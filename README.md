@@ -1,4 +1,4 @@
-# sleepful
+# Sleepful
 
 Sleepful - An Application to Reduce Bad Sleeping Hours for University Students
 
