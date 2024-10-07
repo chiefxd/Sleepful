@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Information extends StatelessWidget {
-  const Information({super.key});
+class Settings extends StatelessWidget {
+  const Settings({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text('Sleeping Stats'),
+        child: Text('Settings'),
       ),
     );
   }
