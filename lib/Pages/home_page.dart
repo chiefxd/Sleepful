@@ -6,6 +6,7 @@ import 'settings.dart'; // Import the page_c.dart file
 import 'information.dart'; // Import the page_d.dart file
 import '../Navbar/bottom_navbar.dart'; // Import the BottomNavbar widget
 import '../Components/button_with_text.dart'; // Import the ButtonWithText widget
+import '../Components/cloud_painter.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -22,14 +23,88 @@ class HomePage extends StatelessWidget {
                   Container(
                     height: 200, // Set the height of the rectangle
                     decoration: BoxDecoration(
+                      color: const Color(0xFFA594F9), // Set the background color to purple
                       border: Border.all(color: Colors.grey),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Center(
-                      child: Text('Youve slept for 7,5 hours'),
+                    child: Stack(
+                      children: [
+                        const Positioned(
+                          top: 10,
+                          left: 10,
+                          child: Text(
+                            'Hello you',
+                            style: TextStyle(
+                              fontSize: 16, // Set the font size to 16
+                              fontWeight: FontWeight.bold, // Set the font weight to bold
+                              color: Colors.white, // Set the text color to white
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          top: 10,
+                          right: 10,
+                          child: Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white),
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.person,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'You\'ve slept for',
+                                style: TextStyle(
+                                  fontSize: 16, // Set the font size to 16
+                                  fontWeight: FontWeight.bold, // Set the font weight to bold
+                                  color: Colors.white, // Set the text color to white
+                                ),
+                              ),
+                              Text(
+                                '7,5 Hours',
+                                style: TextStyle(
+                                  fontSize: 36, // Set the font size to 36
+                                  fontWeight: FontWeight.bold, // Set the font weight to bold
+                                  color: Colors.white, // Set the text color to white
+                                ),
+                              ),
+                              Text(
+                                'Your goal is: 8 hours per day',
+                                style: TextStyle(
+                                  fontSize: 14, // Set the font size to 14
+                                  color: Colors.white, // Set the text color to white
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: CustomPaint(
+                            painter: CloudPainter(),
+                            child: Container(
+                              height: 50, // Set the height of the cloud shape
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 20), // Add some space between sections
+                  const SizedBox(height: 50), // Add some space between sections
                   const Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -101,11 +176,24 @@ class HomePage extends StatelessWidget {
                     child: Column(
                       children: [
                         const Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Section Title'),
-                            Text('Section Subtitle'),
-                          ],
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
+                          Text(
+                            'Information',
+                            style: TextStyle(
+                              fontSize: 16, // Set the font size to 16
+                              fontWeight: FontWeight.bold, // Set the font weight to bold
+                              color: Color(0xFFA594F9), // Set the text color to 0xFFA594F9
+                            ),
+                          ),
+                          Text(
+                            'More >',
+                            style: TextStyle(
+                              fontSize: 16, // Set the font size to 16
+                              fontWeight: FontWeight.bold, // Set the font weight to bold
+                              color: Color(0xFFCDC1FF), // Set the text color to 0xFFCDC1FF
+                            ),
+                          ),
+                        ],
                         ),
                         const SizedBox(height: 20), // Add some space between rows
                         Row(
@@ -114,6 +202,7 @@ class HomePage extends StatelessWidget {
                               child: Container(
                                 height: 150,
                                 decoration: BoxDecoration(
+                                  color: Color(0xFFCDC1FF), // Set the background color to 0xFFCDC1FF
                                   border: Border.all(color: Colors.grey),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -154,6 +243,7 @@ class HomePage extends StatelessWidget {
                               child: Container(
                                 height: 150,
                                 decoration: BoxDecoration(
+                                  color: Color(0xFFCDC1FF), // Set the background color to 0xFFCDC1FF
                                   border: Border.all(color: Colors.grey),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -173,15 +263,24 @@ class HomePage extends StatelessWidget {
                                         children: [
                                           Text(
                                             'This is a sample text',
-                                            style: TextStyle(fontSize: 12), // Set the font size to 12
+                                            style: TextStyle(
+                                              fontSize: 12, // Set the font size to 12
+                                              color: Colors.white, // Set the text color to white
+                                            ),
                                           ),
                                           Text(
                                             'This is another sample text',
-                                            style: TextStyle(fontSize: 12), // Set the font size to 12
+                                            style: TextStyle(
+                                              fontSize: 12, // Set the font size to 12
+                                              color: Colors.white, // Set the text color to white
+                                            ),
                                           ),
                                           Text(
                                             'This is yet another sample text',
-                                            style: TextStyle(fontSize: 12), // Set the font size to 12
+                                            style: TextStyle(
+                                              fontSize: 12, // Set the font size to 12
+                                              color: Colors.white, // Set the text color to white
+                                            ),
                                           ),
                                         ],
                                       ),
