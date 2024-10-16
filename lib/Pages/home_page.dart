@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Center(
-                      child: Text('Youve slept for 7,5 hours'),
+                      child: Text('I want to sleep'),
                     ),
                   ),
                   const SizedBox(height: 20), // Add some space between sections
