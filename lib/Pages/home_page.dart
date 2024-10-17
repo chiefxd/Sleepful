@@ -2,11 +2,9 @@
 import 'package:flutter/material.dart';
 import 'view_plans.dart'; // Import the new_page_a.dart file
 import 'sleeping_stats.dart'; // Import the page_b.dart file
-import 'settings.dart'; // Import the page_c.dart file
 import 'information.dart'; // Import the page_d.dart file
 import '../Navbar/bottom_navbar.dart'; // Import the BottomNavbar widget
 import '../Components/button_with_text.dart'; // Import the ButtonWithText widget
-import '../Components/cloud_painter.dart';
 import '../Components/plus_button.dart'; // Import the PlusButton widget
 import 'profile.dart';
 
