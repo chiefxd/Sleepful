@@ -24,7 +24,7 @@ class IconWithText extends StatelessWidget {
           onTap: onPressed,
           child: Icon(
             icon,
-            size: 36, // Make the icon bigger
+            size: 48, // Make the icon bigger
             color: color,
           ),
         ),

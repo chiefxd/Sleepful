@@ -11,9 +11,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'My App',
-      home: HomePage(), // Use the HomePage widget
+      theme: ThemeData(
+        scaffoldBackgroundColor: const Color(0xFF120C23),//0xFF120C23 // Set the default scaffold background color to black
+      ),
+
+      home: const HomePage(), // Use the HomePage widget
     );
   }
 }
