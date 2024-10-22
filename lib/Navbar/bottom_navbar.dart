@@ -19,79 +19,62 @@ class BottomNavbar extends StatefulWidget {
 class BottomNavbarState extends State<BottomNavbar> {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          height: 80, // adjust the height as needed
-          decoration: const BoxDecoration(
-            border: Border(top: BorderSide(color: Colors.grey, width: 0.5)),
-            color: navbarColor,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              IconWithText(
-                icon: Icons.home,
-                text: 'Home',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomePage()),
-                  );
-                },
-                color: iconText,
-              ),
-              IconWithText(
-                icon: Icons.calendar_month,
-                text: 'Calendar',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Calendar()),
-                  );
-                },
-                color: iconText,
-              ),
-              const SizedBox(width: 5),
-              IconWithText(
-                icon: Icons.bar_chart,
-                text: 'My Stats',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const SleepingStats()),
-                  );
-                },
-                color: iconText,
-              ),
-              IconWithText(
-                icon: Icons.settings,
-                text: 'Settings',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Settings()),
-                  );
-                },
-                color: iconText,
-              ),
-            ],
-          ),
-        ),
-        // Plus button (half inside, half outside the navbar)
-        Positioned(
-          bottom: 56, // adjust this value as needed
-          left: MediaQuery.of(context).size.width / 2 - 30, // adjust the position as needed
-          child: FloatingActionButton(
+    return Container(
+      height: 80, // adjust the height as needed
+      decoration: const BoxDecoration(
+        border: Border(top: BorderSide(color: Colors.grey, width: 0.5)),
+        color: navbarColor,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          IconWithText(
+            icon: Icons.home,
+            text: 'Home',
             onPressed: () {
-              // handle plus button press
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HomePage()),
+              );
             },
-            // mini: true,
-            child: const Icon(Icons.add, size: 30,),
+            color: iconText,
           ),
-        ),
-      ],
+          IconWithText(
+            icon: Icons.calendar_month,
+            text: 'Calendar',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Calendar()),
+              );
+            },
+            color: iconText,
+          ),
+          // Removed the SizedBox and PlusButton from here
+          IconWithText(
+            icon: Icons.bar_chart,
+            text: 'My Stats',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SleepingStats()),
+              );
+            },
+            color: iconText,
+          ),
+          IconWithText(
+            icon: Icons.settings,
+            text: 'Settings',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Settings()),
+              );
+            },
+            color: iconText,
+          ),
+        ],
+      ),
     );
   }
 }

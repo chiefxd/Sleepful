@@ -19,6 +19,8 @@ class ButtonWithText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double buttonSize = MediaQuery.of(context).size.width * 0.20; // Adjust this value as needed
+    double iconSize = buttonSize * 0.8; // Make the icon size a percentage of the button size
     return Column(
       children: [
         ElevatedButton(
@@ -26,13 +28,17 @@ class ButtonWithText extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
-            minimumSize: const Size(100, 100), //button kotak
+            // Remove minimumSize to allow button to resize based on its child
+            // foregroundColor is set to white by default, you can keep it or remove it
+            minimumSize: Size(buttonSize, buttonSize),
             foregroundColor: Colors.white,
             backgroundColor: buttonColor,
+            padding: EdgeInsets.all(0), // Add padding for better touch area
           ),
           child: Icon(
             icon,
-            size: MediaQuery.of(context).size.width * 0.14, // Size icon responsip
+            // size: MediaQuery.of(context).size.width * 0.10,
+            size: iconSize,
           ),
           onPressed: () {
             Navigator.push(
@@ -51,10 +57,11 @@ class ButtonWithText extends StatelessWidget {
           },
           child: Text(
             text,
+            textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
-              fontFamily: 'Montserrat',
+              fontFamily: 'Montserrat-Bold',
               color: textColor,
             ),
           ),
