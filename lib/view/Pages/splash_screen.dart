@@ -15,15 +15,15 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const HomePage()));
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-          child: Stack(
+      body: Stack(
         children: [
           Center(
               child: Image.asset(
@@ -38,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 fit: BoxFit.fill,
               ))
         ],
-      )),
+      ),
     );
   }
 }
