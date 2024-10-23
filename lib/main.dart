@@ -1,6 +1,7 @@
 // main.dart
 import 'package:flutter/material.dart';
-import 'view/Pages/home_page.dart'; // Import the HomePage widget
+import 'package:sleepful/view/Pages/splash_screen.dart';
+// Import the HomePage widget
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFF120C23),//0xFF120C23 // Set the default scaffold background color to black
       ),
 
-      home: const HomePage(), // Use the HomePage widget
+      home: const SplashScreen(), // Use the HomePage widget
     );
   }
 }
