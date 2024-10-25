@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sleepful/view/Pages/forgot_password.dart';
 import 'package:sleepful/view/Pages/home_page.dart';
+import 'package:sleepful/view/Pages/signup_page.dart'; // Adjust the path as needed
 
 class SignIn extends StatelessWidget {
   const SignIn({super.key});
@@ -13,7 +15,7 @@ class SignIn extends StatelessWidget {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 80.0),
+                  padding: const EdgeInsets.only(top: 50.0),
                   child: Image.asset(
                     'assets/images/Logo Sleepful.png',
                     fit: BoxFit.fill,
@@ -29,9 +31,9 @@ class SignIn extends StatelessWidget {
                         end: Alignment.centerRight,
                         stops: [0, 0.28, 1],
                         colors: [
-                          Color(0xFF6048A6),
-                          Color(0xFF8F7FC2),
-                          Color(0xFFB4A9D6), //B4A9D6
+                        Color(0xFFB4A9D6),
+                        Color(0xFFB4A9D6),
+                        Color(0xFFB4A9D6), //B4A9D6
                         ],
                       ).createShader(bounds);
                     },
@@ -53,8 +55,8 @@ class SignIn extends StatelessWidget {
                       end: Alignment.centerRight,
                       stops: [0, 0.28, 1],
                       colors: [
-                        Color(0xFF6048A6),
-                        Color(0xFF8F7FC2),
+                        Color(0xFFB4A9D6),
+                        Color(0xFFB4A9D6),
                         Color(0xFFB4A9D6), //B4A9D6
                       ],
                     ).createShader(bounds);
@@ -146,42 +148,109 @@ class SignIn extends StatelessWidget {
                             ),
                           ),
                         ),
+                      ],
+                    ),
 
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 40, horizontal: 30),
-                          child: Center(
-                            child: SizedBox(
-                              width: 150,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const HomePage()),
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF725FAC),
-                                  foregroundColor: Colors.white,
-                                  textStyle: const TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
-                                  minimumSize: const Size(double.infinity, 40),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 10),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 30, top: 5),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ForgotPassword()),
+                                );
+                              },
+                              child: const Text(
+                                'Forgot Password?',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal,
+                                  color: Color(0xFFFFFFFF),
+                                  fontFamily: 'Montserrat',
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: Color(0xFFFFFFFF),
+                                  decorationThickness: 1,
                                 ),
-                                child: const Text('Sign In'),
                               ),
                             ),
                           ),
                         ),
                       ],
-                    )
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(top: 25),
+                      child: Center(
+                        child: SizedBox(
+                          width: 150,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const HomePage()),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF725FAC),
+                              foregroundColor: Colors.white,
+                              textStyle: const TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18),
+                              minimumSize: const Size(double.infinity, 40),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                            child: const Text('Sign In'),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 5),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const SignUp()),
+                                );
+                              },
+                              child: const Text(
+                                'Don’t have an account? Sign Up Here',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFFB4A9D6),
+                                  fontFamily: 'Montserrat',
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: Color(0xFFB4A9D6),
+                                  decorationThickness: 1,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ],
