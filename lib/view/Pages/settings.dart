@@ -7,7 +7,11 @@ class Settings extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text('Settings'),
+        child: Text('Settings',
+          style: TextStyle(
+            color: Colors.white, // Set the text color to white
+          ),
+        ),
       ),
     );
   }

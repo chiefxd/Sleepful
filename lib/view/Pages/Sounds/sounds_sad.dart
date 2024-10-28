@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Information extends StatelessWidget {
-  const Information({super.key});
+class SoundsSad extends StatelessWidget {
+  const SoundsSad({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text('Information',
+        child: Text('Sad',
           style: TextStyle(
             color: Colors.white, // Set the text color to white
           ),

@@ -7,7 +7,11 @@ class SleepingStats extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text('Sleeping Stats'),
+        child: Text('Sleeping Stats',
+          style: TextStyle(
+            color: Colors.white, // Set the text color to white
+          ),
+        ),
       ),
     );
   }

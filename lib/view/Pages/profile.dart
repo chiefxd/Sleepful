@@ -7,7 +7,11 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text('Profile'),
+        child: Text('Profile',
+          style: TextStyle(
+            color: Colors.white, // Set the text color to white
+          ),
+        ),
       ),
     );
   }
