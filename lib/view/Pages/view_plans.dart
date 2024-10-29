@@ -7,7 +7,11 @@ class ViewPlans extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text('View Plans'),
+        child: Text('View Plans',
+          style: TextStyle(
+            color: Colors.white, // Set the text color to white
+          ),
+        ),
       ),
     );
   }

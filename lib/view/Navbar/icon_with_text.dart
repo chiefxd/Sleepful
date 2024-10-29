@@ -24,7 +24,7 @@ class IconWithText extends StatelessWidget {
           onTap: onPressed,
           child: Icon(
             icon,
-            size: 48, // Make the icon bigger
+            size: 36, // Make the icon bigger
             color: color,
           ),
         ),
@@ -32,7 +32,7 @@ class IconWithText extends StatelessWidget {
           padding: const EdgeInsets.only(top: 2), // Reduce the distance between the icon and the text
           child: Text(
             text,
-            style: TextStyle(fontSize: 14, color: color),
+            style: TextStyle(fontSize: 13, color: color),
           ),
         ),
       ],
