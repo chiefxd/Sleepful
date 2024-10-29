@@ -1,7 +1,5 @@
 // button_with_text.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart'; // Import for SVG support
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ButtonWithText extends StatelessWidget {
   final IconData? icon; // Make this nullable

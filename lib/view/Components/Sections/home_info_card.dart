@@ -9,17 +9,17 @@ class InfoCard extends StatelessWidget {
   final Color titleColor; // Color of the title text
 
   const InfoCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.imagePath,
     required this.onReadMore,
     this.cardColor = Colors.white, // Default card color
     this.titleColor = Colors.white, // Default title color
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       // Remove fixed height to allow dynamic height adjustment
       width: 150, // Set a fixed width for the card
       child: Card(
@@ -34,7 +34,7 @@ class InfoCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
-              child: Container(
+              child: SizedBox(
                 width: double.infinity, // Ensure the image takes the full width of the card
                 height: 100, // Set a fixed height for the image
                 child: Image.asset(
