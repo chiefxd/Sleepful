@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:sleepful/view/Pages/home_page.dart';
-import 'package:sleepful/view/Pages/signin_page.dart'; // Adjust the path as needed
+import 'package:sleepful/view/Pages/signin_page.dart';
 
 class SignUp extends StatelessWidget {
   const SignUp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -17,7 +19,7 @@ class SignUp extends StatelessWidget {
                 child: Image.asset(
                   'assets/images/Logo Sleepful.png',
                   fit: BoxFit.fill,
-                  width: MediaQuery.of(context).size.width * 0.4,
+                  width: screenWidth * 0.4,
                 ),
               ),
               Padding(
@@ -71,11 +73,52 @@ class SignUp extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // Email input field with label
+              // Name input field with label
               Column(
                 crossAxisAlignment:
                     CrossAxisAlignment.start, // Align label to the start
                 children: [
+                  Column(
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start, // Align label to the start
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(
+                            left: 30, bottom: 5), // Adjust padding as needed
+                        child: Text(
+                          'Name',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                              color: Color(0xFFFFFFFF),
+                              fontFamily: 'Montserrat'),
+                        ),
+                      ),
+
+                      // Name input field
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 3),
+                        margin: const EdgeInsets.symmetric(horizontal: 30),
+                        decoration: BoxDecoration(
+                          color: Color(0xFFB5B5B5),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Enter your name',
+                            hintStyle: TextStyle(fontFamily: 'Montserrat'),
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(
+                      height: 10), // Add spacing between input fields
+
+                  // Email input field with label
                   Column(
                     crossAxisAlignment:
                         CrossAxisAlignment.start, // Align label to the start
@@ -93,7 +136,7 @@ class SignUp extends StatelessWidget {
                         ),
                       ),
 
-                      // Password input field
+                      // Email input field
                       Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 3),
@@ -116,6 +159,7 @@ class SignUp extends StatelessWidget {
                   const SizedBox(
                       height: 10), // Add spacing between input fields
 
+                  // Password input field with label
                   Column(
                     crossAxisAlignment:
                         CrossAxisAlignment.start, // Align label to the start
@@ -143,7 +187,7 @@ class SignUp extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: const TextField(
-                          obscureText: true, // Hide password characters
+                          obscureText: true,
                           decoration: InputDecoration(
                             hintText: 'Enter your password',
                             hintStyle: TextStyle(fontFamily: 'Montserrat'),
@@ -157,6 +201,7 @@ class SignUp extends StatelessWidget {
                   const SizedBox(
                       height: 10), // Add spacing between input fields
 
+                  // Confirm password input field with label
                   Column(
                     crossAxisAlignment:
                         CrossAxisAlignment.start, // Align label to the start
@@ -165,7 +210,7 @@ class SignUp extends StatelessWidget {
                         padding: EdgeInsets.only(
                             left: 30, bottom: 5), // Adjust padding as needed
                         child: Text(
-                          'E-mail',
+                          'Confirm Password',
                           style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.normal,
@@ -174,7 +219,7 @@ class SignUp extends StatelessWidget {
                         ),
                       ),
 
-                      // Password input field
+                      // Confirm Password input field
                       Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 3),
@@ -185,47 +230,7 @@ class SignUp extends StatelessWidget {
                         ),
                         child: const TextField(
                           decoration: InputDecoration(
-                            hintText: 'Enter your e-mail',
-                            hintStyle: TextStyle(fontFamily: 'Montserrat'),
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(
-                      height: 10), // Add spacing between input fields
-
-                  Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.start, // Align label to the start
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(
-                            left: 30, bottom: 5), // Adjust padding as needed
-                        child: Text(
-                          'E-mail',
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                              color: Color(0xFFFFFFFF),
-                              fontFamily: 'Montserrat'),
-                        ),
-                      ),
-
-                      // Password input field
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 3),
-                        margin: const EdgeInsets.symmetric(horizontal: 30),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFB5B5B5),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Enter your e-mail',
+                            hintText: 'Re-enter your password',
                             hintStyle: TextStyle(fontFamily: 'Montserrat'),
                             border: InputBorder.none,
                           ),
@@ -244,7 +249,7 @@ class SignUp extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const HomePage()),
+                                  builder: (context) => const SignIn()),
                             );
                           },
                           style: ElevatedButton.styleFrom(
