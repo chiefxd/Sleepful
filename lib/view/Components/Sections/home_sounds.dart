@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../../Pages/sounds.dart';
 import '../../Pages/sounds_more.dart';
 import '../../Pages/Sounds/sounds_sad.dart';
 import '../../Pages/Sounds/sounds_night.dart';
@@ -32,7 +32,7 @@ class SoundsSection extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const SoundsMore()),
+                    MaterialPageRoute(builder: (context) => const SoundPage()),
                   );
                 },
                 child: Text(
