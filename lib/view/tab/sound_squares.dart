@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import '../util/sound_part.dart';
 
-class Soundsquares extends StatelessWidget {
+class SoundSquares extends StatelessWidget {
   List SoundAvailable = [
     ["assets/images/Contoh 1.png", "Sound 1", "Calm, Relaxing" "1h"],
     ["assets/images/Contoh 2.png", "Sound 2", "Magical" "55m"]
   ];
 
-  Soundsquares({super.key});
+  SoundSquares({super.key});
 
   @override
   Widget build(BuildContext context) {
