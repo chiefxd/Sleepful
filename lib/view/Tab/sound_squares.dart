@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../util/sound_part.dart';
+import '../Util/sound_part.dart';
 
 class SoundSquares extends StatelessWidget {
   List SoundAvailable = [
@@ -15,7 +15,7 @@ class SoundSquares extends StatelessWidget {
         itemCount: SoundAvailable.length,
         padding: EdgeInsets.all(10),
         gridDelegate:
-            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (context, index) {
           return SoundPart(
               Pictures: SoundAvailable[index][0],

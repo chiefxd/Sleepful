@@ -26,7 +26,7 @@ class SoundPart extends StatelessWidget {
           //images
           Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
             child: Image.asset(Pictures),
           ),
           //title
