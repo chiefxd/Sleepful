@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 // import '../util/SoundPart.dart';
-import '../tab/SoundSquares.dart';
+import '../tab/sound_squares.dart';
 // import 'view_plans.dart'; // Import the new_page_a.dart file
 // import 'sleeping_stats.dart'; // Import the page_b.dart file
 // import 'information.dart'; // Import the page_d.dart file

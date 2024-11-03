@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../util/SoundPart.dart';
+import '../util/sound_part.dart';
 
 class Soundsquares extends StatelessWidget {
   List SoundAvailable = [
