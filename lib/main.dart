@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'My App',
+      title: 'Sleepful',
       theme: ThemeData(
         scaffoldBackgroundColor: const Color(0xFF120C23),//0xFF120C23 // Set the default scaffold background color to black
       ),
