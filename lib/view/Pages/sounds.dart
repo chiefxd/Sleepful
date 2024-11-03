@@ -39,86 +39,73 @@ class SoundPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(
+      body: Stack(
+        children: [
+          Column(
             children: [
-              Column(
-                  children: [
-                    Expanded(
-                        child: SingleChildScrollView(
-                            child: Column(
-                                children: [
-                                  // Section 1: Hello You and Profile Icon
-                                  Container(
-                                      padding: const EdgeInsets.all(10),
-                                      child: Row(
-                                          mainAxisAlignment: MainAxisAlignment
-                                              .spaceBetween,
-                                          children: [
-                                            ShaderMask(
-                                              shaderCallback: (Rect bounds) {
-                                                return const LinearGradient(
-                                                  begin: Alignment.centerLeft,
-                                                  end: Alignment.centerRight,
-                                                  stops: [0, 0.28, 1],
-                                                  colors: [
-                                                    Color(0xFF6048A6),
-                                                    Color(0xFF8F7FC2),
-                                                    Color(0xFFB4A9D6), //B4A9D6
-                                                  ],
-                                                ).createShader(bounds);
-                                              },
-                                              blendMode: BlendMode.srcIn, //
-                                              child: const Text(
-                                                'Sounds',
-                                                style: TextStyle(
-                                                  fontSize: 24,
-                                                  // Set the font size to 16
-                                                  fontWeight: FontWeight.bold,
-                                                  // Set the font weight to bold// Set the text color to white
-                                                  fontFamily: 'Montserrat-Bold',
-                                                ),
-                                              ),
-                                            ),
+              Expanded(
+                  child: SingleChildScrollView(
+                      child: Column(children: [
+                // Section 1: Hello You and Profile Icon
+                Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ShaderMask(
+                            shaderCallback: (Rect bounds) {
+                              return const LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                stops: [0, 0.28, 1],
+                                colors: [
+                                  Color(0xFF6048A6),
+                                  Color(0xFF8F7FC2),
+                                  Color(0xFFB4A9D6), //B4A9D6
+                                ],
+                              ).createShader(bounds);
+                            },
+                            blendMode: BlendMode.srcIn, //
+                            child: const Text(
+                              'Sounds',
+                              style: TextStyle(
+                                fontSize: 24,
+                                // Set the font size to 16
+                                fontWeight: FontWeight.bold,
+                                // Set the font weight to bold// Set the text color to white
+                                fontFamily: 'Montserrat-Bold',
+                              ),
+                            ),
+                          ),
+                        ])),
+                Column(
+                  children: [Soundsquares()],
+                )
+              ])))
+            ],
+          ),
 
-                                          ]
-                                      )
+          // Add some space between sections
+          // const SizedBox(height: 50),
+          // Container(
+          //   padding: const EdgeInsets.all(30),
+          //   child: Column(
+          //     children: [
+          //       const Row(
+          //
+          //       )
+          //     ],
+          //   )
+          // )
 
-                                  ),
-                                  Container(
-                                    child:Column(
-                                      children: [
-                                        Soundsquares()
-                                      ],
-                                    )
-                                  )
-                                ]
-                            )
-                        )
-                    )
-                  ],
-              ),
-
-                            // Add some space between sections
-              // const SizedBox(height: 50),
-              // Container(
-              //   padding: const EdgeInsets.all(30),
-              //   child: Column(
-              //     children: [
-              //       const Row(
-              //
-              //       )
-              //     ],
-              //   )
-              // )
-
-
-              Positioned(
-                bottom: 56, // adjust this value as needed
-                left: MediaQuery.of(context).size.width / 2 - 30, // adjust the position as needed
-                child: const PlusButton(),
-              ),
-          ],
-        ),
+          Positioned(
+            bottom: 56, // adjust this value as needed
+            left: MediaQuery.of(context).size.width / 2 -
+                30, // adjust the position as needed
+            child: const PlusButton(),
+          ),
+        ],
+      ),
     );
   }
 }
