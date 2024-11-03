@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sleepful/view/Tab/sound_squares.dart';
+import '/view/Tab/sound_squares.dart';
 // import '../util/SoundPart.dart';
 // import 'view_plans.dart'; // Import the new_page_a.dart file
 // import 'sleeping_stats.dart'; // Import the page_b.dart file
