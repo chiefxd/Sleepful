@@ -1,8 +1,6 @@
-// ignore: file_names
 import 'package:flutter/material.dart';
 import '../util/SoundPart.dart';
 
-// ignore: must_be_immutable
 class Soundsquares extends StatelessWidget {
   List SoundAvailable = [
     ["assets/images/Contoh 1.png", "Sound 1", "Calm, Relaxing" "1h"],
