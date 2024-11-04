@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../Pages/sounds_more.dart';
+import '../../Pages/sounds.dart';
 import '../../Pages/Sounds/sounds_sad.dart';
 import '../../Pages/Sounds/sounds_night.dart';
 import '../../Pages/Sounds/sounds_mix.dart';
@@ -14,7 +13,8 @@ class SoundsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20), // Add padding of 20 pixels
+      padding: const EdgeInsets.only(
+          left: 20, right: 20), // Add padding of 20 pixels
       child: Column(
         children: [
           Row(
@@ -33,7 +33,7 @@ class SoundsSection extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const SoundsMore()),
+                    MaterialPageRoute(builder: (context) => const SoundPage()),
                   );
                 },
                 child: Text(
@@ -42,27 +42,34 @@ class SoundsSection extends StatelessWidget {
                     fontSize: screenWidth * 0.04,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Montserrat',
-                    color: Color(0x8CE4DCFF), // Set the text color to 0xFFCDC1FF
+                    color:
+                        Color(0x8CE4DCFF), // Set the text color to 0xFFCDC1FF
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 20), // Add some space between the title and images
+          const SizedBox(
+              height: 20), // Add some space between the title and images
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
                 // First Image
-                _buildSoundItem(context, 'Sad', 'assets/images/Contoh 1.png', SoundsSad()),
+                _buildSoundItem(
+                    context, 'Sad', 'assets/images/Contoh 1.png', SoundsSad()),
                 // Second Image
-                _buildSoundItem(context, 'Night', 'assets/images/Long.png', SoundsNight()),
+                _buildSoundItem(
+                    context, 'Night', 'assets/images/Long.png', SoundsNight()),
                 // Third Image
-                _buildSoundItem(context, 'Mix', 'assets/images/Long.png', SoundsMix()),
+                _buildSoundItem(
+                    context, 'Mix', 'assets/images/Long.png', SoundsMix()),
                 // Fourth Image
-                _buildSoundItem(context, 'Winter', 'assets/images/Contoh 1.png', SoundsWinter()),
+                _buildSoundItem(context, 'Winter', 'assets/images/Contoh 1.png',
+                    SoundsWinter()),
                 // Fifth Image
-                _buildSoundItem(context, 'Lofi', 'assets/images/Long.png', SoundsLofi()),
+                _buildSoundItem(
+                    context, 'Lofi', 'assets/images/Long.png', SoundsLofi()),
               ],
             ),
           ),
@@ -73,6 +80,7 @@ class SoundsSection extends StatelessWidget {
 
   Widget _buildSoundItem(BuildContext context, String label, String imagePath, Widget nextPage) {
     double screenWidth = MediaQuery.of(context).size.width;
+  
     return GestureDetector(
       onTap: () {
         Navigator.push(
