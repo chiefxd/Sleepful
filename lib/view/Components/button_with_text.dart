@@ -23,19 +23,21 @@ class ButtonWithText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double buttonSize = MediaQuery
-        .of(context)
-        .size
-        .width * 0.20; // Adjust this value as needed
-    double iconSize = buttonSize *
-        0.6; // Make the icon size a percentage of the button size
+    // Get the screen width
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    // Define button size as a percentage of the screen width
+    double buttonSize = screenWidth * 0.20; // Adjust this value as needed
+
+    double iconSize = buttonSize * 0.6; // Make the icon size a percentage of the button size
+    double buttonTextSize = screenWidth * 0.04;
 
     // Define the gradient
     final Gradient gradient = LinearGradient(
       colors: [
         const Color(0xFF493190),
         const Color(0xFF725FAC),
-        const Color(0xFF8472BB), // 0xFF8472BB
+        const Color(0xFF8472BB),
       ],
       stops: const [0.0, 0.5, 1.0],
     );
@@ -87,7 +89,7 @@ class ButtonWithText extends StatelessWidget {
             text,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 16,
+              fontSize:  buttonTextSize,
               fontWeight: FontWeight.bold,
               fontFamily: 'Montserrat',
               color: textColor,
@@ -122,4 +124,3 @@ class GradientBorderPainter extends CustomPainter {
     return false;
   }
 }
-
