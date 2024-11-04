@@ -1,7 +1,7 @@
 // home_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'view_plans.dart'; // Import the new_page_a.dart file
+import 'Plans/view_plans.dart'; // Import the new_page_a.dart file
 import 'sleeping_stats.dart'; // Import the page_b.dart file
 import 'information.dart'; // Import the page_d.dart file
 import '../Navbar/bottom_navbar.dart'; // Import the BottomNavbar widget
@@ -42,13 +42,27 @@ class HomePage extends StatelessWidget {
               title: Row(
                 children: [
                   Expanded(
-                    child: Text(
-                      'Hello Stefan!',
-                      style: TextStyle(
-                        fontSize: titleFontSize,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Montserrat-Bold',
-                        color: Color(0xFFB4A9D6),
+                    child: ShaderMask(
+                      shaderCallback: (Rect bounds) {
+                        return const LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          stops: [0, 0.28, 1],
+                          colors: [
+                            Color(0xFF6048A6),
+                            Color(0xFF8F7FC2),
+                            Color(0xFFB4A9D6),
+                          ],
+                        ).createShader(bounds);
+                      },
+                      blendMode: BlendMode.srcIn,
+                      child: Text(
+                        'Hello Stefan!',
+                        style: TextStyle(
+                          fontSize: titleFontSize,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Montserrat-Bold',
+                        ),
                       ),
                     ),
                   ),
@@ -115,8 +129,8 @@ class HomePage extends StatelessWidget {
                                     end: Alignment.centerRight,
                                     stops: [0, 0.28, 1],
                                     colors: [
-                                      Color(0xFFB4A9D6),
-                                      Color(0xFFB4A9D6),
+                                      Color(0xFF6048A6),
+                                      Color(0xFF8F7FC2),
                                       Color(0xFFB4A9D6),
                                     ],
                                   ).createShader(bounds);
