@@ -7,6 +7,8 @@ class InfoCard extends StatelessWidget {
   final VoidCallback onReadMore;
   final Color cardColor; // Background color of the card
   final Color titleColor; // Color of the title text
+  final double titleFontSize;
+  final double readMoreFontSize;
 
   const InfoCard({
     super.key,
@@ -15,6 +17,8 @@ class InfoCard extends StatelessWidget {
     required this.onReadMore,
     this.cardColor = Colors.white, // Default card color
     this.titleColor = Colors.white, // Default title color
+    this.titleFontSize = 14,
+    this.readMoreFontSize= 12,
   });
 
   @override
@@ -51,7 +55,7 @@ class InfoCard extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: titleFontSize,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Montserrat',
                       color: titleColor, // Set the title color here
@@ -70,8 +74,8 @@ class InfoCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         padding: const EdgeInsets.symmetric(horizontal: 8), // Adjust horizontal padding
-                        textStyle: const TextStyle(
-                          fontSize: 12, // Smaller font size
+                        textStyle: TextStyle(
+                          fontSize: readMoreFontSize, // Smaller font size
                         ),
                       ),
                       child: const Text(

@@ -12,6 +12,7 @@ class SoundsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20), // Add padding of 20 pixels
       child: Column(
@@ -19,10 +20,10 @@ class SoundsSection extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Sounds',
                 style: TextStyle(
-                  fontSize: 28, // Set the font size to 16
+                  fontSize: screenWidth * 0.07, // Set the font size to 28
                   fontWeight: FontWeight.bold, // Set the font weight to bold
                   fontFamily: 'Montserrat',
                   color: Color(0xFFE4DCFF), // Set the text color to 0xFFA594F9
@@ -38,7 +39,7 @@ class SoundsSection extends StatelessWidget {
                 child: Text(
                   'More >',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: screenWidth * 0.04,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Montserrat',
                     color: Color(0x8CE4DCFF), // Set the text color to 0xFFCDC1FF
@@ -71,6 +72,7 @@ class SoundsSection extends StatelessWidget {
   }
 
   Widget _buildSoundItem(BuildContext context, String label, String imagePath, Widget nextPage) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -94,8 +96,8 @@ class SoundsSection extends StatelessWidget {
             const SizedBox(height: 5), // Space between image and text
             Text(
               label,
-              style: const TextStyle(
-                fontSize: 16,
+              style: TextStyle(
+                fontSize: screenWidth * 0.04,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Montserrat',

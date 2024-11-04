@@ -12,12 +12,24 @@ import '../Components/Sections/home_sounds.dart';
 import '../Components/Sections/home_info_card.dart';
 import 'Information/example_detail_information.dart';
 
-
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Get the screen width
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    // Define button size as a percentage of the screen width
+    double buttonSize = screenWidth * 0.25; // Adjust this value as needed
+
+    double titleFontSize = screenWidth * 0.06; // 6% of screen width for title
+    double subtitleFontSize = screenWidth * 0.04; // 4% of screen width for subtitles
+    double largeTextFontSize = screenWidth * 0.16; // 10% of screen width for large text
+    double smallTextFontSize = screenWidth * 0.04; // 4% of screen width for small text
+    double titleFontCardSize = screenWidth * 0.035; // Responsive font size for card title
+    double readMoreFontSize = screenWidth * 0.030;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -42,16 +54,16 @@ class HomePage extends StatelessWidget {
                                   colors: [
                                     Color(0xFF6048A6),
                                     Color(0xFF8F7FC2),
-                                    Color(0xFFB4A9D6), //B4A9D6
+                                    Color(0xFFB4A9D6),
                                   ],
                                 ).createShader(bounds);
                               },
-                              blendMode: BlendMode.srcIn, //
-                              child: const Text(
+                              blendMode: BlendMode.srcIn,
+                              child: Text(
                                 'Hello Stefan!',
                                 style: TextStyle(
-                                  fontSize: 24, // Set the font size to 16
-                                  fontWeight: FontWeight.bold, // Set the font weight to bold// Set the text color to white
+                                  fontSize: titleFontSize,
+                                  fontWeight: FontWeight.bold,
                                   fontFamily: 'Montserrat-Bold',
                                 ),
                               ),
@@ -83,19 +95,18 @@ class HomePage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 20), // Add some space between sections
+                      const SizedBox(height: 20),
 
                       // Section 2: You've slept for text
                       Center(
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center, //gangaruh
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text(
+                            Text(
                               'You\'ve slept for',
                               style: TextStyle(
-                                fontSize: 16, // Set the font size to 16
-                                // fontWeight: FontWeight.bold, // Set the font weight to bold
-                                color: Color(0xFFAB9FD1), // Set the text color to black
+                                fontSize: smallTextFontSize,
+                                color: Color(0xFFAB9FD1),
                                 fontFamily: 'Montserrat',
                               ),
                             ),
@@ -108,46 +119,45 @@ class HomePage extends StatelessWidget {
                                   colors: [
                                     Color(0xFF6048A6),
                                     Color(0xFF8F7FC2),
-                                    Color(0xFFB4A9D6), //B4A9D6
+                                    Color(0xFFB4A9D6),
                                   ],
                                 ).createShader(bounds);
                               },
-                              blendMode: BlendMode.srcIn, // Add this line
-                              child: const Text(
+                              blendMode: BlendMode.srcIn,
+                              child: Text(
                                 '7,5 Hours',
                                 style: TextStyle(
-                                  fontSize: 64,
+                                  fontSize: largeTextFontSize,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: 'Montserrat',
-
                                 ),
                               ),
                             ),
                             RichText(
                               text: TextSpan(
                                 children: [
-                                  const TextSpan(
+                                  TextSpan(
                                     text: 'Your goal is: ',
                                     style: TextStyle(
-                                      fontSize: 15,
-                                      color: Color(0xFF8C7EB4), // Set the text color to 0xFF8C7EB4
+                                      fontSize: subtitleFontSize,
+                                      color: Color(0xFF8C7EB4),
                                       fontFamily: 'Montserrat',
                                     ),
                                   ),
                                   TextSpan(
                                     text: '8 Hours',
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                      color: Color(0xFFE4DCFF), // Set the text color to 0xFFAB9FD1
+                                    style: TextStyle(
+                                      fontSize: subtitleFontSize,
+                                      color: Color(0xFFE4DCFF),
                                       fontFamily: 'Montserrat',
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  const TextSpan(
+                                  TextSpan(
                                     text: ' per day',
                                     style: TextStyle(
-                                      fontSize: 15,
-                                      color: Color(0xFFE4DCFF), // Set the text color to 0xFF8C7EB4
+                                      fontSize: subtitleFontSize,
+                                      color: Color(0xFF8C7EB4),
                                       fontFamily: 'Montserrat',
                                     ),
                                   ),
@@ -157,59 +167,45 @@ class HomePage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      // Positioned(
-                      //   bottom: 0,
-                      //   left: 0,
-                      //   right: 0,
-                      //   child: CustomPaint(
-                      //      painter: CloudPainter(),
-                      //     child: Container(
-                      //       height: 50, // Set the height of the cloud shape
-                      //     ),
-                      //   ),
-                      // ),
-                      //   ],
-                      // ),
-                      const SizedBox(height: 50), // Add some space between sections
+                      const SizedBox(height: 50),
+
+                      // Section 3: View Plans and Sleeping Stats
                       Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween, // Use spaceBetween to evenly distribute the buttons
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                const SizedBox(
-                                  width: 120, // Set a fixed width for each button
+                                SizedBox(
+                                  width: buttonSize,
                                   child: ButtonWithText(
                                     icon: Icons.calendar_month,
                                     text: 'View\nPlans',
                                     nextPage: ViewPlans(),
-                                    // buttonColor: Color(0xFFCDC1FF),
-                                    textColor: Color(0xFFE4DCFF),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 120, // Set a fixed width for each button
-                                  child: ButtonWithText(
-                                    icon: Icons.bar_chart,
-                                    text: 'Sleeping\nStats',
-                                    nextPage: SleepingStats(),
-                                    // buttonColor: Color(0xFFCDC1FF),
                                     textColor: Color(0xFFE4DCFF),
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 120, // Set a fixed width for each button
+                                  width: buttonSize,
+                                  child: ButtonWithText(
+                                    icon: Icons.bar_chart,
+                                    text: 'Sleeping\nStats',
+                                    nextPage: SleepingStats(),
+                                    textColor: Color(0xFFE4DCFF),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: buttonSize,
                                   child: ButtonWithText(
                                     customIcon: SizedBox(
-                                      height: 50, // Set a fixed height
-                                      width: 50, // Set a fixed width if necessary
-                                      child: SvgPicture.asset('assets/icons/breathing-icon.svg', fit: BoxFit.contain), // Use fit to control how the SVG is rendered
+                                      height: buttonSize * 0.5,
+                                      width: buttonSize * 0.5,
+                                      child: SvgPicture.asset('assets/icons/breathing-icon.svg', fit: BoxFit.contain),
                                     ),
                                     text: 'Breathing\nExercise',
-                                    // buttonColor: const Color(0xFFCDC1FF),
-                                    textColor: const Color(0xFFE4DCFF), //0xFFCDC1FF
                                     nextPage: const Information(),
+                                    textColor: Color(0xFFE4DCFF),
                                   ),
                                 ),
                               ],
@@ -217,9 +213,12 @@ class HomePage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 30), // Add some space before the new section
+                      const SizedBox(height: 30),
+                      // Section 4: Home Sounds
                       const SoundsSection(),
-                      const SizedBox(height: 10), // Add some space after the new section// Add some space between sections
+                      const SizedBox(height: 10),
+
+                      // Section 5: Information Cards
                       Container(
                         padding: const EdgeInsets.all(20),
                         child: Column(
@@ -227,13 +226,13 @@ class HomePage extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text(
+                                Text(
                                   'Information',
                                   style: TextStyle(
-                                    fontSize: 28, // Set the font size to 16
-                                    fontWeight: FontWeight.bold, // Set the font weight to bold
+                                    fontSize: screenWidth * 0.07,
+                                    fontWeight: FontWeight.bold,
                                     fontFamily: 'Montserrat',
-                                    color: Color(0xFFE4DCFF), // Set the text color to 0xFFA594F9
+                                    color: Color(0xFFE4DCFF),
                                   ),
                                 ),
                                 GestureDetector(
@@ -246,16 +245,16 @@ class HomePage extends StatelessWidget {
                                   child: Text(
                                     'More >',
                                     style: TextStyle(
-                                      fontSize: 16,
+                                      fontSize: screenWidth * 0.04,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Montserrat',
-                                      color: Color(0x8CE4DCFF), // Set the text color to 0xFFCDC1FF
+                                      color: Color(0x8CE4DCFF),
                                     ),
                                   ),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 20), // Add some space between rows
+                            const SizedBox(height: 20),
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
@@ -273,6 +272,8 @@ class HomePage extends StatelessWidget {
                                       onReadMore: () {}, // Remove this callback
                                       cardColor: const Color(0xFF1F1249),
                                       titleColor: Colors.white,
+                                      titleFontSize: titleFontCardSize,
+                                      readMoreFontSize: readMoreFontSize,
                                     ),
                                   ),
                                   const SizedBox(width: 10),
@@ -289,6 +290,8 @@ class HomePage extends StatelessWidget {
                                       onReadMore: () {}, // Remove this callback
                                       cardColor: const Color(0xFF1F1249),
                                       titleColor: Colors.white,
+                                      titleFontSize: titleFontCardSize,
+                                      readMoreFontSize: readMoreFontSize,
                                     ),
                                   ),
                                   const SizedBox(width: 10),
@@ -305,6 +308,8 @@ class HomePage extends StatelessWidget {
                                       onReadMore: () {}, // Remove this callback
                                       cardColor: const Color(0xFF1F1249),
                                       titleColor: Colors.white,
+                                      titleFontSize: titleFontCardSize,
+                                      readMoreFontSize: readMoreFontSize,
                                     ),
                                   ),
                                   const SizedBox(width: 10),
@@ -316,11 +321,13 @@ class HomePage extends StatelessWidget {
                                       );
                                     },
                                     child: InfoCard(
-                                      title: 'This is another sample text',
+                                      title: 'This is another sample text ',
                                       imagePath: 'assets/images/Contoh 1.png',
                                       onReadMore: () {}, // Remove this callback
                                       cardColor: const Color(0xFF1F1249),
                                       titleColor: Colors.white,
+                                      titleFontSize: titleFontCardSize,
+                                      readMoreFontSize: readMoreFontSize,
                                     ),
                                   ),
                                   const SizedBox(width: 10),
@@ -337,6 +344,8 @@ class HomePage extends StatelessWidget {
                                       onReadMore: () {}, // Remove this callback
                                       cardColor: const Color(0xFF1F1249),
                                       titleColor: Colors.white,
+                                      titleFontSize: titleFontCardSize,
+                                      readMoreFontSize: readMoreFontSize,
                                     ),
                                   ),
                                 ],
