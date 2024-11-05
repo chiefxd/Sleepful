@@ -117,7 +117,7 @@ class Profile extends StatelessWidget {
             children: <Widget>[
               // Profile Pic
               CircleAvatar(
-                radius: 80,
+                radius: 75,
                 backgroundImage: AssetImage(
                     'assets/images/Contoh 1.png'),
               ),
