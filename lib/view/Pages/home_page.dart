@@ -7,7 +7,7 @@ import 'information.dart'; // Import the page_d.dart file
 import '../Navbar/bottom_navbar.dart'; // Import the BottomNavbar widget
 import '../Components/button_with_text.dart'; // Import the ButtonWithText widget
 import '../Components/plus_button.dart'; // Import the PlusButton widget
-import 'profile.dart';
+import 'Profile/profile.dart';
 import '../Components/Sections/home_sounds.dart';
 import '../Components/Sections/home_info_card.dart';
 import 'Information/example_detail_information.dart';
