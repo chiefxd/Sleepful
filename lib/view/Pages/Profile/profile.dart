@@ -54,7 +54,7 @@ class Profile extends StatelessWidget {
               activeColor: Color(0xFF120C23),
               inactiveTrackColor: Color(0xFF120C23),
               activeTrackColor: Color(0xFFB4A9D6),
-              thumbColor: MaterialStateProperty.all<Color>(Color(0xFFFFFFFF)),
+              thumbColor: WidgetStateProperty.all<Color>(Color(0xFFFFFFFF)),
             ),
           ),
         ],
