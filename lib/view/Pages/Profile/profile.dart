@@ -23,45 +23,6 @@ class Profile extends StatelessWidget {
     );
   }
 
-  Widget _buildChangeThemeRow(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Icon(
-                Icons.palette,
-                color: Color(0xFFB4A9D6),
-              ),
-              SizedBox(width: 10),
-              Text(
-                'Change Theme',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Montserrat',
-                  color: Color(0xFFB4A9D6),
-                ),
-              ),
-            ],
-          ),
-          Transform.scale(
-            scale: 0.9,
-            child: Switch(
-              value: Theme.of(context).brightness == Brightness.dark,
-              onChanged: (value) {},
-              activeColor: Color(0xFF120C23),
-              inactiveTrackColor: Color(0xFF120C23),
-              activeTrackColor: Color(0xFFB4A9D6),
-              thumbColor: WidgetStateProperty.all<Color>(Color(0xFFFFFFFF)),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -111,55 +72,57 @@ class Profile extends StatelessWidget {
         },
         
         // Section 2: Profile Contents
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              // Profile Pic
-              CircleAvatar(
-                radius: 75,
-                backgroundImage: AssetImage(
-                    'assets/images/Contoh 1.png'),
-              ),
+        body: Stack(
+          children: [
+            Column(
+              children: <Widget>[
+                SizedBox(height: 25),
 
-              SizedBox(height: 15),
-
-              // User's Name
-              Text(
-                'Stefan Santoso',
-                style: TextStyle(
-                    fontSize: titleFontSize,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Montserrat',
-                    color: Color(0xFFB4A9D6)),
-              ),
-
-              SizedBox(height: 0),
-
-              // Sleep Time
-              Text(
-                'Your total sleep time is 32 hours!',
-                style: TextStyle(
-                    fontSize: subtitleFontSize,
-                    fontFamily: 'Montserrat',
-                    color: Color(0xFFB4A9D6)),
-              ),
-
-              SizedBox(height: 20),
-
-              // 5 rows
-              Column(
-                children: [
-                  _buildIconRow(Icons.edit, 'Edit Profile', subtitleFontSize),
-                  _buildIconRow(
-                      Icons.lock, 'Change Password', subtitleFontSize),
-                  _buildChangeThemeRow(context),
-                  _buildIconRow(Icons.info, 'About Us', subtitleFontSize),
-                  _buildIconRow(Icons.logout, 'Log Out', subtitleFontSize),
-                ],
-              ),
-            ],
-          ),
+                // Profile Pic
+                CircleAvatar(
+                  radius: 75,
+                  backgroundImage: AssetImage(
+                      'assets/images/Contoh 1.png'),
+                ),
+            
+                SizedBox(height: 15),
+            
+                // User's Name
+                Text(
+                  'Stefan Santoso',
+                  style: TextStyle(
+                      fontSize: titleFontSize,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Montserrat',
+                      color: Color(0xFFB4A9D6)),
+                ),
+            
+                SizedBox(height: 0),
+            
+                // Sleep Time
+                Text(
+                  'Your total sleep time is 32 hours!',
+                  style: TextStyle(
+                      fontSize: subtitleFontSize,
+                      fontFamily: 'Montserrat',
+                      color: Color(0xFFB4A9D6)),
+                ),
+            
+                SizedBox(height: 20),
+            
+                // 5 rows
+                Column(
+                  children: [
+                    _buildIconRow(Icons.edit, 'Edit Profile', subtitleFontSize),
+                    _buildIconRow(Icons.lock, 'Change Password', subtitleFontSize),
+                    _buildIconRow(Icons.palette, 'Change Theme', subtitleFontSize),
+                    _buildIconRow(Icons.info, 'About Us', subtitleFontSize),
+                    _buildIconRow(Icons.logout, 'Log Out', subtitleFontSize),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
