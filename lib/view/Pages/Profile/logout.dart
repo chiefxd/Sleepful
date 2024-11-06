@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ChangePassword extends StatelessWidget {
-  const ChangePassword({super.key});
+class Logout extends StatelessWidget {
+  const Logout({super.key});
 
  @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class ChangePassword extends StatelessWidget {
               title: Padding(
                 padding: const EdgeInsets.only(left: 0),
                 child: Text(
-                  'Change Password',
+                  'Logout',
                   style: TextStyle(
                     fontSize: titleFontSize,
                     fontWeight: FontWeight.bold,
