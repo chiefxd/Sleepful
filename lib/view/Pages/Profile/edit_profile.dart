@@ -72,7 +72,7 @@ class EditProfile extends StatelessWidget {
               title: Padding(
                 padding: const EdgeInsets.only(left: 0),
                 child: Text(
-                  'Profile',
+                  'Edit Profile',
                   style: TextStyle(
                     fontSize: titleFontSize,
                     fontWeight: FontWeight.bold,
