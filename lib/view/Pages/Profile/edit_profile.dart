@@ -93,7 +93,6 @@ class EditProfile extends StatelessWidget {
         body: Stack(
           children: [
             SingleChildScrollView(
-              // Wrap with SingleChildScrollView
               child: Column(
                 children: <Widget>[
                   SizedBox(height: 25),
