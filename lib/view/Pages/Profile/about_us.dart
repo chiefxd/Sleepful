@@ -3,11 +3,32 @@ import 'package:flutter/material.dart';
 class AboutUs extends StatelessWidget {
   const AboutUs({super.key});
 
- @override
+  Widget _buildIconRow(IconData icon, String text, double fontSize) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
+      child: Row(
+        children: [
+          Icon(icon, color: Color(0xFFB4A9D6)),
+          SizedBox(width: 10),
+          Text(
+            text,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Montserrat',
+              color: Color(0xFFB4A9D6),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double titleFontSize = screenWidth * 0.06;
-    // double subtitleFontSize = screenWidth * 0.04;
+    double subtitleFontSize = screenWidth * 0.04;
+    double miniFontSize = screenWidth * 0.03;
 
     return Scaffold(
       // Section 1: Title and Back Button
@@ -48,7 +69,91 @@ class AboutUs extends StatelessWidget {
               pinned: false,
             ),
           ];
-        }, body: Center(),
+        },
+
+        // Section 2: About Us Contents
+        body: Stack(
+          children: [
+            Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Image.asset(
+                    'assets/images/Logo Sleepful.png',
+                    fit: BoxFit.fill,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                  ),
+                ),
+
+                SizedBox(height: 15),
+
+                // App Name
+                Text(
+                  'Sleepful',
+                  style: TextStyle(
+                      fontSize: titleFontSize,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Montserrat',
+                      color: Color(0xFFB4A9D6)),
+                ),
+
+                SizedBox(height: 0),
+
+                // Desc
+                Text(
+                  'Helps you to sleep peacefully',
+                  style: TextStyle(
+                      fontSize: subtitleFontSize,
+                      fontFamily: 'Montserrat',
+                      color: Color(0xFFB4A9D6)),
+                ),
+
+                SizedBox(height: 20),
+
+                // Contact Us
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildIconRow(
+                        Icons.headphones, 'Contact Us', subtitleFontSize),
+                    Row(
+                      children: [
+                        SizedBox(width: 40),
+                        Expanded(
+                          child: Text(
+                            '- Email: sleepful@gmail.com',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontSize: miniFontSize,
+                              fontFamily: 'Montserrat',
+                              color: Color(0xFFB4A9D6),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(width: 40),
+                        Expanded(
+                          child: Text(
+                            '- Phone: 081368395466',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontSize: miniFontSize,
+                              fontFamily: 'Montserrat',
+                              color: Color(0xFFB4A9D6),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
