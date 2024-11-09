@@ -13,7 +13,9 @@ import '../Components/Sections/home_info_card.dart';
 import 'Information/example_detail_information.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final int selectedIndex; // Add selectedIndex parameter
+
+  const HomePage({super.key, this.selectedIndex = 0});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +63,7 @@ class HomePage extends StatelessWidget {
                         style: TextStyle(
                           fontSize: titleFontSize,
                           fontWeight: FontWeight.bold,
-                          fontFamily: 'Montserrat-Bold',
+                          fontFamily: 'Montserrat',
                         ),
                       ),
                     ),
@@ -392,7 +394,7 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const BottomNavbar(),
+                BottomNavbar(selectedIndex: selectedIndex),
               ],
             ),
             Positioned(

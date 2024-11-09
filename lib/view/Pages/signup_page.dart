@@ -7,7 +7,13 @@ class SignUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    // double screenHeight = MediaQuery.of(context).size.height;
+
+    double buttonSize = screenWidth * 0.4;
+
+    double titleFontSize = screenWidth * 0.06;
+    double subtitleFontSize = screenWidth * 0.04; 
+    double buttonFontSize = screenWidth * 0.05; 
+    double smallTextFontSize = screenWidth * 0.03;
 
     return Scaffold(
       body: Center(
@@ -38,10 +44,10 @@ class SignUp extends StatelessWidget {
                     ).createShader(bounds);
                   },
                   blendMode: BlendMode.srcIn, //
-                  child: const Text(
+                  child: Text(
                     'Welcome to Sleepful!',
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: titleFontSize,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Montserrat',
                     ),
@@ -62,10 +68,10 @@ class SignUp extends StatelessWidget {
                   ).createShader(bounds);
                 },
                 blendMode: BlendMode.srcIn, //
-                child: const Text(
+                child: Text(
                   'Get ready to sleep peacefully',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: subtitleFontSize,
                     fontFamily: 'Montserrat',
                   ),
                 ),
@@ -82,15 +88,15 @@ class SignUp extends StatelessWidget {
                     crossAxisAlignment:
                         CrossAxisAlignment.start, // Align label to the start
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(
+                      Padding(
+                        padding: const EdgeInsets.only(
                             left: 30, bottom: 5), // Adjust padding as needed
                         child: Text(
                           'Name',
                           style: TextStyle(
-                              fontSize: 16,
+                              fontSize: subtitleFontSize,
                               fontWeight: FontWeight.normal,
-                              color: Color(0xFFFFFFFF),
+                              color: const Color(0xFFFFFFFF),
                               fontFamily: 'Montserrat'),
                         ),
                       ),
@@ -104,10 +110,10 @@ class SignUp extends StatelessWidget {
                           color: Color(0xFFB5B5B5),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: const TextField(
+                        child: TextField(
                           decoration: InputDecoration(
                             hintText: 'Enter your name',
-                            hintStyle: TextStyle(fontFamily: 'Montserrat'),
+                            hintStyle: TextStyle(fontFamily: 'Montserrat', fontSize: subtitleFontSize),
                             border: InputBorder.none,
                           ),
                         ),
@@ -123,13 +129,13 @@ class SignUp extends StatelessWidget {
                     crossAxisAlignment:
                         CrossAxisAlignment.start, // Align label to the start
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.only(
                             left: 30, bottom: 5), // Adjust padding as needed
                         child: Text(
                           'E-mail',
                           style: TextStyle(
-                              fontSize: 16,
+                              fontSize: subtitleFontSize,
                               fontWeight: FontWeight.normal,
                               color: Color(0xFFFFFFFF),
                               fontFamily: 'Montserrat'),
@@ -145,10 +151,10 @@ class SignUp extends StatelessWidget {
                           color: Color(0xFFB5B5B5),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: const TextField(
+                        child: TextField(
                           decoration: InputDecoration(
                             hintText: 'Enter your e-mail',
-                            hintStyle: TextStyle(fontFamily: 'Montserrat'),
+                            hintStyle: TextStyle(fontFamily: 'Montserrat', fontSize: subtitleFontSize),
                             border: InputBorder.none,
                           ),
                         ),
@@ -164,13 +170,13 @@ class SignUp extends StatelessWidget {
                     crossAxisAlignment:
                         CrossAxisAlignment.start, // Align label to the start
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.only(
                             left: 30, bottom: 5), // Adjust padding as needed
                         child: Text(
                           'Password',
                           style: TextStyle(
-                              fontSize: 16,
+                              fontSize: subtitleFontSize,
                               fontWeight: FontWeight.normal,
                               color: Color(0xFFFFFFFF),
                               fontFamily: 'Montserrat'),
@@ -186,11 +192,11 @@ class SignUp extends StatelessWidget {
                           color: Color(0xFFB5B5B5),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: const TextField(
+                        child: TextField(
                           obscureText: true,
                           decoration: InputDecoration(
                             hintText: 'Enter your password',
-                            hintStyle: TextStyle(fontFamily: 'Montserrat'),
+                            hintStyle: TextStyle(fontFamily: 'Montserrat', fontSize: subtitleFontSize),
                             border: InputBorder.none,
                           ),
                         ),
@@ -206,13 +212,13 @@ class SignUp extends StatelessWidget {
                     crossAxisAlignment:
                         CrossAxisAlignment.start, // Align label to the start
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.only(
                             left: 30, bottom: 5), // Adjust padding as needed
                         child: Text(
                           'Confirm Password',
                           style: TextStyle(
-                              fontSize: 16,
+                              fontSize: subtitleFontSize,
                               fontWeight: FontWeight.normal,
                               color: Color(0xFFFFFFFF),
                               fontFamily: 'Montserrat'),
@@ -228,10 +234,10 @@ class SignUp extends StatelessWidget {
                           color: Color(0xFFB5B5B5),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: const TextField(
+                        child: TextField(
                           decoration: InputDecoration(
                             hintText: 'Re-enter your password',
-                            hintStyle: TextStyle(fontFamily: 'Montserrat'),
+                            hintStyle: TextStyle(fontFamily: 'Montserrat', fontSize: subtitleFontSize),
                             border: InputBorder.none,
                           ),
                         ),
@@ -243,7 +249,7 @@ class SignUp extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 25),
                     child: Center(
                       child: SizedBox(
-                        width: 150,
+                        width: buttonSize,
                         child: ElevatedButton(
                           onPressed: () {
                             Navigator.push(
@@ -255,10 +261,10 @@ class SignUp extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF725FAC),
                             foregroundColor: Colors.white,
-                            textStyle: const TextStyle(
+                            textStyle: TextStyle(
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.bold,
-                                fontSize: 18),
+                                fontSize: buttonFontSize),
                             minimumSize: const Size(double.infinity, 40),
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 10),
@@ -266,7 +272,8 @@ class SignUp extends StatelessWidget {
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
-                          child: const Text('Sign Up'),
+                          child: Text('Sign Up', style: TextStyle(fontSize: buttonFontSize)
+                          ),
                         ),
                       ),
                     ),
@@ -287,10 +294,10 @@ class SignUp extends StatelessWidget {
                                     builder: (context) => const SignIn()),
                               );
                             },
-                            child: const Text(
+                            child: Text(
                               'Already have an account? Sign In Here',
                               style: TextStyle(
-                                fontSize: 12,
+                                fontSize: smallTextFontSize,
                                 fontWeight: FontWeight.bold,
                                 color: Color(0xFFB4A9D6),
                                 fontFamily: 'Montserrat',
