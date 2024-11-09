@@ -1,54 +1,189 @@
 import 'package:flutter/material.dart';
 
-class ChangeTheme extends StatelessWidget {
+class ChangeTheme extends StatefulWidget {
   const ChangeTheme({super.key});
 
- @override
+  @override
+  State<ChangeTheme> createState() => _ChangeThemeState();
+}
+
+class _ChangeThemeState extends State<ChangeTheme> {
+  int _selectedTheme = 0; // 0: Light, 1: Dark, 2: Auto
+
+  Widget _buildThemeOption(int index, String iconPath, String label, String description) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          _selectedTheme = index;
+        });
+      },
+      child:Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 30),
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            double screenWidth = constraints.maxWidth;
+
+            return Column(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.asset(
+                    iconPath,
+                    width: double.infinity, height: 100,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    Radio<int>(
+                      value: index,
+                      groupValue: _selectedTheme,
+                      onChanged: (int? value) {
+                        setState(() {
+                          _selectedTheme = value!;
+                        });
+                      },
+                      activeColor: Color(0xFFB4A9D6),
+                    ),
+                    SizedBox(width: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          label,
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.042, // Responsive font size
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Montserrat',
+                            color: Color(0xFFB4A9D6),
+                          ),
+                        ),
+                        Text(
+                          description,
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.03, // Responsive font size
+                            fontFamily: 'Montserrat',
+                            color: Color(0xFFB4A9D6),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double titleFontSize = screenWidth * 0.06;
-    // double subtitleFontSize = screenWidth * 0.04;
+    double buttonFontSize = screenWidth * 0.05;
+    double buttonSize = screenWidth * 0.3;
 
     return Scaffold(
       // Section 1: Title and Back Button
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerIsScrolled) {
-          return [
-            SliverAppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              leading: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Image.asset(
-                    'assets/images/buttonBack.png',
-                    width: 48,
-                    height: 48,
-                  ),
-                ),
-              ),
-              title: Padding(
-                padding: const EdgeInsets.only(left: 0),
-                child: Text(
-                  'Change Theme',
-                  style: TextStyle(
-                    fontSize: titleFontSize,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Montserrat',
-                    color: Color(0xFFB4A9D6),
-                  ),
-                ),
-              ),
-              centerTitle: false,
-              floating: true,
-              snap: true,
-              pinned: false,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Image.asset(
+              'assets/images/buttonBack.png',
+              width: 48,
+              height: 48,
             ),
-          ];
-        }, body: Center(),
+          ),
+        ),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 0),
+          child: Text(
+            'Change Theme',
+            style: TextStyle(
+              fontSize: titleFontSize,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Montserrat',
+              color: Color(0xFFB4A9D6),
+            ),
+          ),
+        ),
+      ),
+
+      // Section 2: Change Theme Contents
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: 25),
+                _buildThemeOption(
+                  0,
+                  'assets/images/Contoh 1.png',
+                  'Light Mode',
+                  'Provides a bright and vibrant interface',
+                ),
+                SizedBox(height: 15),
+                _buildThemeOption(
+                  1,
+                  'assets/images/Contoh 1.png',
+                  'Dark Mode',
+                  'Provides a dark and comfortable interface',
+                ),
+                SizedBox(height: 15),
+                _buildThemeOption(
+                  2,
+                  'assets/images/Contoh 1.png',
+                  'Automatically',
+                  'Switches automatically based on timezone',
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 25),
+                  child: Center(
+                    child: SizedBox(
+                      width: buttonSize,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Handle save button press here
+                          // You can access the selected theme using _selectedTheme// and apply the theme accordingly.
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF725FAC),
+                          foregroundColor: Colors.white,
+                          textStyle: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.bold,
+                            fontSize: buttonFontSize,
+                          ),
+                          minimumSize: const Size(double.infinity, 40),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 10,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        child: Text(
+                          'Save',
+                          style: TextStyle(fontSize: buttonFontSize),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
