@@ -1,4 +1,3 @@
-// bottom_navbar.dart
 import 'package:flutter/material.dart';
 import '../Pages/home_page.dart';
 import 'icon_with_text.dart';
@@ -64,7 +63,9 @@ class BottomNavbarState extends State<BottomNavbar> {
                 customIcon: SvgPicture.asset(
                   'assets/icons/breathing-icon.svg',
                   fit: BoxFit.contain,
-                  color: isOnMainPage && widget.selectedIndex == 2 ? iconText : const Color(0xFF7F779A), // Set color based on selected index
+                  colorFilter: isOnMainPage && widget.selectedIndex == 2
+                      ? ColorFilter.mode(iconText, BlendMode.srcIn)
+                      : ColorFilter.mode(const Color(0xFF7F779A), BlendMode.srcIn), // Set color based on selected index
                 ),
                 text: 'Rewards',
                 onPressed: () {
