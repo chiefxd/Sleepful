@@ -52,7 +52,7 @@ class BottomNavbarState extends State<BottomNavbar> {
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => const Calendar(selectedIndex: 1)),
+                    MaterialPageRoute(builder: (context) => const Calendar()),
                   );
                 },
                 color: isOnMainPage && widget.selectedIndex == 1 ? iconText : const Color(0xFF7F779A),
