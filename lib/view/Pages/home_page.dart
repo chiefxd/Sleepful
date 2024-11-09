@@ -61,7 +61,7 @@ class HomePage extends StatelessWidget {
                         style: TextStyle(
                           fontSize: titleFontSize,
                           fontWeight: FontWeight.bold,
-                          fontFamily: 'Montserrat-Bold',
+                          fontFamily: 'Montserrat',
                         ),
                       ),
                     ),

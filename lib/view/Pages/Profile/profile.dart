@@ -3,61 +3,48 @@ import 'package:flutter/material.dart';
 class Profile extends StatelessWidget {
   const Profile({super.key});
 
-  Widget _buildIconRow(IconData icon, String text, double fontSize) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
-      child: Row(
-        children: [
-          Icon(icon, color: Color(0xFFB4A9D6)),
-          SizedBox(width: 10),
-          Text(
-            text,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Montserrat',
-              color: Color(0xFFB4A9D6),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildIconRow(IconData icon, String text, double fontSize) {
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
+  //     child: Row(
+  //       children: [
+  //         Icon(icon, color: Color(0xFFB4A9D6)),
+  //         SizedBox(width: 10),
+  //         Text(
+  //           text,
+  //           style: TextStyle(
+  //             fontWeight: FontWeight.bold,
+  //             fontFamily: 'Montserrat',
+  //             color: Color(0xFFB4A9D6),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
-  Widget _buildChangeThemeRow(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Icon(
-                Icons.palette,
+  Widget _buildIconRow(IconData icon, String text, double fontSize,
+      {required BuildContext context, required String routeName}) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, routeName);
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
+        child: Row(
+          children: [
+            Icon(icon, color: Color(0xFFB4A9D6)),
+            SizedBox(width: 10),
+            Text(
+              text,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Montserrat',
                 color: Color(0xFFB4A9D6),
               ),
-              SizedBox(width: 10),
-              Text(
-                'Change Theme',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Montserrat',
-                  color: Color(0xFFB4A9D6),
-                ),
-              ),
-            ],
-          ),
-          Transform.scale(
-            scale: 0.9,
-            child: Switch(
-              value: Theme.of(context).brightness == Brightness.dark,
-              onChanged: (value) {},
-              activeColor: Color(0xFF120C23),
-              inactiveTrackColor: Color(0xFF120C23),
-              activeTrackColor: Color(0xFFB4A9D6),
-              thumbColor: WidgetStateProperty.all<Color>(Color(0xFFFFFFFF)),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -66,8 +53,7 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double titleFontSize = screenWidth * 0.06;
-    double subtitleFontSize =
-        screenWidth * 0.04;
+    double subtitleFontSize = screenWidth * 0.04;
 
     return Scaffold(
       // Section 1: Title and Back Button
@@ -109,57 +95,75 @@ class Profile extends StatelessWidget {
             ),
           ];
         },
-        
+
         // Section 2: Profile Contents
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              // Profile Pic
-              CircleAvatar(
-                radius: 80,
-                backgroundImage: AssetImage(
-                    'assets/images/Contoh 1.png'),
-              ),
+        body: Stack(
+          children: [
+            Column(
+              children: <Widget>[
+                SizedBox(height: 25),
 
-              SizedBox(height: 15),
+                // Profile Pic
+                CircleAvatar(
+                  radius: 75,
+                  backgroundImage: AssetImage('assets/images/Contoh 1.png'),
+                ),
 
-              // User's Name
-              Text(
-                'Stefan Santoso',
-                style: TextStyle(
-                    fontSize: titleFontSize,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Montserrat',
-                    color: Color(0xFFB4A9D6)),
-              ),
+                SizedBox(height: 15),
 
-              SizedBox(height: 0),
+                // User's Name
+                Text(
+                  'Stefan Santoso',
+                  style: TextStyle(
+                      fontSize: titleFontSize,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Montserrat',
+                      color: Color(0xFFB4A9D6)),
+                ),
 
-              // Sleep Time
-              Text(
-                'Your total sleep time is 32 hours!',
-                style: TextStyle(
-                    fontSize: subtitleFontSize,
-                    fontFamily: 'Montserrat',
-                    color: Color(0xFFB4A9D6)),
-              ),
+                SizedBox(height: 0),
 
-              SizedBox(height: 20),
+                // Sleep Time
+                Text(
+                  'Your total sleep time is 32 hours!',
+                  style: TextStyle(
+                      fontSize: subtitleFontSize,
+                      fontFamily: 'Montserrat',
+                      color: Color(0xFFB4A9D6)),
+                ),
 
-              // 5 rows
-              Column(
-                children: [
-                  _buildIconRow(Icons.edit, 'Edit Profile', subtitleFontSize),
-                  _buildIconRow(
-                      Icons.lock, 'Change Password', subtitleFontSize),
-                  _buildChangeThemeRow(context),
-                  _buildIconRow(Icons.info, 'About Us', subtitleFontSize),
-                  _buildIconRow(Icons.logout, 'Log Out', subtitleFontSize),
-                ],
-              ),
-            ],
-          ),
+                SizedBox(height: 20),
+
+                // 5 rows
+                Column(
+                  children: [
+                    _buildIconRow(Icons.edit, 'Edit Profile', subtitleFontSize,
+                        context: context,
+                        routeName:
+                            '/editProfile'),
+                    _buildIconRow(
+                        Icons.lock, 'Change Password', subtitleFontSize,
+                        context: context,
+                        routeName:
+                            '/change_password'),
+                    _buildIconRow(
+                        Icons.palette, 'Change Theme', subtitleFontSize,
+                        context: context,
+                        routeName:
+                            '/change_theme'),
+                    _buildIconRow(Icons.info, 'About Us', subtitleFontSize,
+                        context: context,
+                        routeName:
+                            '/about_us'),
+                    _buildIconRow(Icons.logout, 'Log Out', subtitleFontSize,
+                        context: context,
+                        routeName:
+                            '/logout'),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
