@@ -6,10 +6,11 @@ class AddPlans extends StatefulWidget {
   const AddPlans({super.key});
 
   @override
-  _AddPlansState createState() => _AddPlansState();
+  AddPlansState createState() => AddPlansState(); // Change to public
 }
 
-class _AddPlansState extends State<AddPlans> {
+class AddPlansState extends State<AddPlans> {
+  // Change to public
   bool isStartSelected = false; // Track if Start button is selected
 
   void _toggleButton(bool isStart) {
@@ -170,10 +171,15 @@ class _AddPlansState extends State<AddPlans> {
                             ElevatedButton(
                               onPressed: () => _toggleButton(true),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: isStartSelected ? Color(0xFFB4A9D6) : Colors.transparent,
-                                foregroundColor: isStartSelected ? Color(0xFF1F1249) : Colors.white,
+                                backgroundColor: isStartSelected
+                                    ? Color(0xFFB4A9D6)
+                                    : Colors.transparent,
+                                foregroundColor: isStartSelected
+                                    ? Color(0xFF1F1249)
+                                    : Colors.white,
                                 side: BorderSide(color: Colors.white),
-                                padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 4.0),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 30.0, vertical: 4.0),
                               ),
                               child: const Text(
                                 'Start',
@@ -188,10 +194,15 @@ class _AddPlansState extends State<AddPlans> {
                             ElevatedButton(
                               onPressed: () => _toggleButton(false),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: !isStartSelected ? Color(0xFFB4A9D6) : Colors.transparent,
-                                foregroundColor: !isStartSelected ? Color(0xFF1F1249) : Colors.white,
+                                backgroundColor: !isStartSelected
+                                    ? Color(0xFFB4A9D6)
+                                    : Colors.transparent,
+                                foregroundColor: !isStartSelected
+                                    ? Color(0xFF1F1249)
+                                    : Colors.white,
                                 side: BorderSide(color: Colors.white),
-                                padding: const EdgeInsets.symmetric(horizontal: 35.0, vertical: 4.0),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 35.0, vertical: 4.0),
                               ),
                               child: const Text(
                                 'End',
@@ -216,13 +227,13 @@ class _AddPlansState extends State<AddPlans> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: const [
-                            _DayCircle(letter: 'S'),
-                            _DayCircle(letter: 'M'),
-                            _DayCircle(letter: 'T'),
-                            _DayCircle(letter: 'W'),
-                            _DayCircle(letter: 'T'),
-                            _DayCircle(letter: 'F'),
-                            _DayCircle(letter: 'S'),
+                            DayCircle(letter: 'S'),
+                            DayCircle(letter: 'M'),
+                            DayCircle(letter: 'T'),
+                            DayCircle(letter: 'W'),
+                            DayCircle(letter: 'T'),
+                            DayCircle(letter: 'F'),
+                            DayCircle(letter: 'S'),
                           ],
                         ),
                       ],
@@ -249,27 +260,42 @@ class _AddPlansState extends State<AddPlans> {
                     decoration: InputDecoration(
                       // Set the bottom border to be visible
                       enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFB4A9D6), width: 2.0), // Set the bottom border color and width
+                        borderSide: BorderSide(
+                            color: Color(0xFFB4A9D6),
+                            width:
+                                2.0), // Set the bottom border color and width
                       ),
                       focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFB4A9D6), width: 2.0), // Set the focused bottom border color and width
+                        borderSide: BorderSide(
+                            color: Color(0xFFB4A9D6),
+                            width:
+                                2.0), // Set the focused bottom border color and width
                       ),
                       errorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 2.0), // Set the error bottom border color and width
+                        borderSide: BorderSide(
+                            color: Colors.red,
+                            width:
+                                2.0), // Set the error bottom border color and width
                       ),
                       hintText: 'Enter plan name',
-                      hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)), // Optional: Change hint text color
+                      hintStyle: TextStyle(
+                          color: Colors.white.withOpacity(
+                              0.5)), // Optional: Change hint text color
                     ),
                   ),
                   const SizedBox(height: 20),
 
-                  //Add Button
+                  // Add Button
                   ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF6149A7), // Same background color as Start button
-                      foregroundColor: Color(0xFF1F1249), // Same foreground color as Start button
-                      padding: const EdgeInsets.symmetric(horizontal: 35.0, vertical: 4.0), // Same padding as Start button
+                      backgroundColor: Color(0xFF6149A7),
+                      // Same background color as Start button
+                      foregroundColor: Color(0xFF1F1249),
+                      // Same foreground color as Start button
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 35.0,
+                          vertical: 4.0), // Same padding as Start button
                     ),
                     child: const Text(
                       'Add',
@@ -302,16 +328,16 @@ class _AddPlansState extends State<AddPlans> {
   }
 }
 
-class _DayCircle extends StatefulWidget {
+class DayCircle extends StatefulWidget {
   final String letter;
 
-  const _DayCircle({required this.letter});
+  const DayCircle({super.key, required this.letter});
 
   @override
-  _DayCircleState createState() => _DayCircleState();
+  DayCircleState createState() => DayCircleState();
 }
 
-class _DayCircleState extends State<_DayCircle> {
+class DayCircleState extends State<DayCircle> {
   bool isSelected = false;
 
   @override
