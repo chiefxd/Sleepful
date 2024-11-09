@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../Pages/sleeping_stats.dart';  // import the SleepingStats page
+import '../Pages/Plans/add_plans.dart';  // import the SleepingStats page
 
 class PlusButton extends StatelessWidget {
   const PlusButton({super.key});
@@ -28,7 +28,7 @@ class PlusButton extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SleepingStats()),
+                MaterialPageRoute(builder: (context) => const AddPlans()),
               );
             },
             child: const Center(
