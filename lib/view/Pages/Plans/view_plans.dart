@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sleepful/view/Pages/Plans/update_plans.dart';
 
 import '../../Navbar/bottom_navbar.dart';
 import '../../Components/plus_button.dart';
@@ -9,7 +10,8 @@ class ViewPlans extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack( // Use Stack to position the PlusButton
+      body: Stack(
+        // Use Stack to position the PlusButton
         children: [
           NestedScrollView(
             headerSliverBuilder: (context, innerIsScrolled) {
@@ -19,12 +21,14 @@ class ViewPlans extends StatelessWidget {
                   elevation: 0,
                   leading: GestureDetector(
                     onTap: () {
-                      Navigator.of(context).pop(); // Go back to the previous screen
+                      Navigator.of(context)
+                          .pop(); // Go back to the previous screen
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Image.asset(
-                        'assets/images/buttonBack.png', // Use the same back button image
+                        'assets/images/buttonBack.png',
+                        // Use the same back button image
                         width: 48,
                         height: 48,
                       ),
@@ -37,8 +41,10 @@ class ViewPlans extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        fontFamily: 'Montserrat', // Ensure the same font family is used
-                        color: Color(0xFFB4A9D6), // Use the same color as in profile.dart
+                        fontFamily: 'Montserrat',
+                        // Ensure the same font family is used
+                        color: Color(
+                            0xFFB4A9D6), // Use the same color as in profile.dart
                       ),
                     ),
                   ),
@@ -56,9 +62,12 @@ class ViewPlans extends StatelessWidget {
                   child: ListView(
                     padding: const EdgeInsets.all(16.0),
                     children: [
-                      _buildPlanCard('Plan Title 1', '2:00 AM - 11:00 AM'),
-                      _buildPlanCard('Plan Title 2', '3:00 AM - 12:00 PM'),
-                      _buildPlanCard('Plan Title 3', '4:00 AM - 1:00 PM'),
+                      _buildPlanCard(
+                          context, 'Plan Title 1', '2:00 AM - 11:00 AM'),
+                      _buildPlanCard(
+                          context, 'Plan Title 2', '3:00 AM - 12:00 PM'),
+                      _buildPlanCard(
+                          context, 'Plan Title 3', '4:00 AM - 1:00 PM'),
                     ],
                   ),
                 ),
@@ -76,12 +85,13 @@ class ViewPlans extends StatelessWidget {
     );
   }
 
-  Widget _buildPlanCard(String title, String timePeriod) {
+  Widget _buildPlanCard(BuildContext context, String title, String timePeriod) {
     return Card(
       color: Color(0xFF1F1249),
       margin: const EdgeInsets.symmetric(vertical: 10.0),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0), // Padding for the entire card
+        padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
+        // Padding for the entire card
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start, // Align to the left
           children: [
@@ -104,12 +114,14 @@ class ViewPlans extends StatelessWidget {
                 fontFamily: 'Montserrat',
               ),
             ),
-            const SizedBox(height: 8.0), // Add some space before the days section
+            const SizedBox(height: 8.0),
+            // Add some space before the days section
             // Days of the Week Section
             Container(
               decoration: BoxDecoration(
                 color: Color(0xFF6149A7),
-                borderRadius: BorderRadius.circular(20.0), // Adjust the radius as needed
+                borderRadius:
+                    BorderRadius.circular(20.0), // Adjust the radius as needed
               ),
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -132,13 +144,25 @@ class ViewPlans extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Update Plan',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.bold,
+                  InkWell(
+                    onTap: () {
+                      // Navigate to Update Plan page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => UpdatePlans(
+                                  title: title,
+                                )), // Replace with your UpdatePlanPage widget
+                      );
+                    },
+                    child: const Text(
+                      'Update Plan',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   Container(
@@ -146,13 +170,132 @@ class ViewPlans extends StatelessWidget {
                     height: 24, // Height of the line
                     color: Colors.white, // Color of the line
                   ),
-                  const Text(
-                    'Delete Plan',
-                    style: TextStyle(
-                      color: Color(0xFFE4DCFF), //E4DCFF
-                      fontSize: 20,
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.bold,
+                  InkWell(
+                    onTap: () {
+                      // Show confirmation dialog
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            backgroundColor: Color(0xFF1F1249),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              // Use minimum size for the column
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.delete, // Use the delete icon
+                                      color: Color(0xFFB4A9D6),
+                                      size: 30, // Adjust the size as needed
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 16),
+                                // Add some space between the icon and text
+                                Text(
+                                  'Are you sure you want to delete $title?',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                            actions: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.transparent,
+                                        // Background color
+                                        borderRadius:
+                                            BorderRadius.circular(30.0),
+                                        // Rounded corners
+                                        border: Border.all(
+                                          color: Color(0xFFB4A9D6),
+                                          // Border color
+                                          width: 2.0, // Border width
+                                        ),
+                                      ),
+                                      child: TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pop(); // Close the dialog
+                                        },
+                                        style: TextButton.styleFrom(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 12.0),
+                                          // Vertical padding
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                30.0), // Rounded corners
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          'Cancel',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: 'Montserrat',
+                                            // Montserrat font
+                                            fontWeight:
+                                                FontWeight.bold, // Bold text
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const VerticalDivider(color: Colors.white),
+                                  // Divider between buttons
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        // Set the background color to red
+                                        borderRadius:
+                                            BorderRadius.circular(30.0),
+                                      ),
+                                      child: TextButton(
+                                        onPressed: () {
+                                          // Handle the delete action here
+                                          Navigator.of(context)
+                                              .pop(); // Close the dialog
+                                          // Add your delete logic here
+                                        },
+                                        child: const Text(
+                                          'Delete',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            // Change text color to white
+                                            fontFamily: 'Montserrat',
+                                            // Montserrat font
+                                            fontWeight:
+                                                FontWeight.bold, // Bold text
+                                          ), // Change text color to white
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    child: const Text(
+                      'Delete Plan',
+                      style: TextStyle(
+                        color: Color(0xFFE4DCFF), //E4DCFF
+                        fontSize: 20,
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
