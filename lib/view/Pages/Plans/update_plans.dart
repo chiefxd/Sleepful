@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import '../../Navbar/bottom_navbar.dart';
 import '../../Components/plus_button.dart';
 
-class AddPlans extends StatefulWidget {
-  const AddPlans({super.key});
+class UpdatePlans extends StatefulWidget {
+  final String title;
+
+  const UpdatePlans({super.key, required this.title});
 
   @override
-  AddPlansState createState() => AddPlansState(); // Change to public
+  UpdatePlansState createState() => UpdatePlansState(); // Change to public
 }
 
-class AddPlansState extends State<AddPlans> {
+class UpdatePlansState extends State<UpdatePlans> {
   // Change to public
   bool isStartSelected = true; // Track if Start button is selected
 
@@ -72,8 +74,8 @@ class AddPlansState extends State<AddPlans> {
                   ),
                   title: Padding(
                     padding: const EdgeInsets.only(left: 0),
-                    child: const Text(
-                      'Add Plans',
+                    child: Text(
+                      'Update ${widget.title}',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -137,7 +139,7 @@ class AddPlansState extends State<AddPlans> {
                                     color: index == selectedHourIndex
                                         ? Colors.white
                                         : Colors.white.withOpacity(
-                                            0.5), // Change text color if selected
+                                        0.5), // Change text color if selected
                                   ),
                                 ),
                               );
@@ -152,12 +154,12 @@ class AddPlansState extends State<AddPlans> {
                         child: Container(
                           decoration: BoxDecoration(
                             color: (selectedHourIndex != -1 ||
-                                    selectedMinuteIndex != -1)
+                                selectedMinuteIndex != -1)
                                 ? Color(
-                                    0xFF6A5ACD) // Change color if hour or minute is selected
+                                0xFF6A5ACD) // Change color if hour or minute is selected
                                 : Colors.transparent, // Default color
                             borderRadius:
-                                BorderRadius.circular(0), // No rounding
+                            BorderRadius.circular(0), // No rounding
                           ),
                           alignment: Alignment.center,
                           child: Stack(
@@ -231,7 +233,7 @@ class AddPlansState extends State<AddPlans> {
                                     color: index == selectedMinuteIndex
                                         ? Colors.white
                                         : Colors.white.withOpacity(
-                                            0.5), // Change text color if selected
+                                        0.5), // Change text color if selected
                                   ),
                                 ),
                               );
@@ -275,7 +277,7 @@ class AddPlansState extends State<AddPlans> {
                                     color: isStartAM == (index == 0)
                                         ? Colors.white
                                         : Colors.white.withOpacity(
-                                            0.5), // Change text color if selected
+                                        0.5), // Change text color if selected
                                   ),
                                 ),
                               );
@@ -311,8 +313,7 @@ class AddPlansState extends State<AddPlans> {
                                     : Colors.white,
                                 side: BorderSide(
                                   color: isStartSelected
-                                      ? Color(
-                                          0xFFB4A9D6) // Change border color to B4A9D6 when selected
+                                      ? Color(0xFFB4A9D6) // Change border color to B4A9D6 when selected
                                       : Colors.white,
                                 ),
                                 padding: const EdgeInsets.symmetric(
@@ -400,19 +401,19 @@ class AddPlansState extends State<AddPlans> {
                         borderSide: BorderSide(
                             color: Color(0xFFB4A9D6),
                             width:
-                                2.0), // Set the bottom border color and width
+                            2.0), // Set the bottom border color and width
                       ),
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Color(0xFFB4A9D6),
                             width:
-                                2.0), // Set the focused bottom border color and width
+                            2.0), // Set the focused bottom border color and width
                       ),
                       errorBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.red,
                             width:
-                                2.0), // Set the error bottom border color and width
+                            2.0), // Set the error bottom border color and width
                       ),
                       hintText: 'Enter plan name',
                       hintStyle: TextStyle(
@@ -435,7 +436,7 @@ class AddPlansState extends State<AddPlans> {
                           vertical: 4.0), // Same padding as Start button
                     ),
                     child: const Text(
-                      'Add',
+                      'Update',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
