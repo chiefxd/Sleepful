@@ -1,6 +1,7 @@
 // home_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sleepful/view/Pages/Breathing%20Exercise/breathing_exercise.dart';
 import 'Plans/view_plans.dart'; // Import the new_page_a.dart file
 import 'sleeping_stats.dart'; // Import the page_b.dart file
 import 'information.dart'; // Import the page_d.dart file
@@ -221,7 +222,7 @@ class HomePage extends StatelessWidget {
                                             fit: BoxFit.contain),
                                       ),
                                       text: 'Breathing\nExercise',
-                                      nextPage: const Information(),
+                                      nextPage: const BreathingExercise(),
                                       textColor: Color(0xFFE4DCFF),
                                     ),
                                   ),
