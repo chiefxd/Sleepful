@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../Util/sound_part.dart';
+import '../Pages/Sounds/sound_part.dart';
 
 class SoundSquares extends StatelessWidget {
   List SoundAvailable = [
@@ -18,10 +18,10 @@ class SoundSquares extends StatelessWidget {
         SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (context, index) {
           return SoundPart(
-              Pictures: SoundAvailable[index][0],
-              SoundTitle: SoundAvailable[index][1],
-              SoundGenre: SoundAvailable[index][2],
-              SoundDuration: SoundAvailable[index][3]);
+              soundPictures: SoundAvailable[index][0],
+              soundTitle: SoundAvailable[index][1],
+              soundGenre: SoundAvailable[index][2],
+              soundDuration: SoundAvailable[index][3]);
         });
   }
 }
