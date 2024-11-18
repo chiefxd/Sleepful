@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../Pages/sounds.dart';
+import '../../Pages/Sounds/sounds.dart';
 import '../../Pages/Sounds/sounds_sad.dart';
 import '../../Pages/Sounds/sounds_night.dart';
 import '../../Pages/Sounds/sounds_mix.dart';
@@ -57,19 +57,19 @@ class SoundsSection extends StatelessWidget {
               children: [
                 // First Image
                 _buildSoundItem(
-                    context, 'Sad', 'assets/images/Contoh 1.png', SoundsSad()),
+                    context, 'Sad', 'assets/images/rain.jpg', SoundsRain()),
                 // Second Image
                 _buildSoundItem(
-                    context, 'Night', 'assets/images/Long.png', SoundsNight()),
+                    context, 'Night', 'assets/images/night.jpg', SoundsNight()),
                 // Third Image
                 _buildSoundItem(
-                    context, 'Mix', 'assets/images/Long.png', SoundsMix()),
+                    context, 'Mix', 'assets/images/mix.jpg', SoundsMix()),
                 // Fourth Image
-                _buildSoundItem(context, 'Winter', 'assets/images/Contoh 1.png',
+                _buildSoundItem(context, 'Winter', 'assets/images/winter.jpg',
                     SoundsWinter()),
                 // Fifth Image
                 _buildSoundItem(
-                    context, 'Lofi', 'assets/images/Long.png', SoundsLofi()),
+                    context, 'Comfort', 'assets/images/comfort.jpeg', SoundsComfort()),
               ],
             ),
           ),
