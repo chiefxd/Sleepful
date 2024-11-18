@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
 class SoundPart extends StatelessWidget {
-  final String Pictures;
-  final String SoundTitle;
-  final String SoundGenre;
-  final String SoundDuration;
+  final String soundPictures;
+  final String soundTitle;
+  final String soundGenre;
+  final String soundDuration;
 
   const SoundPart({
     super.key,
-    required this.Pictures,
-    required this.SoundTitle,
-    required this.SoundGenre,
-    required this.SoundDuration,
+    required this.soundPictures,
+    required this.soundTitle,
+    required this.soundGenre,
+    required this.soundDuration,
   });
 
   @override
@@ -27,24 +27,24 @@ class SoundPart extends StatelessWidget {
           Padding(
             padding:
             const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-            child: Image.asset(Pictures),
+            child: Image.asset(soundPictures),
           ),
           //title
           Text(
-            SoundTitle,
+            soundTitle,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
           const SizedBox(height: 5),
-          Text(SoundGenre,
+          Text(soundGenre,
               style: TextStyle(
                   color: Colors.deepPurpleAccent,
                   fontWeight: FontWeight.bold,
                   fontSize: 20)),
           const SizedBox(height: 12),
-          Text(SoundGenre,
+          Text(soundGenre,
               style: TextStyle(color: Colors.deepPurpleAccent, fontSize: 10)),
           const SizedBox(height: 12),
-          Text(SoundDuration,
+          Text(soundDuration,
               style: TextStyle(color: Colors.deepPurpleAccent, fontSize: 8)),
           //genre
           //duration
