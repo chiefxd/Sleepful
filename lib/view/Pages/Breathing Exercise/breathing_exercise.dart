@@ -56,96 +56,181 @@ class _BreathingExerciseState extends State<BreathingExercise> {
       ),
 
       // Section 2: Breathing Contents
-      body: Stack(
-        children: [
-          Column(
+      body: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return Stack(
             children: [
-              SizedBox(height: 30),
+              Column(
+                children: [
+                  SizedBox(height: 30),
 
-              // Breathing Circle
-              GestureDetector(
-                onTap: () {
-                  if (_controller.isBreathing) {
-                    _controller.stopBreathing();
-                  } else {
-                    _controller.startBreathing();
-                  }
-                },
-                child: Container(
-                  width: 300,
-                  height: 300,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _controller.isBreathing ? Colors.blue : Color(0xFF7D64CA),
-                  ),
-                  child: Center(
-                    child: Text(
-                      _controller.isBreathing ? 'Breathe Out' : 'Breathe In',
-                      style: TextStyle(
-                        fontSize: titleFontSize,
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                  // Breathing Circle
+                  GestureDetector(
+                    onTap: () {
+                      if (!_controller.isBreathing) {
+                        _controller.startBreathing();
+                      } else {
+                        _controller.stopBreathing();
+                      }
+                    },
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        // Outer Circle (Border)
+                        Container(
+                          width: 300,
+                          height: 300,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border:
+                                Border.all(color: Color(0xFF7D64CA), width: 5),
+                          ),
+                        ),
+
+                        // Inner Circle (Animated)
+                        AnimatedContainer(
+                          duration:
+                              Duration(seconds: _controller.breathDuration),
+                          width: _controller.buttonText == 'BREATHE IN'
+                              ? 280
+                              : 240,
+                          height: _controller.buttonText == 'BREATHE IN'
+                              ? 280
+                              : 240,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color(0xFF7D64CA),
+                          ),
+                          child: Center(
+                            child: Text(
+                              _controller.buttonText,
+                              style: TextStyle(
+                                fontSize: titleFontSize,
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ),
 
-              SizedBox(height: 30),
+                  SizedBox(height: 20),
 
-              // Pick Time Text
-              Center(
-                child: Text(
-                  'Pick the time durations:',
-                  style: TextStyle(
-                    fontSize: breatheFontSize,
-                    fontFamily: 'Montserrat',
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFFB4A9D6),
-                  ),
-                ),
-              ),
+                  // Timer and Duration Controls
+                  if (!_controller.isBreathing) ...[
+                    // Show when not breathing
+                    Center(
+                      child: Column(
+                        children: [
+                          Text(
+                            'Pick the time durations:',
+                            style: TextStyle(
+                              fontSize: breatheFontSize,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFFB4A9D6),
+                            ),
+                          ),
 
-              SizedBox(height: 10),
+                          SizedBox(height: 10),
 
-              // Pick Time Button
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.remove),
-                    onPressed: () {
-                      setState(() {
-                        if (_controller.breathDuration > 1) {
-                          _controller.setBreathDuration(
-                              _controller.breathDuration - 1);
-                        }
-                      });
-                    },
-                  ),
-                  Text('${_controller.breathDuration} mins',
-                      style: TextStyle(
-                        fontSize: breatheFontSize,
-                        fontFamily: 'Montserrat',
-                        color: Color(0xFFB4A9D6),
-                      )),
-                  IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: () {
-                      setState(() {
-                        if (_controller.breathDuration < 5) {
-                          _controller.setBreathDuration(
-                              _controller.breathDuration + 1);
-                        }
-                      });
-                    },
-                  ),
+                          // Pick Time Button
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xFF1F124A),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10), // Add padding
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  icon: Icon(Icons.remove, color: Colors.white),
+                                  onPressed: () {
+                                    setState(() {
+                                      if (_controller.breathDuration > 1) {
+                                        _controller.setBreathDuration(
+                                            _controller.breathDuration - 1);
+                                      }
+                                    });
+                                  },
+                                ),
+                                Text('${_controller.breathDuration} mins',
+                                    style: TextStyle(
+                                      fontSize: breatheFontSize,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    )),
+                                IconButton(
+                                  icon: Icon(Icons.add, color: Colors.white),
+                                  onPressed: () {
+                                    setState(() {
+                                      if (_controller.breathDuration < 5) {
+                                        _controller.setBreathDuration(
+                                            _controller.breathDuration + 1);
+                                      }
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ] else ...[
+                    // Show when breathing
+                    Center(
+                      child: Column(
+                        children: [
+                          Text(
+                            'You\'ve set the duration \nfor ${_controller.breathDuration} minutes!',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: breatheFontSize,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFFB4A9D6),
+                            ),
+                          ),
+
+                          SizedBox(height: 10),
+
+                          // Time Remaining Display
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xFF1F124A),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            child: Text(
+                              _controller
+                                  .formatTime(_controller.secondsRemaining),
+                              style: TextStyle(
+                                fontSize: breatheFontSize,
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ],
-          ),
-        ],
+          );
+        },
       ),
     );
   }
