@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sleepful/view/Pages/Sounds/sound_squares.dart';
-import '../../Navbar/bottom_navbar.dart';
-import '../../Components/plus_button.dart';
+// import '../../Navbar/bottom_navbar.dart';
+// import '../../Components/plus_button.dart';
 // import '../util/SoundPart.dart';
 
 class SoundPage extends StatelessWidget {
@@ -81,16 +81,16 @@ class SoundPage extends StatelessWidget {
                     child:SoundSquares(),
 
                   ),
-                  BottomNavbar(selectedIndex: -1),
+                  // BottomNavbar(selectedIndex: -1),
                 ],
               ),
             ),
           ),
-          Positioned(
-            bottom: 56,
-            left: MediaQuery.of(context).size.width / 2 - 27,
-            child: const PlusButton(),
-          ),
+          // Positioned(
+          //   bottom: 56,
+          //   left: MediaQuery.of(context).size.width / 2 - 27,
+          //   child: const PlusButton(),
+          // ),
         ],
       ),
     );

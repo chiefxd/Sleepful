@@ -1,9 +1,9 @@
 // import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:sleepful/view/Pages/Sounds/sounds_lofi.dart';
-import 'package:sleepful/view/Pages/Sounds/sounds_winter.dart';
-import '../Sounds/sound_part.dart';
+import '../../Pages/Sounds/sounds_lofi.dart';
+import '../../Pages/Sounds/sounds_winter.dart';
+import '../../Pages/Sounds/sound_part.dart';
 import '../../Pages/Sounds/sounds_sad.dart';
 import '../../Pages/Sounds/sounds_night.dart';
 import '../../Pages/Sounds/sounds_mix.dart';
@@ -11,31 +11,31 @@ import '../../Pages/Sounds/sounds_mix.dart';
 class SoundSquares extends StatelessWidget {
   List<SoundPart> soundAvailable = [
     SoundPart(
-      pictures: "assets/images/rain.jpg",
+      soundPictures: "assets/images/rain.jpg",
       soundTitle: "Rain",
       soundGenre: "Relaxing",
       soundDuration: "30m",
     ),
     SoundPart(
-      pictures: "assets/images/night.jpg",
+      soundPictures: "assets/images/night.jpg",
       soundTitle: "Night",
       soundGenre: "Calm, Soothing",
       soundDuration: "28m",
     ),
     SoundPart(
-      pictures: "assets/images/mix.jpg",
+      soundPictures: "assets/images/mix.jpg",
       soundTitle: "Mix",
       soundGenre: "Relaxing",
       soundDuration: "42m",
     ),
     SoundPart(
-      pictures: "assets/images/winter.jpg",
+      soundPictures: "assets/images/winter.jpg",
       soundTitle: "Winter",
       soundGenre: "Ambient",
       soundDuration: "15m",
     ),
     SoundPart(
-      pictures: "assets/images/comfort.jpeg",
+      soundPictures: "assets/images/comfort.jpeg",
       soundTitle: "Comfort",
       soundGenre: "Calm, Ambient",
       soundDuration: "17m",
@@ -101,7 +101,7 @@ class SoundSquares extends StatelessWidget {
                   child:ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
                     child: Image.asset(
-                      item.pictures,
+                      item.soundPictures,
                       fit: BoxFit.cover,
                     ),
                   ),
