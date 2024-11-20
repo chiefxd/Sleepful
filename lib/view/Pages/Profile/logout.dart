@@ -11,44 +11,34 @@ class Logout extends StatelessWidget {
 
     return Scaffold(
       // Section 1: Title and Back Button
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerIsScrolled) {
-          return [
-            SliverAppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              leading: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Image.asset(
-                    'assets/images/buttonBack.png',
-                    width: 48,
-                    height: 48,
-                  ),
-                ),
-              ),
-              title: Padding(
-                padding: const EdgeInsets.only(left: 0),
-                child: Text(
-                  'Logout',
-                  style: TextStyle(
-                    fontSize: titleFontSize,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Montserrat',
-                    color: Color(0xFFB4A9D6),
-                  ),
-                ),
-              ),
-              centerTitle: false,
-              floating: true,
-              snap: true,
-              pinned: false,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Image.asset(
+              'assets/images/buttonBack.png',
+              width: 48,
+              height: 48,
             ),
-          ];
-        }, body: Center(),
+          ),
+        ),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 0),
+          child: Text(
+            'Logout',
+            style: TextStyle(
+              fontSize: titleFontSize,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Montserrat',
+              color: Color(0xFFB4A9D6),
+            ),
+          ),
+        ),
       ),
     );
   }
