@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../sounds.dart';
+import '../Sounds/sounds.dart';
 
 class RewardsRedeem extends StatelessWidget {
   final String imagePath; // Add imagePath parameter

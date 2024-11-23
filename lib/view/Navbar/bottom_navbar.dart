@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import '../Pages/Rewards/rewards_page.dart';
 import '../Pages/home_page.dart';
 import 'icon_with_text.dart';
-import '../Pages/sleeping_stats.dart';
 import '../Pages/Sleeping Stats/sleeping_stats.dart';
-import '../Pages/settings.dart';
+import '../Pages/calendar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 const Color iconText = Color(0xFFFFFFFF); //2196F3
 const Color navbarColor = Color(0xFF1F1249); //CDC1FF , 1F1249 , 0xFFA594F9
