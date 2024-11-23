@@ -20,14 +20,15 @@ class Settings extends StatelessWidget {
               ),
             ),
           ),
+
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: BottomNavbar(selectedIndex: selectedIndex),
+          ),
           Positioned(
             bottom: 56, // Adjust this value as needed
             left: MediaQuery.of(context).size.width / 2 - 27,
             child: const PlusButton(),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: BottomNavbar(selectedIndex: selectedIndex),
           ),
         ],
       ),

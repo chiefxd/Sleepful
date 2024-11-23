@@ -27,14 +27,10 @@ class HomePage extends StatelessWidget {
     double buttonSize = screenWidth * 0.25; // Adjust this value as needed
 
     double titleFontSize = screenWidth * 0.06; // 6% of screen width for title
-    double subtitleFontSize =
-        screenWidth * 0.04; // 4% of screen width for subtitles
-    double largeTextFontSize =
-        screenWidth * 0.16; // 10% of screen width for large text
-    double smallTextFontSize =
-        screenWidth * 0.04; // 4% of screen width for small text
-    double titleFontCardSize =
-        screenWidth * 0.035; // Responsive font size for card title
+    double subtitleFontSize = screenWidth * 0.04; // 4% of screen width for subtitles
+    double largeTextFontSize = screenWidth * 0.16; // 10% of screen width for large text
+    double smallTextFontSize = screenWidth * 0.035; // 4% of screen width for small text
+    double titleFontCardSize = screenWidth * 0.035; // Responsive font size for card title
     double readMoreFontSize = screenWidth * 0.030;
 
     return Scaffold(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import '../Pages/Rewards/rewards_page.dart';
 import '../Pages/home_page.dart';
 import 'icon_with_text.dart';
 import '../Pages/Sleeping Stats/sleeping_stats.dart';
-import '../Pages/settings.dart';
 import '../Pages/calendar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -39,7 +39,7 @@ class BottomNavbarState extends State<BottomNavbar> {
                 icon: Icons.home,
                 text: 'Home',
                 onPressed: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const HomePage(selectedIndex: 0)),
                   );
@@ -50,7 +50,7 @@ class BottomNavbarState extends State<BottomNavbar> {
                 icon: Icons.calendar_month,
                 text: 'Calendar',
                 onPressed: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const Calendar()),
                   );
@@ -69,9 +69,9 @@ class BottomNavbarState extends State<BottomNavbar> {
                 ),
                 text: 'Rewards',
                 onPressed: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const Settings(selectedIndex: 2)),
+                    MaterialPageRoute(builder: (context) => const RewardsPage(selectedIndex: 2)),
                   );
                 },
                 color: isOnMainPage && widget.selectedIndex == 2 ? iconText : const Color(0xFF7F779A), // Set color based on selected index
@@ -88,7 +88,7 @@ class BottomNavbarState extends State<BottomNavbar> {
                 icon: Icons.bar_chart,
                 text: 'My Stats',
                 onPressed: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const SleepingStats(selectedIndex: 3)),
                   );
