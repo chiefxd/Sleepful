@@ -90,7 +90,7 @@ class BottomNavbarState extends State<BottomNavbar> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const SleepingStats(selectedIndex: 3)),
+                    MaterialPageRoute(builder: (context) => const SleepingStats()),
                   );
                 },
                 color: isOnMainPage && widget.selectedIndex == 3 ? iconText : const Color(0xFF7F779A),
