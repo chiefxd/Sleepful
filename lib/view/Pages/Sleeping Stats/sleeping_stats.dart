@@ -174,27 +174,38 @@ class _SleepingStatsState extends State<SleepingStats> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Wrap(
+                    alignment: WrapAlignment.spaceBetween,
                     children: [
-                      Text(
-                        "7.5 HRS",
-                        style: TextStyle(
-                          fontSize: bigFontSize,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Montserrat',
-                        ),
+                      Row(
+                        children: [
+                          Icon(Icons.alarm, color: Colors.white, size: 24), // Clock icon
+                          const SizedBox(width: 8),
+                          Text(
+                            "7.5 HRS",
+                            style: TextStyle(
+                                fontSize: bigFontSize,
+                                color: Color(0xFFE4DCFF),
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.bold
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        "KEEP UP\nTHE GOOD WORK!",
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          fontSize: smallFontSize,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Montserrat',
-                        ),
+                      Row(
+                        children: [
+                          Icon(Icons.thumb_up, color: Colors.white, size: 24), // Thumbs-up icon
+                          const SizedBox(width: 8),
+                          Text(
+                            "KEEP UP\nTHE GOOD WORK!",
+                            style: TextStyle(
+                                fontSize: smallFontSize,
+                                color: Color(0xFFE4DCFF),
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.bold
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
