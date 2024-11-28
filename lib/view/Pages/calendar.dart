@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-
+import 'package:sleepful/view/Pages/Plans/update_plans.dart';
 
 class Calendar extends StatefulWidget {
   const Calendar({super.key});
@@ -119,11 +119,12 @@ class _CalendarState extends State<Calendar> {
                             fontWeight: FontWeight.bold,
                             fontFamily: 'Montserrat'
                         ),
-
                       ),
-                  )
-          )
-          )
+                  ),
+              ),
+          ),
+          const SizedBox(height: 20),
+          _buildPlanCard(context, 'Today Schedule', '2:00 AM - 11:00 AM'),
         ],
         )
       ),
@@ -135,4 +136,86 @@ class _CalendarState extends State<Calendar> {
       //
             // Set the text color to white
   }
+}
+
+Widget _buildPlanCard(BuildContext context, String title, String timePeriod) {
+  return Card(
+    color: Color(0xFF1F1249),
+    margin: const EdgeInsets.symmetric(vertical: 10.0),
+    child: Padding(
+      padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
+      // Padding for the entire card
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start, // Align to the left
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Montserrat',
+            ),
+          ),
+          const SizedBox(height: 4.0),
+          Text(
+            timePeriod,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Montserrat',
+            ),
+          ),
+          const SizedBox(height: 8.0),
+          // Add some space before the days section
+          // Days of the Week Section
+          Container(
+            decoration: BoxDecoration(
+              color: Color(0xFF6149A7),
+              borderRadius:
+              BorderRadius.circular(20.0), // Adjust the radius as needed
+            ),
+            padding: const EdgeInsets.all(8.0),
+          ),
+          // Update and Delete Section
+          Container(
+            color: Color(0xFF1F1249),
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                InkWell(
+                  onTap: () {
+                    // Navigate to Update Plan page
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => UpdatePlans(
+                            title: title,
+                          )), // Replace with your UpdatePlanPage widget
+                    );
+                  },
+                  child: const Text(
+                    'Update Plan',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 1, // Width of the line
+                  height: 24, // Height of the line
+                  color: Colors.white, // Color of the line
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }
