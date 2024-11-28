@@ -1,40 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:sleepful/view/Pages/Sounds/sound_squares.dart';
-// import '../../Navbar/bottom_navbar.dart';
-// import '../../Components/plus_button.dart';
-// import '../util/SoundPart.dart';
+import '../../Pages/Information/info_squares.dart';
 
-class SoundPage extends StatelessWidget {
-  const SoundPage({super.key});
 
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//         body: Stack(
-//             children: [
-//               Column(
-//                 children: [
-//                   const Text(
-//                   "Sounds",
-//                   style: TextStyle(
-//                   fontSize: 30,
-//                   fontWeight: FontWeight.bold,
-//                   color:Color(0xFFA594F9),
-//                     ),
-//                   )
-//                 ],
-//               )
-//             ],
-//         )
-//     );
-//   }
-// }
+class Information extends StatelessWidget {
+  const Information({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea( // Use Stack to position the PlusButton
-        child:
+      body: Stack( // Use Stack to position the PlusButton
+        children: [
           NestedScrollView(
             headerSliverBuilder: (context, innerIsScrolled) {
               return [
@@ -57,7 +32,7 @@ class SoundPage extends StatelessWidget {
                   title: Padding(
                     padding: const EdgeInsets.only(left: 0),
                     child: const Text(
-                      'Sounds',
+                      'Information',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -66,11 +41,11 @@ class SoundPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                centerTitle: false,
-                floating: false,
-                snap: false,
-                pinned: false,
-                forceElevated: innerIsScrolled,
+                  centerTitle: false,
+                  floating: false,
+                  snap: false,
+                  pinned: false,
+                  forceElevated: innerIsScrolled,
                 ),
               ];
             },
@@ -79,7 +54,7 @@ class SoundPage extends StatelessWidget {
               child: Column(
                 children: [
                   Expanded(
-                    child:SoundSquares(),
+                    child:InfoSquares(),
 
                   ),
                   // BottomNavbar(selectedIndex: -1),
@@ -92,24 +67,9 @@ class SoundPage extends StatelessWidget {
           //   left: MediaQuery.of(context).size.width / 2 - 27,
           //   child: const PlusButton(),
           // ),
+        ],
       ),
     );
   }
 
-  }
-//         body: Padding(
-//           padding: const EdgeInsets.all(10.0),
-//           child: Column(
-//             children: [
-//               SoundSquares()
-//             ],
-//
-//           )
-//         )
-//       ),
-//     );// 4% of screen width for subtitles
-//   }
-// }
-
-
-
+}

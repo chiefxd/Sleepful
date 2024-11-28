@@ -2,16 +2,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sleepful/view/Pages/Breathing%20Exercise/breathing_exercise.dart';
+import 'package:sleepful/view/Pages/Information/information_2.dart';
+import 'package:sleepful/view/Pages/Information/information_3.dart';
+import 'package:sleepful/view/Pages/Information/information_4.dart';
+import 'package:sleepful/view/Pages/Information/information_5.dart';
 import 'Plans/view_plans.dart'; // Import the new_page_a.dart file
 import 'Sleeping Stats/sleeping_stats.dart'; // Import the page_b.dart file
-import 'information.dart'; // Import the page_d.dart file
+import 'Information/information.dart'; // Import the page_d.dart file
 import '../Navbar/bottom_navbar.dart'; // Import the BottomNavbar widget
 import '../Components/button_with_text.dart'; // Import the ButtonWithText widget
 import '../Components/plus_button.dart'; // Import the PlusButton widget
 import 'Profile/profile.dart';
 import '../Components/Sections/home_sounds.dart';
 import '../Components/Sections/home_info_card.dart';
-import 'Information/example_detail_information.dart';
+import 'Information/information_1.dart';
 
 class HomePage extends StatelessWidget {
   final int selectedIndex; // Add selectedIndex parameter
@@ -264,7 +268,7 @@ class HomePage extends StatelessWidget {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  const Information()),
+                                                  Information()),
                                         );
                                       },
                                       child: Text(
@@ -290,13 +294,13 @@ class HomePage extends StatelessWidget {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const CardDetailExample()),
+                                                    const InformationOne()),
                                           );
                                         },
                                         child: InfoCard(
                                           title:
-                                              'This is a sample text yes yes yes',
-                                          imagePath: 'assets/images/Long.png',
+                                              'Kesehatan Mental Dapat Terpengaruhi oleh Tidur?',
+                                          imagePath: 'assets/images/info 1.jpg',
                                           onReadMore:
                                               () {}, // Remove this callback
                                           cardColor: const Color(0xFF1F1249),
@@ -312,13 +316,13 @@ class HomePage extends StatelessWidget {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const CardDetailExample()),
+                                                    const InformationTwo()),
                                           );
                                         },
                                         child: InfoCard(
-                                          title: 'This is another sample text',
+                                          title: 'Apakah Benar Kurang Tidur Mempengaruhi Penampilan? Ini Jawabannya!',
                                           imagePath:
-                                              'assets/images/Contoh 1.png',
+                                              'assets/images/info 2.jpg',
                                           onReadMore:
                                               () {}, // Remove this callback
                                           cardColor: const Color(0xFF1F1249),
@@ -334,12 +338,12 @@ class HomePage extends StatelessWidget {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const CardDetailExample()),
+                                                    const InformationThree()),
                                           );
                                         },
                                         child: InfoCard(
-                                          title: 'This is a sample text',
-                                          imagePath: 'assets/images/Long.png',
+                                          title: 'Begini Caranya Mencegah Tidur saat Belajar!',
+                                          imagePath: 'assets/images/info 3.jpg',
                                           onReadMore:
                                               () {}, // Remove this callback
                                           cardColor: const Color(0xFF1F1249),
@@ -355,13 +359,13 @@ class HomePage extends StatelessWidget {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const CardDetailExample()),
+                                                    const InformationFour()),
                                           );
                                         },
                                         child: InfoCard(
-                                          title: 'This is another sample text ',
+                                          title: 'Capek, tapi Tidak Bisa Tidur? Ini Alasannya!',
                                           imagePath:
-                                              'assets/images/Contoh 1.png',
+                                              'assets/images/info 4.jpg',
                                           onReadMore:
                                               () {}, // Remove this callback
                                           cardColor: const Color(0xFF1F1249),
@@ -377,12 +381,12 @@ class HomePage extends StatelessWidget {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const CardDetailExample()),
+                                                    const InformationFive()),
                                           );
                                         },
                                         child: InfoCard(
-                                          title: 'This is a sample text',
-                                          imagePath: 'assets/images/Long.png',
+                                          title: 'Ini Beberapa Tips & Trik Agar Cepat Tidur!',
+                                          imagePath: 'assets/images/info 5.jpg',
                                           onReadMore:
                                               () {}, // Remove this callback
                                           cardColor: const Color(0xFF1F1249),
