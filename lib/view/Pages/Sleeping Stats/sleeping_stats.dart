@@ -21,6 +21,16 @@ class _SleepingStatsState extends State<SleepingStats> {
     double bigFontSize = screenWidth * 0.07;
     double tinyFontSize = screenWidth * 0.03;
 
+    final systemPadding = MediaQuery.of(context).padding;
+    final parentPadding = const EdgeInsets.symmetric(horizontal: 20.0);
+
+// Calculate available width
+    final availableWidth = screenWidth -
+        (systemPadding.left +
+            systemPadding.right +
+            parentPadding.left +
+            parentPadding.right);
+
     return Scaffold(
       // Section 1: Title and Back Button
       appBar: AppBar(
@@ -84,7 +94,7 @@ class _SleepingStatsState extends State<SleepingStats> {
 
             // Bar Graphs
             AspectRatio(
-              aspectRatio: 1.7,
+              aspectRatio: 1.8,
               child: BarChart(
                 BarChartData(
                   barGroups: _generateBarGroups(),
@@ -109,7 +119,9 @@ class _SleepingStatsState extends State<SleepingStats> {
                             padding: const EdgeInsets.only(right: 8.0),
                             child: Text(
                               value.toInt().toString(),
-                              style: TextStyle(color: Color(0xFFE4DCFF), fontSize: tinyFontSize),
+                              style: TextStyle(
+                                  color: Color(0xFFE4DCFF),
+                                  fontSize: tinyFontSize),
                             ),
                           );
                         },
@@ -119,7 +131,15 @@ class _SleepingStatsState extends State<SleepingStats> {
                       sideTitles: SideTitles(
                         showTitles: true,
                         getTitlesWidget: (value, meta) {
-                          const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+                          const days = [
+                            'SUN',
+                            'MON',
+                            'TUE',
+                            'WED',
+                            'THU',
+                            'FRI',
+                            'SAT'
+                          ];
                           return Padding(
                             padding: const EdgeInsets.only(top: 8.0),
                             child: FittedBox(
@@ -130,11 +150,15 @@ class _SleepingStatsState extends State<SleepingStats> {
                                 children: [
                                   Text(
                                     days[value.toInt()],
-                                    style: TextStyle(color: Color(0xFFE4DCFF), fontSize: bigFontSize),
+                                    style: TextStyle(
+                                        color: Color(0xFFE4DCFF),
+                                        fontSize: bigFontSize),
                                   ),
                                   Text(
                                     "${17 + value.toInt()}/3",
-                                    style: TextStyle(color: Color(0xFFE4DCFF), fontSize: bigFontSize),
+                                    style: TextStyle(
+                                        color: Color(0xFFE4DCFF),
+                                        fontSize: bigFontSize),
                                   ),
                                 ],
                               ),
@@ -143,8 +167,12 @@ class _SleepingStatsState extends State<SleepingStats> {
                         },
                       ),
                     ),
-                    topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)), // Hide top titles
-                    rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)), // Hide right titles
+                    topTitles: AxisTitles(
+                        sideTitles:
+                            SideTitles(showTitles: false)), // Hide top titles
+                    rightTitles: AxisTitles(
+                        sideTitles:
+                            SideTitles(showTitles: false)), // Hide right titles
                   ),
                   barTouchData: BarTouchData(enabled: false),
                 ),
@@ -160,7 +188,6 @@ class _SleepingStatsState extends State<SleepingStats> {
                 color: const Color(0xFF26184A), // Purple card background
                 borderRadius: BorderRadius.circular(10),
               ),
-
               child: Column(
                 children: [
                   Text(
@@ -173,54 +200,72 @@ class _SleepingStatsState extends State<SleepingStats> {
                       fontFamily: 'Montserrat',
                     ),
                   ),
+
                   const SizedBox(height: 10),
-                  Wrap(
-                    alignment: WrapAlignment.spaceBetween,
-                    children: [
-                      Row(
+
+                  // Icons and Text
+                  SizedBox(
+                    // Added SizedBox for width
+                    width: availableWidth,
+                    child: IntrinsicHeight(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment
+                            .center, // Center content horizontally
+                        mainAxisSize:
+                            MainAxisSize.min, // Row takes minimum space
                         children: [
-                          Icon(Icons.alarm, color: Colors.white, size: 24), // Clock icon
-                          const SizedBox(width: 8),
-                          Text(
-                            "7.5 HRS",
-                            style: TextStyle(
-                                fontSize: bigFontSize,
-                                color: Color(0xFFE4DCFF),
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.bold
-                            ),
+                          Row(
+                            children: [
+                              Icon(Icons.alarm, color: Colors.white, size: 24),
+                              const SizedBox(width: 8),
+                              Text(
+                                "7.5 HRS",
+                                style: TextStyle(
+                                  fontSize: smallFontSize,
+                                  color: Color(0xFFE4DCFF),
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(width: 20), 
+                          
+                          Row(
+                            children: [
+                              Icon(Icons.thumb_up,
+                                  color: Colors.white, size: 24),
+                              const SizedBox(width: 8),
+                              Text(
+                                "KEEP UP\nTHE GOOD WORK!",
+                                style: TextStyle(
+                                  fontSize: tinyFontSize,
+                                  color: Color(0xFFE4DCFF),
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                      Row(
-                        children: [
-                          Icon(Icons.thumb_up, color: Colors.white, size: 24), // Thumbs-up icon
-                          const SizedBox(width: 8),
-                          Text(
-                            "KEEP UP\nTHE GOOD WORK!",
-                            style: TextStyle(
-                                fontSize: smallFontSize,
-                                color: Color(0xFFE4DCFF),
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.bold
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 30),
+
+            const SizedBox(height: 20),
+
+            //Things you should do
             Text(
               "Things you should do to keep your sleeping time good:",
               style: TextStyle(
-                fontSize: smallFontSize,
-                color: Color(0xFFE4DCFF),
-                fontFamily: 'Montserrat',
-                fontWeight: FontWeight.bold
-              ),
+                  fontSize: smallFontSize,
+                  color: Color(0xFFE4DCFF),
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             Text(
