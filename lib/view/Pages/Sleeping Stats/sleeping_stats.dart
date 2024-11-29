@@ -10,7 +10,7 @@ class SleepingStats extends StatefulWidget {
 
 class _SleepingStatsState extends State<SleepingStats> {
   // Dummy data for hours of sleep
-  final List<double> sleepData = [5, 9, 7, 8, 7, 4, 6];
+  final List<double> sleepData = [5, 9, 7, 8, 10, 4, 6];
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +97,7 @@ class _SleepingStatsState extends State<SleepingStats> {
               aspectRatio: 1.8,
               child: BarChart(
                 BarChartData(
+                  maxY: 10,
                   barGroups: _generateBarGroups(),
                   borderData: FlBorderData(show: false),
                   gridData: FlGridData(
