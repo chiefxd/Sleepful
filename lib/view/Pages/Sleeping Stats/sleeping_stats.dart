@@ -141,24 +141,39 @@ class _SleepingStatsState extends State<SleepingStats> {
                             'SAT'
                           ];
                           return Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
+                            padding: const EdgeInsets.only(top: 4.0),
                             child: FittedBox(
                               fit: BoxFit.scaleDown,
-                              alignment: Alignment.center,
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text(
-                                    days[value.toInt()],
-                                    style: TextStyle(
+                                  Transform.scale(
+                                    scale: 1.4,
+                                    child: Text(
+                                      days[value.toInt()],
+                                      maxLines: 2,
+                                      overflow:
+                                          TextOverflow.ellipsis,
+                                      style: TextStyle(
                                         color: Color(0xFFE4DCFF),
-                                        fontSize: bigFontSize),
+                                        fontSize:
+                                            bigFontSize,
+                                      ),
+                                    ),
                                   ),
-                                  Text(
-                                    "${17 + value.toInt()}/3",
-                                    style: TextStyle(
+                                  Transform.scale(
+                                    scale: 1.3,
+                                    child: Text(
+                                      "${17 + value.toInt()}/3",
+                                      maxLines: 2,
+                                      overflow:
+                                          TextOverflow.ellipsis,
+                                      style: TextStyle(
                                         color: Color(0xFFE4DCFF),
-                                        fontSize: bigFontSize),
+                                        fontSize:
+                                            bigFontSize,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -229,9 +244,7 @@ class _SleepingStatsState extends State<SleepingStats> {
                               ),
                             ],
                           ),
-
-                          const SizedBox(width: 20), 
-                          
+                          const SizedBox(width: 20),
                           Row(
                             children: [
                               Icon(Icons.thumb_up,
