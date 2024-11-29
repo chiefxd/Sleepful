@@ -10,7 +10,7 @@ class SleepingStats extends StatefulWidget {
 
 class _SleepingStatsState extends State<SleepingStats> {
   // Dummy data for hours of sleep
-  final List<double> sleepData = [5, 9, 7, 8, 7, 4, 6];
+  final List<double> sleepData = [5, 9, 7, 8, 10, 4, 6];
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +97,7 @@ class _SleepingStatsState extends State<SleepingStats> {
               aspectRatio: 1.8,
               child: BarChart(
                 BarChartData(
+                  maxY: 10,
                   barGroups: _generateBarGroups(),
                   borderData: FlBorderData(show: false),
                   gridData: FlGridData(
@@ -141,24 +142,39 @@ class _SleepingStatsState extends State<SleepingStats> {
                             'SAT'
                           ];
                           return Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
+                            padding: const EdgeInsets.only(top: 4.0),
                             child: FittedBox(
                               fit: BoxFit.scaleDown,
-                              alignment: Alignment.center,
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text(
-                                    days[value.toInt()],
-                                    style: TextStyle(
+                                  Transform.scale(
+                                    scale: 1.4,
+                                    child: Text(
+                                      days[value.toInt()],
+                                      maxLines: 2,
+                                      overflow:
+                                          TextOverflow.ellipsis,
+                                      style: TextStyle(
                                         color: Color(0xFFE4DCFF),
-                                        fontSize: bigFontSize),
+                                        fontSize:
+                                            bigFontSize,
+                                      ),
+                                    ),
                                   ),
-                                  Text(
-                                    "${17 + value.toInt()}/3",
-                                    style: TextStyle(
+                                  Transform.scale(
+                                    scale: 1.3,
+                                    child: Text(
+                                      "${17 + value.toInt()}/3",
+                                      maxLines: 2,
+                                      overflow:
+                                          TextOverflow.ellipsis,
+                                      style: TextStyle(
                                         color: Color(0xFFE4DCFF),
-                                        fontSize: bigFontSize),
+                                        fontSize:
+                                            bigFontSize,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -229,9 +245,7 @@ class _SleepingStatsState extends State<SleepingStats> {
                               ),
                             ],
                           ),
-
-                          const SizedBox(width: 20), 
-                          
+                          const SizedBox(width: 20),
                           Row(
                             children: [
                               Icon(Icons.thumb_up,
