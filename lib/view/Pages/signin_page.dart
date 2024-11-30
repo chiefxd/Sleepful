@@ -1,8 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sleepful/controller/signin_controller.dart';
 import 'package:sleepful/view/Pages/forgot_password.dart';
-import 'package:sleepful/view/Pages/home_page.dart';
 import 'package:sleepful/view/Pages/signup_page.dart';
 
 class SignIn extends StatefulWidget {
@@ -15,64 +13,15 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _isPasswordVisible = false;
+  late SignInController _signInController;
 
-  // Function to show toast
-  void showToast(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.black,
-      textColor: Colors.white,
-      fontSize: 16.0,
+  @override
+  void initState() {
+    super.initState();
+    _signInController = SignInController(
+      emailController: _emailController,
+      passwordController: _passwordController,
     );
-  }
-
-  // Sign-in function
-  Future<void> _signInWithEmailAndPassword() async {
-    try {
-      // Attempt to sign in with email and password
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-
-      // Check if the widget is still mounted before navigating
-      if (mounted) {
-        // Navigate to the home page after successful sign-in
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
-        );
-      }
-    } on FirebaseAuthException catch (e) {
-      // Show Firebase authentication errors
-      showToast(e.message ?? 'Sign-in failed');
-    }
-  }
-
-  // Validate inputs and call the sign-in function
-  void validateAndSignIn() {
-    if (_emailController.text.trim().isEmpty) {
-      showToast('Please enter your email');
-      return;
-    }
-    if (!_emailController.text.trim().contains('@')) {
-      showToast('Please enter a valid email');
-      return;
-    }
-    if (_passwordController.text.trim().isEmpty) {
-      showToast('Please enter your password');
-      return;
-    }
-    if (_passwordController.text.trim().length < 6) {
-      showToast('Password must be at least 6 characters');
-      return;
-    }
-
-    // If validation passes, proceed to sign in
-    _signInWithEmailAndPassword();
   }
 
   @override
@@ -214,7 +163,7 @@ class _SignInState extends State<SignIn> {
                     ),
                     child: TextFormField(
                       controller: _passwordController,
-                      obscureText: !_isPasswordVisible,
+                      obscureText: !_signInController.isPasswordVisible,
                       decoration: InputDecoration(
                         hintText: 'Enter your password',
                         hintStyle: TextStyle(
@@ -231,14 +180,15 @@ class _SignInState extends State<SignIn> {
                             maxWidth: 24,
                           ),
                           icon: Icon(
-                            _isPasswordVisible
+                            _signInController.isPasswordVisible
                                 ? Icons.visibility
                                 : Icons.visibility_off,
                             color: Colors.grey,
                           ),
                           onPressed: () {
                             setState(() {
-                              _isPasswordVisible = !_isPasswordVisible;
+                              _signInController.isPasswordVisible =
+                                  !_signInController.isPasswordVisible;
                             });
                           },
                         ),
@@ -280,7 +230,8 @@ class _SignInState extends State<SignIn> {
                       child: SizedBox(
                         width: buttonSize,
                         child: ElevatedButton(
-                          onPressed: validateAndSignIn,
+                          onPressed: () =>
+                              _signInController.validateAndSignIn(context),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF725FAC),
                             foregroundColor: Colors.white,
