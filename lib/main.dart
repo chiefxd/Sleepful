@@ -1,4 +1,3 @@
-// main.dart
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sleepful/view/Pages/Profile/about_us.dart';
@@ -6,12 +5,12 @@ import 'package:sleepful/view/Pages/Profile/change_password.dart';
 import 'package:sleepful/view/Pages/Profile/change_theme.dart';
 import 'package:sleepful/view/Pages/Profile/edit_profile.dart';
 import 'package:sleepful/view/Pages/Profile/logout.dart';
-import 'package:sleepful/view/Pages/splash_screen.dart';
-// Import the HomePage widget
+import 'package:sleepful/view/Pages/splash_screen.dart'; // Import SplashScreen
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Initialize Firebase
   await Firebase.initializeApp();
 
   runApp(const MyApp());
@@ -24,11 +23,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Sleepful',
-
       theme: ThemeData(
-        scaffoldBackgroundColor: const Color(0xFF120C23),//0xFF120C23 // Set the default scaffold background color to black
+        scaffoldBackgroundColor: const Color(
+            0xFF120C23), // Set the default scaffold background color
       ),
-
       routes: {
         '/editProfile': (context) => EditProfile(),
         '/change_password': (context) => ChangePassword(),
@@ -36,8 +34,7 @@ class MyApp extends StatelessWidget {
         '/about_us': (context) => AboutUs(),
         '/logout': (context) => Logout(),
       },
-
-      home: const SplashScreen(), // Use the HomePage widget
+      home: const SplashScreen(), // Use SplashScreen as the starting page
     );
   }
 }

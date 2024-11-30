@@ -1,6 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sleepful/view/Pages/signin_page.dart';
+import 'package:sleepful/controller/signup_controller.dart';
+import 'package:sleepful/view/Pages/signin_page.dart'; // Import the controller
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -15,70 +15,18 @@ class _SignUpState extends State<SignUp> {
   final _confirmPasswordController = TextEditingController();
   final _nameController = TextEditingController();
 
-  bool _isPasswordVisible = false;
+  late SignupController _signupController;
 
-  // Show Toast
-  void showToast(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
+  @override
+  void initState() {
+    super.initState();
+    _signupController = SignupController(
+      emailController: _emailController,
+      passwordController: _passwordController,
+      confirmPasswordController: _confirmPasswordController,
+      nameController: _nameController,
+      context: context,
     );
-  }
-
-  // Sign up with Firebase
-  Future<void> _signUpWithEmailAndPassword() async {
-    try {
-      if (_passwordController.text.trim() !=
-          _confirmPasswordController.text.trim()) {
-        showToast("Passwords do not match");
-        return;
-      }
-
-      // Create user using Firebase Auth
-      UserCredential userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-
-      showToast('Account created successfully');
-
-      // Check if the widget is still mounted before calling Navigator
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const SignIn()),
-        );
-      }
-    } on FirebaseAuthException catch (e) {
-      showToast(e.message ?? 'Sign up failed');
-    }
-  }
-
-  // Validate inputs and call the sign-up function
-  void validateAndSignUp() {
-    if (_emailController.text.trim().isEmpty) {
-      showToast('Please enter your email');
-      return;
-    }
-    if (!_emailController.text.trim().contains('@')) {
-      showToast('Please enter a valid email');
-      return;
-    }
-    if (_passwordController.text.trim().isEmpty) {
-      showToast('Please enter your password');
-      return;
-    }
-    if (_passwordController.text.trim().length < 6) {
-      showToast('Password must be at least 6 characters');
-      return;
-    }
-    if (_confirmPasswordController.text.trim().isEmpty) {
-      showToast('Please confirm your password');
-      return;
-    }
-
-    // If validation passes, proceed to sign up
-    _signUpWithEmailAndPassword();
   }
 
   @override
@@ -194,161 +142,27 @@ class _SignUpState extends State<SignUp> {
               ),
 
               // Email input field
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 30, bottom: 5),
-                    child: Text(
-                      'E-mail',
-                      style: TextStyle(
-                          fontSize: subtitleFontSize,
-                          fontWeight: FontWeight.normal,
-                          color: const Color(0xFFFFFFFF),
-                          fontFamily: 'Montserrat'),
-                    ),
-                  ),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
-                    margin: const EdgeInsets.symmetric(horizontal: 30),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFB5B5B5),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: TextField(
-                      controller: _emailController,
-                      decoration: InputDecoration(
-                        hintText: 'Enter your e-mail',
-                        hintStyle: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: subtitleFontSize),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                ],
+              _buildInputField(
+                label: 'E-mail',
+                controller: _emailController,
+                hintText: 'Enter your e-mail',
+                subtitleFontSize: subtitleFontSize,
               ),
 
               // Password input field
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 30, bottom: 5),
-                    child: Text(
-                      'Password',
-                      style: TextStyle(
-                          fontSize: subtitleFontSize,
-                          fontWeight: FontWeight.normal,
-                          color: const Color(0xFFFFFFFF),
-                          fontFamily: 'Montserrat'),
-                    ),
-                  ),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
-                    margin: const EdgeInsets.symmetric(horizontal: 30),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFB5B5B5),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: TextFormField(
-                      controller: _passwordController,
-                      obscureText: !_isPasswordVisible,
-                      decoration: InputDecoration(
-                        hintText: 'Enter your password',
-                        hintStyle: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: subtitleFontSize,
-                        ),
-                        border: InputBorder.none,
-                        contentPadding:
-                            const EdgeInsets.symmetric(vertical: 10),
-                        suffixIcon: IconButton(
-                          padding: const EdgeInsets.only(left: 20),
-                          constraints: const BoxConstraints(
-                            maxHeight: 24,
-                            maxWidth: 24,
-                          ),
-                          icon: Icon(
-                            _isPasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: Colors.grey,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _isPasswordVisible = !_isPasswordVisible;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                ],
+              _buildPasswordField(
+                controller: _passwordController,
+                subtitleFontSize: subtitleFontSize,
+                label: 'Password',
+                hintText: 'Enter your password',
               ),
 
               // Confirm Password input field
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 30, bottom: 5),
-                    child: Text(
-                      'Confirm Password',
-                      style: TextStyle(
-                          fontSize: subtitleFontSize,
-                          fontWeight: FontWeight.normal,
-                          color: const Color(0xFFFFFFFF),
-                          fontFamily: 'Montserrat'),
-                    ),
-                  ),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
-                    margin: const EdgeInsets.symmetric(horizontal: 30),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFB5B5B5),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: TextFormField(
-                      controller: _confirmPasswordController,
-                      obscureText: !_isPasswordVisible,
-                      decoration: InputDecoration(
-                        hintText: 'Re-enter your password',
-                        hintStyle: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: subtitleFontSize,
-                        ),
-                        border: InputBorder.none,
-                        contentPadding:
-                            const EdgeInsets.symmetric(vertical: 10),
-                        suffixIcon: IconButton(
-                          padding: const EdgeInsets.only(left: 20),
-                          constraints: const BoxConstraints(
-                            maxHeight: 24,
-                            maxWidth: 24,
-                          ),
-                          icon: Icon(
-                            _isPasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: Colors.grey,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _isPasswordVisible = !_isPasswordVisible;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                ],
+              _buildPasswordField(
+                controller: _confirmPasswordController,
+                subtitleFontSize: subtitleFontSize,
+                label: 'Confirm Password',
+                hintText: 'Re-enter your password',
               ),
 
               Padding(
@@ -357,7 +171,7 @@ class _SignUpState extends State<SignUp> {
                   child: SizedBox(
                     width: buttonSize,
                     child: ElevatedButton(
-                      onPressed: validateAndSignUp,
+                      onPressed: _signupController.validateAndSignUp,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF725FAC),
                         foregroundColor: Colors.white,
@@ -416,6 +230,109 @@ class _SignUpState extends State<SignUp> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildInputField({
+    required String label,
+    required TextEditingController controller,
+    required String hintText,
+    required double subtitleFontSize,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 30, bottom: 5),
+          child: Text(
+            label,
+            style: TextStyle(
+                fontSize: subtitleFontSize,
+                fontWeight: FontWeight.normal,
+                color: const Color(0xFFFFFFFF),
+                fontFamily: 'Montserrat'),
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
+          margin: const EdgeInsets.symmetric(horizontal: 30),
+          decoration: BoxDecoration(
+            color: const Color(0xFFB5B5B5),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: TextField(
+            controller: controller,
+            decoration: InputDecoration(
+              hintText: hintText,
+              hintStyle: TextStyle(
+                  fontFamily: 'Montserrat', fontSize: subtitleFontSize),
+              border: InputBorder.none,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+      ],
+    );
+  }
+
+  Widget _buildPasswordField({
+    required TextEditingController controller,
+    required double subtitleFontSize,
+    required String label,
+    required String hintText,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 30, bottom: 5),
+          child: Text(
+            label,
+            style: TextStyle(
+                fontSize: subtitleFontSize,
+                fontWeight: FontWeight.normal,
+                color: const Color(0xFFFFFFFF),
+                fontFamily: 'Montserrat'),
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
+          margin: const EdgeInsets.symmetric(horizontal: 30),
+          decoration: BoxDecoration(
+            color: const Color(0xFFB5B5B5),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: TextFormField(
+            controller: controller,
+            obscureText: !_signupController.isPasswordVisible,
+            decoration: InputDecoration(
+              hintText: hintText,
+              hintStyle: TextStyle(
+                fontFamily: 'Montserrat',
+                fontSize: subtitleFontSize,
+              ),
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(vertical: 10),
+              suffixIcon: IconButton(
+                padding: const EdgeInsets.only(left: 20),
+                constraints: const BoxConstraints(maxHeight: 24, maxWidth: 24),
+                icon: Icon(
+                  _signupController.isPasswordVisible
+                      ? Icons.visibility
+                      : Icons.visibility_off,
+                  color: Colors.grey,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _signupController.togglePasswordVisibility();
+                  });
+                },
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+      ],
     );
   }
 }
