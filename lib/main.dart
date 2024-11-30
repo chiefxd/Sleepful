@@ -1,4 +1,5 @@
 // main.dart
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sleepful/view/Pages/Profile/about_us.dart';
 import 'package:sleepful/view/Pages/Profile/change_password.dart';
@@ -8,7 +9,11 @@ import 'package:sleepful/view/Pages/Profile/logout.dart';
 import 'package:sleepful/view/Pages/splash_screen.dart';
 // Import the HomePage widget
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
+
   runApp(const MyApp());
 }
 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "928314097414",
+    "project_id": "sleepful-4235c",
+    "storage_bucket": "sleepful-4235c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928314097414:android:06ca6e2c316312fc1f2887",
+        "android_client_info": {
+          "package_name": "com.jes.sleepful"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3sq09Xa_zgNan9dafBJlHFvHMVhptNoY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
