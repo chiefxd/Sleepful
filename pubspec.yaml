@@ -41,6 +41,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   just_audio: ^0.9.42
   table_calendar: ^3.1.2
+  firebase_core: ^3.8.0
 
 dev_dependencies:
   flutter_launcher_icons: "^0.14.1"

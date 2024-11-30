@@ -306,7 +306,7 @@ class _SleepingStatsState extends State<SleepingStats> {
           BarChartRodData(
             toY: value,
             color: Color(0xFFE4DCFF),
-            width: 16,
+            width: 20,
             borderRadius: BorderRadius.circular(6),
           ),
         ],
