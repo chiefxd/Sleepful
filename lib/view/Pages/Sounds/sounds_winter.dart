@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
+
 class SoundsWinter extends StatefulWidget {
   const SoundsWinter({super.key});
   @override
@@ -14,10 +15,13 @@ class _SoundsWinterState extends State<SoundsWinter> {
   bool audioPlay = false;
 
 
+
   @override
   void initState() {
     super.initState();
     _initAudioPlayer();
+
+
     player.positionStream.listen((position) {
       setState(() {
         _currentSliderValue = position.inSeconds.toDouble();
@@ -29,19 +33,12 @@ class _SoundsWinterState extends State<SoundsWinter> {
       });
     });
 
-    player.playerStateStream.listen((state) {
-      if (state.processingState != ProcessingState.ready &&
-          state.processingState != ProcessingState.completed) {
-        setState(() {
-          audioPlay = false; // Update isPlaying to false when not playing
-        });
-      }
-    });
-
   }
 
   Future<void> _initAudioPlayer() async {
+    // await player.setAudioSource(AudioSource.uri(Uri.parse('https://youtu.be/6bwBUO02kwc')));
     await player.setAudioSource(AudioSource.asset('assets/sounds/winter contoh.mp3'));
+
   }
 
   @override
@@ -50,11 +47,51 @@ class _SoundsWinterState extends State<SoundsWinter> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (!audioPlay) {
+  void _playingAudio() async{
+    if(!audioPlay){
+      player.play();
+    }else{
       player.pause();
     }
+      setState(() {
+        audioPlay=true;
+      });
+  }
+
+  void _pausingAudio() async{
+    if(audioPlay){
+      player.pause();
+    }else{
+      player.play();
+    }
+    setState(() {
+      audioPlay= false;
+    });
+    // if (audioPlay) {
+    //   player.pause();
+    //   setState(() {
+    //     audioPlay = false;
+    //   });
+    // }
+  }
+
+  void _forward() {
+    player.seek(player.position + Duration(seconds: 5));
+    setState(() {
+      _currentSliderValue = player.position.inSeconds.toDouble();
+    });
+  }
+
+  void _rewind() {
+    player.seek(player.position - Duration(seconds: 5));
+    setState(() {
+      _currentSliderValue = player.position.inSeconds.toDouble();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
     double screenWidth = MediaQuery.of(context).size.width;
     double menuFontSize = screenWidth * 0.06;
     double titleFontSize = screenWidth * 0.079;
@@ -232,9 +269,7 @@ class _SoundsWinterState extends State<SoundsWinter> {
                   iconSize: 30.0,
                   color: Color(0xFF6A5B9A),
                   icon: const Icon(Icons.fast_rewind),
-                  onPressed: () {
-                    player.pause();
-                  },
+                  onPressed: _rewind,
                 ),
                 const SizedBox(width: 15.0),
                 IconButton(
@@ -245,22 +280,24 @@ class _SoundsWinterState extends State<SoundsWinter> {
                     shape: WidgetStateProperty.all<OutlinedBorder>(const CircleBorder()),
 
                   ),
-                  icon: const Icon(Icons.play_arrow_rounded),
-                  onPressed: () {
-                    player.play();
-                    setState(() {
-                      audioPlay = true;
-                    });
-                  },
+                  icon:
+                      Icon(audioPlay ? Icons.pause:Icons.play_arrow_rounded),
+                  // const Icon(Icons.play_arrow_rounded),
+                  onPressed:
+                    audioPlay ? _pausingAudio : _playingAudio,
+                  //     () {
+                  //   player.play();
+                  //   setState(() {
+                  //     audioPlay = true;
+                  //   });
+                  // },
                 ),
                 const SizedBox(width: 15.0),
                 IconButton(
                   iconSize: 30.0,
                   color: Color(0xFF6A5B9A),
                   icon: const Icon(Icons.fast_forward),
-                  onPressed: () {
-                    player.pause();
-                  },
+                  onPressed: _forward,
                 ),
               ],
             ),
