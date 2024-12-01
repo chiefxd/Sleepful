@@ -56,20 +56,21 @@ class SignupController {
           .set({
         'name': nameController.text.trim(),
         'email': emailController.text.trim(),
-        'createdAt': Timestamp.now(), // Store creation time
+        'createdAt': Timestamp.now(),
       });
 
       showToast('Account created successfully');
 
-      // Check if the widget is still mounted before navigating
+      // Sign out the user immediately after account creation
+      await FirebaseAuth.instance.signOut();
+
+      // Navigate to the SignIn page, clearing the stack
       if (context.mounted) {
-        // Navigate to Sign In page after successful sign up
-        if (Navigator.canPop(context)) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const SignIn()),
-          );
-        }
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const SignIn()),
+          (route) => false,
+        );
       }
     } on FirebaseAuthException catch (e) {
       showToast(e.message ?? 'Sign up failed');
