@@ -1,8 +1,40 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sleepful/view/Pages/Authentication/signin_page.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ForgotPassword extends StatelessWidget {
-  const ForgotPassword({super.key});
+  ForgotPassword({super.key});
+
+  final TextEditingController _emailController = TextEditingController();
+
+  // Show Toast
+  void showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.black,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+  }
+
+  // Handle Password Reset
+  Future<void> sendPasswordResetEmail(BuildContext context) async {
+    String email = _emailController.text.trim();
+    if (email.isEmpty) {
+      showToast("Please enter your email.");
+      return;
+    }
+
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      showToast("Password reset email sent. Check your inbox.");
+      Navigator.pop(context); // Go back to the Sign In page
+    } on FirebaseAuthException catch (e) {
+      showToast(e.message ?? "Failed to send password reset email.");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +81,11 @@ class ForgotPassword extends StatelessWidget {
                           colors: [
                             Color(0xFFB4A9D6),
                             Color(0xFFB4A9D6),
-                            Color(0xFFB4A9D6), //B4A9D6
+                            Color(0xFFB4A9D6),
                           ],
                         ).createShader(bounds);
                       },
-                      blendMode: BlendMode.srcIn, //
+                      blendMode: BlendMode.srcIn,
                       child: const Text(
                         'Enter your e-mail',
                         style: TextStyle(
@@ -73,11 +105,11 @@ class ForgotPassword extends StatelessWidget {
                         colors: [
                           Color(0xFFB4A9D6),
                           Color(0xFFB4A9D6),
-                          Color(0xFFB4A9D6), //B4A9D6
+                          Color(0xFFB4A9D6),
                         ],
                       ).createShader(bounds);
                     },
-                    blendMode: BlendMode.srcIn, //
+                    blendMode: BlendMode.srcIn,
                     child: const Text(
                       'to reset your password',
                       style: TextStyle(
@@ -86,68 +118,47 @@ class ForgotPassword extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 20),
-
-                  // Email input field with label
                   Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.start, // Align label to the start
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment
-                            .start, // Align label to the start
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(
-                                left: 30,
-                                bottom: 5), // Adjust padding as needed
-                            child: Text(
-                              'E-mail',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.normal,
-                                  color: Color(0xFFFFFFFF),
-                                  fontFamily: 'Montserrat'),
-                            ),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 30, bottom: 5),
+                        child: Text(
+                          'E-mail',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal,
+                            color: Color(0xFFFFFFFF),
+                            fontFamily: 'Montserrat',
                           ),
-
-                          // Password input field
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 3),
-                            margin: const EdgeInsets.symmetric(horizontal: 30),
-                            decoration: BoxDecoration(
-                              color: Color(0xFFB5B5B5),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: const TextField(
-                              decoration: InputDecoration(
-                                hintText: 'Enter your e-mail',
-                                hintStyle: TextStyle(fontFamily: 'Montserrat'),
-                                border: InputBorder.none,
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-
-                      const SizedBox(
-                          height: 10), // Add spacing between input fields
-
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 3),
+                        margin: const EdgeInsets.symmetric(horizontal: 30),
+                        decoration: BoxDecoration(
+                          color: Color(0xFFB5B5B5),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: TextField(
+                          controller: _emailController,
+                          decoration: const InputDecoration(
+                            hintText: 'Enter your e-mail',
+                            hintStyle: TextStyle(fontFamily: 'Montserrat'),
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.only(top: 25),
                         child: Center(
                           child: SizedBox(
                             width: 150,
                             child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const SignIn()),
-                                );
-                              },
+                              onPressed: () => sendPasswordResetEmail(context),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF725FAC),
                                 foregroundColor: Colors.white,
@@ -171,17 +182,6 @@ class ForgotPassword extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-          ),
-          Positioned(
-            // Position Awan.png at the bottom
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Image.asset(
-              'assets/images/Awan.png',
-              height: 100, // Set a specific height
-              fit: BoxFit.cover, // Adjust fit as needed
             ),
           ),
         ],
