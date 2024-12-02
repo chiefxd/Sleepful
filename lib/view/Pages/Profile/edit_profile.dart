@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sleepful/controller/edit_profile_controller.dart';
+import 'package:sleepful/controller/Profile/edit_profile_controller.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});

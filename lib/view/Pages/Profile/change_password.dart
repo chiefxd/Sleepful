@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sleepful/controller/change_password_controller.dart';
+import 'package:sleepful/controller/Authentication/change_password_controller.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});

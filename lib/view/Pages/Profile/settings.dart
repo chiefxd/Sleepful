@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../Navbar/bottom_navbar.dart';
-import '../Components/plus_button.dart'; // Make sure to import your PlusButton widget
+import '../../Navbar/bottom_navbar.dart';
+import '../../Components/plus_button.dart'; // Make sure to import your PlusButton widget
 
 class Settings extends StatelessWidget {
   final int selectedIndex; // Add selectedIndex parameter

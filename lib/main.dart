@@ -6,7 +6,7 @@ import 'package:sleepful/view/Pages/Profile/change_password.dart';
 import 'package:sleepful/view/Pages/Profile/change_theme.dart';
 import 'package:sleepful/view/Pages/Profile/edit_profile.dart';
 import 'package:sleepful/view/Pages/home_page.dart';
-import 'package:sleepful/view/Pages/signin_page.dart';
+import 'package:sleepful/view/Pages/Authentication/signin_page.dart';
 import 'package:sleepful/view/Pages/splash_screen.dart';
 
 void main() async {

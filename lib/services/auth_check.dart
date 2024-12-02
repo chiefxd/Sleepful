@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sleepful/view/Pages/home_page.dart'; // Import the HomePage
-import 'package:sleepful/view/Pages/signin_page.dart'; // Import the SignIn page
+import 'package:sleepful/view/Pages/Authentication/signin_page.dart'; // Import the SignIn page
 
 class AuthCheck extends StatefulWidget {
   const AuthCheck({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sleepful/controller/signin_controller.dart';
-import 'package:sleepful/view/Pages/forgot_password.dart';
-import 'package:sleepful/view/Pages/signup_page.dart';
+import 'package:sleepful/controller/Authentication/signin_controller.dart';
+import 'package:sleepful/view/Pages/Authentication/forgot_password.dart';
+import 'package:sleepful/view/Pages/Authentication/signup_page.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sleepful/controller/signup_controller.dart';
-import 'package:sleepful/view/Pages/signin_page.dart'; // Import the controller
+import 'package:sleepful/controller/Authentication/signup_controller.dart';
+import 'package:sleepful/view/Pages/Authentication/signin_page.dart'; // Import the controller
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});

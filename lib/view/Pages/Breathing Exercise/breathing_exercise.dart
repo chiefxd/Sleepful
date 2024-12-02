@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sleepful/controller/breathing_exercise_controller.dart';
+import 'package:sleepful/controller/Breathing%20Exercise/breathing_exercise_controller.dart';
 
 class BreathingExercise extends StatefulWidget {
   const BreathingExercise({super.key});
