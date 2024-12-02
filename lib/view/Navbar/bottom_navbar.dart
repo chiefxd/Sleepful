@@ -3,7 +3,7 @@ import '../Pages/Rewards/rewards_page.dart';
 import '../Pages/home_page.dart';
 import 'icon_with_text.dart';
 import '../Pages/Sleeping Stats/sleeping_stats.dart';
-import '../Pages/Calendar/calendar.dart';
+import '../Pages/calendar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 const Color iconText = Color(0xFFFFFFFF); //2196F3

@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         '/change_password': (context) => ChangePassword(),
         '/change_theme': (context) => ChangeTheme(),
         '/about_us': (context) => AboutUs(),
-        '/signin_page':(context) => SignIn(),
+        '/signIn':(context) => SignIn(),
       },
 
       home: const SplashScreen(), // Use the HomePage widget
