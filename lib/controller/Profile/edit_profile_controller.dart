@@ -1,27 +1,36 @@
-import 'package:flutter/material.dart';
 import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class EditProfileController {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   File? selectedImage;
 
-  void saveProfileData() {
-    if (nameController.text.isEmpty || emailController.text.isEmpty) {
-      // Show an error message to the user (e.g., using a snackbar)
-      print("Name and Email cannot be empty"); // Replace with your error handling
-      return;
+  String name = "Loading...";
+  String email = "Loading...";
+
+  // Load profile data from Firestore
+  Future<void> loadProfileData() async {
+    final userDoc =
+        FirebaseFirestore.instance.collection('Users').doc('USER_ID');
+    final snapshot = await userDoc.get();
+
+    if (snapshot.exists) {
+      name = snapshot['name'];
+      email = snapshot['email'];
+
+      nameController.text = name;
+      emailController.text = email;
     }
+  }
 
-    String name = nameController.text;
-    String email = emailController.text;
-
-    // Perform save operation using the name, email, and selectedImage values
-    // ... (e.g., send data to an API or database)
-
-    // Example: Print the data for now
-    print('Name: $name');
-    print('Email: $email');
-    print('Image Path: ${selectedImage?.path}');
+  // Save updated name to Firestore
+  Future<void> saveNameToFirestore() async {
+    final userDoc =
+        FirebaseFirestore.instance.collection('Users').doc('USER_ID');
+    await userDoc.update({'name': nameController.text});
+    name = nameController.text;
   }
 }

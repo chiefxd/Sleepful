@@ -24,7 +24,7 @@ class UserDataProvider {
     }
   }
 
-    Future<String> getFullName(String uid) async {
+  Future<String> getFullName(String uid) async {
     try {
       final userDoc = FirebaseFirestore.instance.collection('Users').doc(uid);
       final snapshot = await userDoc.get();
@@ -41,6 +41,37 @@ class UserDataProvider {
         print('Error fetching user name: $e');
       }
       return ''; // Error occurred
+    }
+  }
+
+  // Fetch the user's email
+  Future<String> getUserEmail(String uid) async {
+    try {
+      final userDoc = FirebaseFirestore.instance.collection('Users').doc(uid);
+      final snapshot = await userDoc.get();
+
+      if (snapshot.exists) {
+        final email = snapshot.data()?['email'] ?? '';
+        return email;
+      } else {
+        return ''; // User not found
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error fetching user email: $e');
+      }
+      return ''; // Error occurred
+    }
+  }
+
+  Future<void> updateUserData(String uid, Map<String, dynamic> data) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(uid)
+          .update(data);
+    } catch (e) {
+      print("Error updating user data: $e");
     }
   }
 }
