@@ -5,7 +5,6 @@ import 'package:sleepful/view/Pages/Profile/about_us.dart';
 import 'package:sleepful/view/Pages/Profile/change_password.dart';
 import 'package:sleepful/view/Pages/Profile/change_theme.dart';
 import 'package:sleepful/view/Pages/Profile/edit_profile.dart';
-import 'package:sleepful/view/Pages/Profile/logout.dart';
 import 'package:sleepful/view/Pages/home_page.dart';
 import 'package:sleepful/view/Pages/signin_page.dart';
 import 'package:sleepful/view/Pages/splash_screen.dart';
@@ -36,7 +35,6 @@ class MyApp extends StatelessWidget {
         '/change_password': (context) => ChangePassword(),
         '/change_theme': (context) => ChangeTheme(),
         '/about_us': (context) => AboutUs(),
-        '/signIn':(context) => SignIn(),
       },
       home: FutureBuilder(
         future: Firebase.initializeApp(), // Ensure Firebase is initialized
