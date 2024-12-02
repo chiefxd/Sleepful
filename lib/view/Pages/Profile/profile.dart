@@ -1,8 +1,46 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sleepful/providers/user_data_provider.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   const Profile({super.key});
+
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  String fullName = '';
+  final UserDataProvider _userDataProvider = UserDataProvider();
+
+  @override
+  void initState() {
+    super.initState();
+    // Listen for authentication state changes
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user != null) {
+        _fetchFullName();
+      }
+    });
+  }
+
+  Future<void> _fetchFullName() async {
+    try {
+      // Get the current user's UID
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        // Get the user's name using the provider
+        fullName = await _userDataProvider.getFullName(user.uid);
+        setState(() {}); // Update the UI
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error fetching user name: $e');
+      }
+      // Handle error, e.g., show an error message
+    }
+  }
 
   Widget _buildIconRow(IconData icon, String text, double fontSize,
       {required BuildContext context, required String routeName}) {
@@ -177,7 +215,7 @@ class Profile extends StatelessWidget {
 
               // User's Name
               Text(
-                'Stefan Santoso',
+                '$fullName',
                 style: TextStyle(
                     fontSize: titleFontSize,
                     fontWeight: FontWeight.bold,

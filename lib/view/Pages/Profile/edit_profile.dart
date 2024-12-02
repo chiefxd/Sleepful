@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:sleepful/controller/Profile/edit_profile_controller.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -37,7 +40,10 @@ class _EditProfileState extends State<EditProfile> {
           ),
           TextField(
             controller: controller,
-            style: TextStyle(color: Color(0xFFB4A9D6), fontFamily: 'Montserrat', fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: Color(0xFFB4A9D6),
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.bold),
             decoration: InputDecoration(
               border: UnderlineInputBorder(),
               hintText: 'Enter $text',
@@ -91,98 +97,106 @@ class _EditProfileState extends State<EditProfile> {
         ),
       ),
 
-        // Section 2: Edit Profile Contents
-        body: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  SizedBox(height: 25),
+      // Section 2: Edit Profile Contents
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: 25),
 
-                  // Profile Pic
-              GestureDetector( // or GestureDetector
-                onTap: () async {
-                  // final ImagePicker picker = ImagePicker();
-                  // final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-                  //
-                  // if (image != null) {
-                  //   // Update the profile picture using the selected image
-                  //   // ...
-                  // }
-                },
+                // Profile Pic
+                GestureDetector(
+                  onTap: () async {
+                    final ImagePicker picker = ImagePicker();
+                    final XFile? image =
+                        await picker.pickImage(source: ImageSource.gallery);
+
+                    if (image != null) {
+                      // Update the profile picture using the selected image
+                      setState(() {
+                        _controller.selectedImage = File(image.path);
+                      });
+                    }
+                  },
                   child: CircleAvatar(
                     radius: 75,
-                    backgroundImage: AssetImage('assets/images/Contoh 1.png'),
+                    backgroundImage: _controller.selectedImage != null
+                        ? FileImage(_controller.selectedImage!)
+                        : AssetImage('assets/images/Contoh 1.png')
+                            as ImageProvider,
                   ),
-              ),
+                ),
 
-                  SizedBox(height: 15),
+                SizedBox(height: 15),
 
-                  // Change Picture Hint
-                  Text(
-                    'Change Profile Picutre',
-                    style: TextStyle(
-                      fontSize: subtitleFontSize,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Montserrat',
-                      color: Color(0xFFB4A9D6),
+                // Change Picture Hint
+                Text(
+                  'Change Profile Picutre',
+                  style: TextStyle(
+                    fontSize: subtitleFontSize,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Montserrat',
+                    color: Color(0xFFB4A9D6),
+                  ),
+                ),
+
+                SizedBox(height: 20),
+
+                // Name and E-mail Text Field
+                Column(
+                  children: [
+                    _buildEditableIconRow(
+                      Icons.person,
+                      'Name',
+                      subtitleFontSize,
+                      _controller
+                          .nameController, // Use the controller from the separate class
                     ),
-                  ),
+                    _buildEditableIconRow(
+                      Icons.mail,
+                      'E-mail Address',
+                      subtitleFontSize,
+                      _controller
+                          .emailController, // Use the controller from the separate class
+                    ),
+                  ],
+                ),
 
-                  SizedBox(height: 20),
-
-                  // Name and E-mail Text Field
-                  Column(
-                    children: [
-                      _buildEditableIconRow(
-                        Icons.person,
-                        'Name',
-                        subtitleFontSize,
-                        _controller.nameController, // Use the controller from the separate class
-                      ),
-                      _buildEditableIconRow(
-                        Icons.mail,
-                        'E-mail Address',
-                        subtitleFontSize,
-                        _controller.emailController, // Use the controller from the separate class
-                      ),
-                    ],
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(top: 25),
-                    child: Center(
-                      child: SizedBox(
-                        width: buttonSize,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            //logic nanti
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF725FAC),
-                            foregroundColor: Colors.white,
-                            textStyle: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.bold,
-                                fontSize: buttonFontSize),
-                            minimumSize: const Size(double.infinity, 40),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                          child: Text('Save', style: TextStyle(fontSize: buttonFontSize)
+                Padding(
+                  padding: const EdgeInsets.only(top: 25),
+                  child: Center(
+                    child: SizedBox(
+                      width: buttonSize,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _controller.saveProfileData();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF725FAC),
+                          foregroundColor: Colors.white,
+                          textStyle: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              fontSize: buttonFontSize),
+                          minimumSize: const Size(double.infinity, 40),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
                           ),
                         ),
+                        child: Text('Save',
+                            style: TextStyle(fontSize: buttonFontSize)),
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
   }
 }

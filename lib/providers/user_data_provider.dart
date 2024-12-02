@@ -23,4 +23,24 @@ class UserDataProvider {
       return ''; // Error occurred
     }
   }
+
+    Future<String> getFullName(String uid) async {
+    try {
+      final userDoc = FirebaseFirestore.instance.collection('Users').doc(uid);
+      final snapshot = await userDoc.get();
+
+      if (snapshot.exists) {
+        final fullName = snapshot.data()?['name'] ?? ''; // Get the full name
+
+        return fullName;
+      } else {
+        return ''; // User not found
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error fetching user name: $e');
+      }
+      return ''; // Error occurred
+    }
+  }
 }
