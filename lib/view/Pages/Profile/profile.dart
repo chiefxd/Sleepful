@@ -149,7 +149,7 @@ class Profile extends StatelessWidget {
                     _buildIconRow(Icons.logout, 'Log Out', subtitleFontSize,
                         context: context,
                         routeName:
-                            '/logout'),
+                            '/signin_page'),
                   ],
                 ),
               ],
