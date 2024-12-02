@@ -1,26 +1,65 @@
 // home_page.dart
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sleepful/providers/user_data_provider.dart';
 import 'package:sleepful/view/Pages/Breathing%20Exercise/breathing_exercise.dart';
 import 'package:sleepful/view/Pages/Information/information_2.dart';
 import 'package:sleepful/view/Pages/Information/information_3.dart';
 import 'package:sleepful/view/Pages/Information/information_4.dart';
 import 'package:sleepful/view/Pages/Information/information_5.dart';
-import 'Plans/view_plans.dart'; // Import the new_page_a.dart file
-import 'Sleeping Stats/sleeping_stats.dart'; // Import the page_b.dart file
-import 'Information/information.dart'; // Import the page_d.dart file
-import '../Navbar/bottom_navbar.dart'; // Import the BottomNavbar widget
-import '../Components/button_with_text.dart'; // Import the ButtonWithText widget
-import '../Components/plus_button.dart'; // Import the PlusButton widget
+import 'Plans/view_plans.dart';
+import 'Sleeping Stats/sleeping_stats.dart';
+import 'Information/information.dart';
+import '../Navbar/bottom_navbar.dart';
+import '../Components/button_with_text.dart';
+import '../Components/plus_button.dart';
 import 'Profile/profile.dart';
 import '../Components/Sections/home_sounds.dart';
 import '../Components/Sections/home_info_card.dart';
 import 'Information/information_1.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   final int selectedIndex; // Add selectedIndex parameter
 
   const HomePage({super.key, this.selectedIndex = 0});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String userName = '';
+  final UserDataProvider _userDataProvider = UserDataProvider();
+
+  @override
+  void initState() {
+    super.initState();
+    // Listen for authentication state changes
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user != null) {
+        _fetchUserName();
+      }
+    });
+  }
+
+  Future<void> _fetchUserName() async {
+    try {
+      // Get the current user's UID
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        // Get the user's name using the provider
+        userName = await _userDataProvider.getUserName(user.uid);
+        setState(() {}); // Update the UI
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error fetching user name: $e');
+      }
+      // Handle error, e.g., show an error message
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +70,14 @@ class HomePage extends StatelessWidget {
     double buttonSize = screenWidth * 0.25; // Adjust this value as needed
 
     double titleFontSize = screenWidth * 0.06; // 6% of screen width for title
-    double subtitleFontSize = screenWidth * 0.04; // 4% of screen width for subtitles
-    double largeTextFontSize = screenWidth * 0.16; // 10% of screen width for large text
-    double smallTextFontSize = screenWidth * 0.035; // 4% of screen width for small text
-    double titleFontCardSize = screenWidth * 0.035; // Responsive font size for card title
+    double subtitleFontSize =
+        screenWidth * 0.04; // 4% of screen width for subtitles
+    double largeTextFontSize =
+        screenWidth * 0.16; // 10% of screen width for large text
+    double smallTextFontSize =
+        screenWidth * 0.035; // 4% of screen width for small text
+    double titleFontCardSize =
+        screenWidth * 0.035; // Responsive font size for card title
     double readMoreFontSize = screenWidth * 0.030;
 
     return Scaffold(
@@ -65,7 +108,7 @@ class HomePage extends StatelessWidget {
                         },
                         blendMode: BlendMode.srcIn,
                         child: Text(
-                          'Hello Stefan!',
+                          'Hello $userName!',
                           style: TextStyle(
                             fontSize: titleFontSize,
                             fontWeight: FontWeight.bold,
@@ -320,9 +363,9 @@ class HomePage extends StatelessWidget {
                                           );
                                         },
                                         child: InfoCard(
-                                          title: 'Apakah Benar Kurang Tidur Mempengaruhi Penampilan? Ini Jawabannya!',
-                                          imagePath:
-                                              'assets/images/info 2.jpg',
+                                          title:
+                                              'Apakah Benar Kurang Tidur Mempengaruhi Penampilan? Ini Jawabannya!',
+                                          imagePath: 'assets/images/info 2.jpg',
                                           onReadMore:
                                               () {}, // Remove this callback
                                           cardColor: const Color(0xFF1F1249),
@@ -342,7 +385,8 @@ class HomePage extends StatelessWidget {
                                           );
                                         },
                                         child: InfoCard(
-                                          title: 'Begini Caranya Mencegah Tidur saat Belajar!',
+                                          title:
+                                              'Begini Caranya Mencegah Tidur saat Belajar!',
                                           imagePath: 'assets/images/info 3.jpg',
                                           onReadMore:
                                               () {}, // Remove this callback
@@ -363,9 +407,9 @@ class HomePage extends StatelessWidget {
                                           );
                                         },
                                         child: InfoCard(
-                                          title: 'Capek, tapi Tidak Bisa Tidur? Ini Alasannya!',
-                                          imagePath:
-                                              'assets/images/info 4.jpg',
+                                          title:
+                                              'Capek, tapi Tidak Bisa Tidur? Ini Alasannya!',
+                                          imagePath: 'assets/images/info 4.jpg',
                                           onReadMore:
                                               () {}, // Remove this callback
                                           cardColor: const Color(0xFF1F1249),
@@ -385,7 +429,8 @@ class HomePage extends StatelessWidget {
                                           );
                                         },
                                         child: InfoCard(
-                                          title: 'Ini Beberapa Tips & Trik Agar Cepat Tidur!',
+                                          title:
+                                              'Ini Beberapa Tips & Trik Agar Cepat Tidur!',
                                           imagePath: 'assets/images/info 5.jpg',
                                           onReadMore:
                                               () {}, // Remove this callback
@@ -405,7 +450,7 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  BottomNavbar(selectedIndex: selectedIndex),
+                  BottomNavbar(selectedIndex: widget.selectedIndex),
                 ],
               ),
               Positioned(

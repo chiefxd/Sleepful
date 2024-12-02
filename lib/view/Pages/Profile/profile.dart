@@ -1,33 +1,106 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
-
-  // Widget _buildIconRow(IconData icon, String text, double fontSize) {
-  //   return Padding(
-  //     padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
-  //     child: Row(
-  //       children: [
-  //         Icon(icon, color: Color(0xFFB4A9D6)),
-  //         SizedBox(width: 10),
-  //         Text(
-  //           text,
-  //           style: TextStyle(
-  //             fontWeight: FontWeight.bold,
-  //             fontFamily: 'Montserrat',
-  //             color: Color(0xFFB4A9D6),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 
   Widget _buildIconRow(IconData icon, String text, double fontSize,
       {required BuildContext context, required String routeName}) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, routeName);
+        if (text == 'Log Out') {
+          // Show confirmation dialog
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                backgroundColor: const Color(0xFF1F1249),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Are you sure you want to log out?',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+                actions: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(30.0),
+                            border: Border.all(
+                              color: const Color(0xFFB4A9D6),
+                              width: 2.0,
+                            ),
+                          ),
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(); // Close the dialog
+                            },
+                            style: TextButton.styleFrom(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 12.0),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                            ),
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const VerticalDivider(color: Colors.white),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          child: TextButton(
+                            onPressed: () {
+                              // Sign out the user
+                              FirebaseAuth.instance.signOut().then((value) {
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, '/signIn', (route) => false);
+                              });
+                            },
+                            child: const Text(
+                              'Log Out',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          Navigator.pushNamed(context, routeName);
+        }
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
@@ -87,75 +160,63 @@ class Profile extends StatelessWidget {
         ),
       ),
 
-        // Section 2: Profile Contents
-        body: Stack(
-          children: [
-            Column(
-              children: <Widget>[
-                SizedBox(height: 25),
+      // Section 2: Profile Contents
+      body: Stack(
+        children: [
+          Column(
+            children: <Widget>[
+              SizedBox(height: 25),
 
-                // Profile Pic
-                CircleAvatar(
-                  radius: 75,
-                  backgroundImage: AssetImage('assets/images/Contoh 1.png'),
-                ),
+              // Profile Pic
+              CircleAvatar(
+                radius: 75,
+                backgroundImage: AssetImage('assets/images/Contoh 1.png'),
+              ),
 
-                SizedBox(height: 15),
+              SizedBox(height: 15),
 
-                // User's Name
-                Text(
-                  'Stefan Santoso',
-                  style: TextStyle(
-                      fontSize: titleFontSize,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Montserrat',
-                      color: Color(0xFFB4A9D6)),
-                ),
+              // User's Name
+              Text(
+                'Stefan Santoso',
+                style: TextStyle(
+                    fontSize: titleFontSize,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Montserrat',
+                    color: Color(0xFFB4A9D6)),
+              ),
 
-                SizedBox(height: 0),
+              SizedBox(height: 0),
 
-                // Sleep Time
-                Text(
-                  'Your total sleep time is 32 hours!',
-                  style: TextStyle(
-                      fontSize: subtitleFontSize,
-                      fontFamily: 'Montserrat',
-                      color: Color(0xFFB4A9D6)),
-                ),
+              // Sleep Time
+              Text(
+                'Your total sleep time is 32 hours!',
+                style: TextStyle(
+                    fontSize: subtitleFontSize,
+                    fontFamily: 'Montserrat',
+                    color: Color(0xFFB4A9D6)),
+              ),
 
-                SizedBox(height: 20),
+              SizedBox(height: 20),
 
-                // 5 rows
-                Column(
-                  children: [
-                    _buildIconRow(Icons.edit, 'Edit Profile', subtitleFontSize,
-                        context: context,
-                        routeName:
-                            '/editProfile'),
-                    _buildIconRow(
-                        Icons.lock, 'Change Password', subtitleFontSize,
-                        context: context,
-                        routeName:
-                            '/change_password'),
-                    _buildIconRow(
-                        Icons.palette, 'Change Theme', subtitleFontSize,
-                        context: context,
-                        routeName:
-                            '/change_theme'),
-                    _buildIconRow(Icons.info, 'About Us', subtitleFontSize,
-                        context: context,
-                        routeName:
-                            '/about_us'),
-                    _buildIconRow(Icons.logout, 'Log Out', subtitleFontSize,
-                        context: context,
-                        routeName:
-                            '/signin_page'),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
+              // 5 rows
+              Column(
+                children: [
+                  _buildIconRow(Icons.edit, 'Edit Profile', subtitleFontSize,
+                      context: context, routeName: '/editProfile'),
+                  _buildIconRow(Icons.lock, 'Change Password', subtitleFontSize,
+                      context: context, routeName: '/change_password'),
+                  _buildIconRow(Icons.palette, 'Change Theme', subtitleFontSize,
+                      context: context, routeName: '/change_theme'),
+                  _buildIconRow(Icons.info, 'About Us', subtitleFontSize,
+                      context: context, routeName: '/about_us'),
+                  _buildIconRow(Icons.logout, 'Log Out', subtitleFontSize,
+                      context: context, routeName: '/logout'),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

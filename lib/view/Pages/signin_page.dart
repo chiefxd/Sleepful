@@ -275,6 +275,8 @@ class _SignInState extends State<SignIn> {
                             color: const Color(0xFFB4A9D6),
                             fontFamily: 'Montserrat',
                             decoration: TextDecoration.underline,
+                            decorationColor: const Color(0xFFB4A9D6),
+                            decorationThickness: 1,
                           ),
                         ),
                       ),

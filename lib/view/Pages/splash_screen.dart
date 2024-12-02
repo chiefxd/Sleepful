@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:sleepful/view/Pages/auth_check.dart'; // Import the AuthCheck page
+import 'package:sleepful/services/auth_check.dart'; // Import the AuthCheck page
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
