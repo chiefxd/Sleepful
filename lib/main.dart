@@ -36,29 +36,19 @@ class MyApp extends StatelessWidget {
         '/change_theme': (context) => ChangeTheme(),
         '/about_us': (context) => AboutUs(),
       },
-      home: FutureBuilder(
-        future: Firebase.initializeApp(), // Ensure Firebase is initialized
+        home: FutureBuilder(
+        future: Future.delayed(const Duration(seconds: 3)), // Simulate splash screen duration
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const SplashScreen(); // Show splash screen while loading
-          } else if (snapshot.hasError) {
-            // Show a user-friendly error page if Firebase fails to initialize
-            return Scaffold(
-              body: Center(
-                child: Text(
-                  'Something went wrong:\n${snapshot.error}',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white, fontSize: 16),
-                ),
-              ),
-            );
+            return const SplashScreen(); // Show splash screen
           } else {
-            // After Firebase initialization, listen to auth state
+            // After splash screen, check auth state
             return StreamBuilder<User?>(
               stream: FirebaseAuth.instance.authStateChanges(),
               builder: (context, userSnapshot) {
+                // Keep showing SplashScreen while waiting for auth state
                 if (userSnapshot.connectionState == ConnectionState.waiting) {
-                  return const SplashScreen(); // Show splash screen during auth check
+                  return const SplashScreen(); 
                 } else if (userSnapshot.hasData) {
                   return const HomePage(); // User is signed in
                 } else {
