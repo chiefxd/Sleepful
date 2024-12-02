@@ -4,8 +4,8 @@ import 'package:sleepful/view/Pages/Profile/about_us.dart';
 import 'package:sleepful/view/Pages/Profile/change_password.dart';
 import 'package:sleepful/view/Pages/Profile/change_theme.dart';
 import 'package:sleepful/view/Pages/Profile/edit_profile.dart';
-import 'package:sleepful/view/Pages/Profile/logout.dart';
 import 'package:sleepful/view/Pages/splash_screen.dart';
+import 'package:sleepful/view/Pages/signin_page.dart';
 // Import the HomePage widget
 
 void main() {
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         '/change_password': (context) => ChangePassword(),
         '/change_theme': (context) => ChangeTheme(),
         '/about_us': (context) => AboutUs(),
-        '/logout': (context) => Logout(),
+        '/signin_page':(context) => SignIn(),
       },
 
       home: const SplashScreen(), // Use the HomePage widget

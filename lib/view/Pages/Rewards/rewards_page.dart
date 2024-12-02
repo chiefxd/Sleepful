@@ -11,10 +11,8 @@ class RewardsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double subtitleFontSize =
-        screenWidth * 0.04; // 4% of screen width for subtitles
-    double largeTextFontSize =
-        screenWidth * 0.16; // 16% of screen width for large text
+    double subtitleFontSize = screenWidth * 0.04; // 4% of screen width for subtitles
+    double largeTextFontSize = screenWidth * 0.16; // 16% of screen width for large text
     double smallTextFontSize = screenWidth * 0.04;
 
     List<String> imagePaths = [
@@ -58,12 +56,12 @@ class RewardsPage extends StatelessWidget {
             headerSliverBuilder: (context, innerIsScrolled) {
               return [
                 SliverAppBar(
+                  automaticallyImplyLeading: false,
                   backgroundColor: Colors.transparent,
                   elevation: 0,
                   leading: GestureDetector(
                     onTap: () {
-                      Navigator.of(context)
-                          .pop(); // Go back to the previous screen
+                      Navigator.of(context).pop(); // Go back to the previous screen
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
@@ -87,9 +85,10 @@ class RewardsPage extends StatelessWidget {
                     ),
                   ),
                   centerTitle: false,
-                  floating: true,
-                  snap: true,
+                  floating: false,
+                  snap: false,
                   pinned: false,
+                  forceElevated: innerIsScrolled,
                 ),
               ];
             },
@@ -101,7 +100,7 @@ class RewardsPage extends StatelessWidget {
                       children: [
                         const SizedBox(height: 20),
 
-                        // Section 2: You've slept for text
+                        // Section 2: You've earned text
                         Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -150,7 +149,7 @@ class RewardsPage extends StatelessWidget {
                                       ),
                                     ),
                                     TextSpan(
-                                      text: 'completing your plans',
+                                      text: ' completing your plans',
                                       style: TextStyle(
                                         fontSize: subtitleFontSize,
                                         color: Color(0xFFB4A9D6),
