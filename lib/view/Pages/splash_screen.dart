@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:sleepful/view/Pages/signin_page.dart';
+import 'package:sleepful/view/Pages/auth_check.dart'; // Import the AuthCheck page
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,9 +14,16 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const SignIn()));
+    // Wait for 3 seconds and navigate to AuthCheck (not SignIn directly)
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted) {
+        // Check if the widget is still in the widget tree
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const AuthCheck()), // Navigate to AuthCheck
+        );
+      }
     });
   }
 
@@ -26,17 +33,19 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Stack(
         children: [
           Center(
-              child: Image.asset(
-            'assets/images/Logo Sleepful.png',
-            fit: BoxFit.fill,
-            width: MediaQuery.of(context).size.width * 0.7,
-          )),
+            child: Image.asset(
+              'assets/images/Logo Sleepful.png',
+              fit: BoxFit.fill,
+              width: MediaQuery.of(context).size.width * 0.7,
+            ),
+          ),
           Align(
-              alignment: Alignment.bottomCenter,
-              child: Image.asset(
-                "assets/images/Awan.png",
-                fit: BoxFit.fill,
-              ))
+            alignment: Alignment.bottomCenter,
+            child: Image.asset(
+              "assets/images/Awan.png",
+              fit: BoxFit.fill,
+            ),
+          ),
         ],
       ),
     );

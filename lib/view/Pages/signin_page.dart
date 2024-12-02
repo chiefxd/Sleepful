@@ -1,20 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:sleepful/controller/signin_controller.dart';
 import 'package:sleepful/view/Pages/forgot_password.dart';
-import 'package:sleepful/view/Pages/home_page.dart';
-import 'package:sleepful/view/Pages/signup_page.dart'; // Adjust the path as needed
+import 'package:sleepful/view/Pages/signup_page.dart';
 
-class SignIn extends StatelessWidget {
+class SignIn extends StatefulWidget {
   const SignIn({super.key});
+
+  @override
+  State<SignIn> createState() => _SignInState();
+}
+
+class _SignInState extends State<SignIn> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  late SignInController _signInController;
+
+  @override
+  void initState() {
+    super.initState();
+    _signInController = SignInController(
+      emailController: _emailController,
+      passwordController: _passwordController,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-
     double buttonSize = screenWidth * 0.4;
-
     double titleFontSize = screenWidth * 0.06;
-    double subtitleFontSize = screenWidth * 0.04; 
-    double buttonFontSize = screenWidth * 0.05; 
+    double subtitleFontSize = screenWidth * 0.04;
+    double buttonFontSize = screenWidth * 0.05;
     double smallTextFontSize = screenWidth * 0.03;
 
     return Scaffold(
@@ -41,11 +57,11 @@ class SignIn extends StatelessWidget {
                       colors: [
                         Color(0xFFB4A9D6),
                         Color(0xFFB4A9D6),
-                        Color(0xFFB4A9D6), //B4A9D6
+                        Color(0xFFB4A9D6),
                       ],
                     ).createShader(bounds);
                   },
-                  blendMode: BlendMode.srcIn, //
+                  blendMode: BlendMode.srcIn,
                   child: Text(
                     'Welcome to Sleepful!',
                     style: TextStyle(
@@ -65,11 +81,11 @@ class SignIn extends StatelessWidget {
                     colors: [
                       Color(0xFFB4A9D6),
                       Color(0xFFB4A9D6),
-                      Color(0xFFB4A9D6), //B4A9D6
+                      Color(0xFFB4A9D6),
                     ],
                   ).createShader(bounds);
                 },
-                blendMode: BlendMode.srcIn, //
+                blendMode: BlendMode.srcIn,
                 child: Text(
                   'Get ready to sleep peacefully',
                   style: TextStyle(
@@ -81,143 +97,149 @@ class SignIn extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // Email input field with label
+              // Email
               Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start, // Align label to the start
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.start, // Align label to the start
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: 30, bottom: 5), // Adjust padding as needed
+                  Padding(
+                    padding: const EdgeInsets.only(left: 30, bottom: 5),
+                    child: Text(
+                      'E-mail',
+                      style: TextStyle(
+                        fontSize: subtitleFontSize,
+                        fontWeight: FontWeight.normal,
+                        color: const Color(0xFFFFFFFF),
+                        fontFamily: 'Montserrat',
+                      ),
+                    ),
+                  ),
+
+                  // Email text field
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
+                    margin: const EdgeInsets.symmetric(horizontal: 30),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFB5B5B5),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: TextFormField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        hintText: 'Enter your e-mail',
+                        hintStyle: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: subtitleFontSize,
+                        ),
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  // Password
+                  Padding(
+                    padding: const EdgeInsets.only(left: 30, bottom: 5),
+                    child: Text(
+                      'Password',
+                      style: TextStyle(
+                        fontSize: subtitleFontSize,
+                        fontWeight: FontWeight.normal,
+                        color: const Color(0xFFFFFFFF),
+                        fontFamily: 'Montserrat',
+                      ),
+                    ),
+                  ),
+
+                  // Password text field
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
+                    margin: const EdgeInsets.symmetric(horizontal: 30),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFB5B5B5),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: TextFormField(
+                      controller: _passwordController,
+                      obscureText: !_signInController.isPasswordVisible,
+                      decoration: InputDecoration(
+                        hintText: 'Enter your password',
+                        hintStyle: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: subtitleFontSize,
+                        ),
+                        border: InputBorder.none,
+                        contentPadding:
+                            const EdgeInsets.symmetric(vertical: 10),
+                        suffixIcon: IconButton(
+                          padding: const EdgeInsets.only(left: 20),
+                          constraints: const BoxConstraints(
+                            maxHeight: 24,
+                            maxWidth: 24,
+                          ),
+                          icon: Icon(
+                            _signInController.isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.grey,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _signInController.isPasswordVisible =
+                                  !_signInController.isPasswordVisible;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // Forgot password
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 30, top: 5),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ForgotPassword()),
+                          );
+                        },
                         child: Text(
-                          'E-mail',
+                          'Forgot Password?',
                           style: TextStyle(
-                              fontSize: subtitleFontSize,
-                              fontWeight: FontWeight.normal,
-                              color: Color(0xFFFFFFFF),
-                              fontFamily: 'Montserrat'),
-                        ),
-                      ),
-
-                      // Password input field
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 3),
-                        margin: const EdgeInsets.symmetric(horizontal: 30),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFB5B5B5),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Enter your e-mail',
-                            hintStyle: TextStyle(fontFamily: 'Montserrat', fontSize: subtitleFontSize),
-                            border: InputBorder.none,
+                            fontSize: smallTextFontSize,
+                            fontWeight: FontWeight.normal,
+                            color: const Color(0xFFFFFFFF),
+                            fontFamily: 'Montserrat',
+                            decoration: TextDecoration.underline,
                           ),
                         ),
                       ),
-                    ],
+                    ),
                   ),
 
-                  const SizedBox(
-                      height: 10), // Add spacing between input fields
-
-                  Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.start, // Align label to the start
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: 30, bottom: 5), // Adjust padding as needed
-                        child: Text(
-                          'Password',
-                          style: TextStyle(
-                              fontSize: subtitleFontSize,
-                              fontWeight: FontWeight.normal,
-                              color: Color(0xFFFFFFFF),
-                              fontFamily: 'Montserrat'),
-                        ),
-                      ),
-
-                      // Password input field
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 3),
-                        margin: const EdgeInsets.symmetric(horizontal: 30),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFB5B5B5),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: TextField(
-                          obscureText: true, // Hide password characters
-                          decoration: InputDecoration(
-                            hintText: 'Enter your password',
-                            hintStyle: TextStyle(fontFamily: 'Montserrat', fontSize: subtitleFontSize),
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 30, top: 5),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ForgotPassword()),
-                              );
-                            },
-                            child: Text(
-                              'Forgot Password?',
-                              style: TextStyle(
-                                fontSize: smallTextFontSize,
-                                fontWeight: FontWeight.normal,
-                                color: Color(0xFFFFFFFF),
-                                fontFamily: 'Montserrat',
-                                decoration: TextDecoration.underline,
-                                decorationColor: Color(0xFFFFFFFF),
-                                decorationThickness: 1,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-
+                  // Sign in button
                   Padding(
                     padding: const EdgeInsets.only(top: 25),
                     child: Center(
                       child: SizedBox(
                         width: buttonSize,
                         child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const HomePage()),
-                            );
-                          },
+                          onPressed: () =>
+                              _signInController.validateAndSignIn(context),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF725FAC),
                             foregroundColor: Colors.white,
                             textStyle: const TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18),
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
                             minimumSize: const Size(double.infinity, 40),
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 10),
@@ -225,44 +247,38 @@ class SignIn extends StatelessWidget {
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
-                          child: Text('Sign In', style: TextStyle(fontSize: buttonFontSize)
-                          ),
+                          child: Text('Sign In',
+                              style: TextStyle(fontSize: buttonFontSize)),
                         ),
                       ),
                     ),
                   ),
 
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 5),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const SignUp()),
-                              );
-                            },
-                            child: Text(
-                              'Don’t have an account? Sign Up Here',
-                              style: TextStyle(
-                                fontSize: smallTextFontSize,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFFB4A9D6),
-                                fontFamily: 'Montserrat',
-                                decoration: TextDecoration.underline,
-                                decorationColor: Color(0xFFB4A9D6),
-                                decorationThickness: 1,
-                              ),
-                            ),
+                  // Sign up button
+                  Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 5),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SignUp()),
+                          );
+                        },
+                        child: Text(
+                          'Don’t have an account? Sign Up Here',
+                          style: TextStyle(
+                            fontSize: smallTextFontSize,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFFB4A9D6),
+                            fontFamily: 'Montserrat',
+                            decoration: TextDecoration.underline,
                           ),
                         ),
                       ),
-                    ],
+                    ),
                   ),
                 ],
               ),
@@ -271,5 +287,12 @@ class SignIn extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }

@@ -33,8 +33,8 @@ class SoundPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack( // Use Stack to position the PlusButton
-        children: [
+      body: SafeArea( // Use Stack to position the PlusButton
+        child:
           NestedScrollView(
             headerSliverBuilder: (context, innerIsScrolled) {
               return [
@@ -92,7 +92,6 @@ class SoundPage extends StatelessWidget {
           //   left: MediaQuery.of(context).size.width / 2 - 27,
           //   child: const PlusButton(),
           // ),
-        ],
       ),
     );
   }
