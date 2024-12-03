@@ -116,7 +116,9 @@ class _EditProfileState extends State<EditProfile> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: 25),
+            // Profile Picture and Text Section
             GestureDetector(
+              // Wrap both the CircleAvatar and Text in GestureDetector
               onTap: () async {
                 final ImagePicker picker = ImagePicker();
                 final XFile? image =
@@ -128,21 +130,27 @@ class _EditProfileState extends State<EditProfile> {
                   });
                 }
               },
-              child: CircleAvatar(
-                radius: 75,
-                backgroundImage: _controller.selectedImage != null
-                    ? FileImage(_controller.selectedImage!)
-                    : AssetImage('assets/images/Contoh 1.png') as ImageProvider,
-              ),
-            ),
-            SizedBox(height: 15),
-            Text(
-              'Change Profile Picture',
-              style: TextStyle(
-                fontSize: screenWidth * 0.04,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Montserrat',
-                color: Color(0xFFB4A9D6),
+              child: Column(
+                // Use a Column to arrange the CircleAvatar and Text
+                children: [
+                  CircleAvatar(
+                    radius: 75,
+                    backgroundImage: _controller.selectedImage != null
+                        ? FileImage(_controller.selectedImage!)
+                        : AssetImage('assets/images/Contoh 1.png')
+                            as ImageProvider,
+                  ),
+                  SizedBox(height: 15),
+                  Text(
+                    'Change Profile Picture',
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.04,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Montserrat',
+                      color: Color(0xFFB4A9D6),
+                    ),
+                  ),
+                ],
               ),
             ),
 
