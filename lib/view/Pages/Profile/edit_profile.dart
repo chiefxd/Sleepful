@@ -78,127 +78,6 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
-  Widget _buildEditableRow1({
-    required String label,
-    required String value,
-    required TextEditingController controller,
-    required bool isEditing,
-    required VoidCallback onEdit,
-  }) {
-    double screenWidth = MediaQuery.of(context).size.width;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(
-                label,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Montserrat',
-                  fontSize: screenWidth * 0.03,
-                  color: Color(0xFFB4A9D6),
-                ),
-              ),
-              Spacer(),
-              if (!isEditing)
-                IconButton(
-                  icon: Icon(Icons.edit, color: Color(0xFFB4A9D6)),
-                  onPressed: onEdit,
-                ),
-            ],
-          ),
-          if (isEditing)
-            TextField(
-              controller: controller,
-              style: TextStyle(
-                color: Color(0xFFB4A9D6),
-                fontFamily: 'Montserrat',
-                fontSize: screenWidth * 0.03,
-                fontWeight: FontWeight.bold,
-              ),
-              decoration: InputDecoration(
-                border: UnderlineInputBorder(),
-                hintText: 'Enter $label',
-                hintStyle: TextStyle(fontSize: 12),
-              ),
-            )
-          else
-            Text(
-              value,
-              style: TextStyle(
-                color: Color(0xFFB4A9D6),
-                fontFamily: 'Montserrat',
-                fontSize: screenWidth * 0.03,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildEditableRow2({
-    required String label,
-    required String value,
-    required TextEditingController controller,
-    required bool isEditing,
-    required VoidCallback onEdit,
-  }) {
-    double screenWidth = MediaQuery.of(context).size.width;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(
-                label,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Montserrat',
-                  fontSize: screenWidth * 0.03,
-                  color: Color(0xFFB4A9D6),
-                ),
-              ),
-              SizedBox(height: 45),
-            ],
-          ),
-          if (isEditing)
-            TextField(
-              controller: controller,
-              style: TextStyle(
-                color: Color(0xFFB4A9D6),
-                fontFamily: 'Montserrat',
-                fontSize: screenWidth * 0.03,
-                fontWeight: FontWeight.bold,
-              ),
-              decoration: InputDecoration(
-                border: UnderlineInputBorder(),
-                hintText: 'Enter $label',
-                hintStyle: TextStyle(fontSize: 12),
-              ),
-            )
-          else
-            Text(
-              value,
-              style: TextStyle(
-                color: Color(0xFFB4A9D6),
-                fontFamily: 'Montserrat',
-                fontSize: screenWidth * 0.03,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -234,6 +113,7 @@ class _EditProfileState extends State<EditProfile> {
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: 25),
             GestureDetector(
@@ -265,22 +145,97 @@ class _EditProfileState extends State<EditProfile> {
                 color: Color(0xFFB4A9D6),
               ),
             ),
+
             SizedBox(height: 20),
-            _buildEditableRow1(
-              label: 'Name',
-              value: name,
-              controller: _controller.nameController,
-              isEditing: isEditingName,
-              onEdit: () => setState(() => isEditingName = true),
+
+            // Name
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Row(
+                children: [
+                  Text(
+                    'Name:',
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.04,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Montserrat',
+                      color: Color(0xFFB4A9D6),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  // Editable name field
+                  Expanded(
+                    child: isEditingName
+                        ? TextField(
+                            controller: _controller.nameController,
+                            style: TextStyle(
+                              // Style applied to the TextField's text
+                              fontSize: screenWidth * 0.04,
+                              fontFamily: 'Montserrat',
+                              color: Color(0xFFB4A9D6),
+                            ),
+                            decoration: InputDecoration(
+                              hintText: 'Enter your name',
+                              hintStyle: TextStyle(
+                                fontSize: screenWidth * 0.04,
+                                fontFamily: 'Montserrat',
+                                color: isEditingName
+                                    ? Color(0xFFD9CAB3)
+                                    : Color(0xFFB4A9D6),
+                              ),
+                            ),
+                          )
+                        : Text(
+                            name,
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.04,
+                              fontFamily: 'Montserrat',
+                              color: Color(0xFFB4A9D6),
+                            ),
+                          ),
+                  ),
+                  // Edit button (removed check icon)
+                  if (!isEditingName) // Show only when not editing
+                    IconButton(
+                      icon: Icon(Icons.edit, color: Color(0xFFB4A9D6)),
+                      onPressed: () {
+                        setState(() {
+                          isEditingName = !isEditingName;
+                        });
+                      },
+                    ),
+                ],
+              ),
             ),
-            // Email Address Section (No Pencil Icon)
-            _buildEditableRow2(
-              label: 'Email Address',
-              value: email,
-              controller: _controller.emailController,
-              isEditing: false, // Email is non-editable
-              onEdit: () {}, // Empty callback to avoid showing the pencil icon
+
+            SizedBox(height: 10),
+            // Email
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Row(
+                children: [
+                  Text(
+                    'Email:',
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.04,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Montserrat',
+                      color: Color(0xFFB4A9D6),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    email, // Display the fetched email
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.04,
+                      fontFamily: 'Montserrat',
+                      color: Color(0xFFB4A9D6),
+                    ),
+                  ),
+                ],
+              ),
             ),
+
             // Save Button (visible only when editing)
             if (isEditingName)
               Padding(

@@ -187,7 +187,7 @@ class _ProfileState extends State<Profile> {
         title: Padding(
           padding: const EdgeInsets.only(left: 0),
           child: Text(
-            'Edit Profile',
+            'Profile',
             style: TextStyle(
               fontSize: titleFontSize,
               fontWeight: FontWeight.bold,
