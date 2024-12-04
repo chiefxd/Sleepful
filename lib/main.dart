@@ -3,12 +3,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sleepful/providers/theme_provider.dart';
+import 'package:sleepful/view/Pages/Authentication/signin_page.dart';
 import 'package:sleepful/view/Pages/Profile/about_us.dart';
 import 'package:sleepful/view/Pages/Profile/change_password.dart';
 import 'package:sleepful/view/Pages/Profile/change_theme.dart';
 import 'package:sleepful/view/Pages/Profile/edit_profile.dart';
 import 'package:sleepful/view/Pages/home_page.dart';
-import 'package:sleepful/view/Pages/Authentication/signin_page.dart';
 import 'package:sleepful/view/Pages/splash_screen.dart';
 
 void main() async {
@@ -16,11 +16,12 @@ void main() async {
 
   await Firebase.initializeApp();
 
+  final User? currentUser = FirebaseAuth.instance.currentUser;
+
   runApp(
     ChangeNotifierProvider(
-      // Wrap with ChangeNotifierProvider
       create: (context) =>
-          ThemeProvider(), // Create an instance of your provider
+          ThemeProvider(currentUser?.uid ?? ''), // Pass user ID or empty
       child: const MyApp(),
     ),
   );

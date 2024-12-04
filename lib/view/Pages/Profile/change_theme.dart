@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sleepful/providers/theme_provider.dart';
 
@@ -18,20 +19,32 @@ class _ChangeThemeState extends State<ChangeTheme> {
     // Initialization moved to didChangeDependencies
   }
 
-@override
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Get the current theme from the provider
-    final currentTheme = Provider.of<ThemeProvider>(context).currentTheme;
 
-    // Set _selectedTheme based on the current theme
-    setState(() { // Wrap in setState to rebuild the widget
-      _selectedTheme = currentTheme == ThemeMode.light
-          ? 0
-          : currentTheme == ThemeMode.dark
-              ? 1
-              : 2;
+    // Get the current theme from the provider
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
+    setState(() {
+      _selectedTheme = themeProvider.isAuto
+          ? 2 // Auto mode
+          : themeProvider.currentTheme == ThemeMode.light
+              ? 0 // Light mode
+              : 1; // Dark mode
     });
+  }
+
+  // Show Toast
+  void showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.black,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
   }
 
   Widget _buildThemeOption(
@@ -180,10 +193,10 @@ class _ChangeThemeState extends State<ChangeTheme> {
                       width: buttonSize,
                       child: ElevatedButton(
                         onPressed: () {
-                          int selectedThemeIndex = _selectedTheme;
                           ThemeMode newTheme;
+                          bool isAuto = false;
 
-                          switch (selectedThemeIndex) {
+                          switch (_selectedTheme) {
                             case 0:
                               newTheme = ThemeMode.light;
                               break;
@@ -191,17 +204,19 @@ class _ChangeThemeState extends State<ChangeTheme> {
                               newTheme = ThemeMode.dark;
                               break;
                             case 2:
-                              newTheme = Provider.of<ThemeProvider>(context,
-                                      listen: false)
-                                  .getThemeBasedOnTime(); // Get time-based theme
+                              newTheme = ThemeMode
+                                  .dark; // Default to dark, overridden by auto logic
+                              isAuto = true; // Set auto mode
                               break;
                             default:
-                              newTheme =
-                                  ThemeMode.dark; // Default to dark theme
+                              newTheme = ThemeMode.dark;
                           }
 
                           Provider.of<ThemeProvider>(context, listen: false)
-                              .setTheme(newTheme);
+                              .setTheme(newTheme,
+                                  isAuto: isAuto); // Save theme and auto flag
+
+                          showToast('Theme updated successfully!');
 
                           Navigator.pop(context);
                         },
