@@ -15,15 +15,19 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  // Get the currently signed-in user
+  // Get the currently signed-in user (this will be null if not signed in)
   final User? currentUser = FirebaseAuth.instance.currentUser;
 
-  final themeProvider = ThemeProvider(currentUser!.uid);
-  await themeProvider.initializeTheme(); // Wait for theme to load
+  // Initialize the theme provider if the user is logged in
+  ThemeProvider? themeProvider;
+  if (currentUser != null) {
+    themeProvider = ThemeProvider(currentUser.uid);
+    await themeProvider.initializeTheme(); // Wait for theme to load
+  }
 
   runApp(
     ChangeNotifierProvider(
-      create: (_) => themeProvider,
+      create: (_) => themeProvider ?? ThemeProvider('default'),
       child: const MyApp(),
     ),
   );
@@ -37,14 +41,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Sleepful',
       theme: ThemeData(
-        // Define your light theme here
-        scaffoldBackgroundColor:
-            Colors.white, // Example: Set background to white
-        primarySwatch: Colors.blue, // Example: Set primary color to blue
-        // ... other light theme properties ...
+        scaffoldBackgroundColor: Colors.white,
+        primarySwatch: Colors.blue,
       ),
       darkTheme: ThemeData(
-        // Your existing dark theme
         scaffoldBackgroundColor: const Color(0xFF120C23),
       ),
       themeMode: Provider.of<ThemeProvider>(context).currentTheme,
@@ -56,20 +56,17 @@ class MyApp extends StatelessWidget {
         '/change_theme': (context) => ChangeTheme(),
         '/about_us': (context) => AboutUs(),
       },
-      home: FutureBuilder(
-        future: Future.delayed(
-            const Duration(seconds: 3)), // Simulate splash screen duration
+      home: FutureBuilder<void>(
+        future: _initializeApp(), // Add a delay before checking the auth state
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const SplashScreen(); // Show splash screen
+            return const SplashScreen(); // Show splash screen while waiting
           } else {
-            // After splash screen, check auth state
             return StreamBuilder<User?>(
               stream: FirebaseAuth.instance.authStateChanges(),
               builder: (context, userSnapshot) {
-                // Keep showing SplashScreen while waiting for auth state
                 if (userSnapshot.connectionState == ConnectionState.waiting) {
-                  return const SplashScreen();
+                  return const SplashScreen(); // Wait for auth state
                 } else if (userSnapshot.hasData) {
                   return const HomePage(); // User is signed in
                 } else {
@@ -81,5 +78,11 @@ class MyApp extends StatelessWidget {
         },
       ),
     );
+  }
+
+  // This function simulates loading or delay
+  Future<void> _initializeApp() async {
+    // Simulate a delay of 3 seconds to show splash screen
+    await Future.delayed(const Duration(seconds: 3));
   }
 }
