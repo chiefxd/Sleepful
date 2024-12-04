@@ -21,8 +21,14 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  Future<void> _initializeApp() async {
-    await Future.delayed(const Duration(seconds: 2)); // Simulate a delay
+  Future<ThemeMode> _initializeApp() async {
+    // Simulate a delay
+    await Future.delayed(const Duration(seconds: 2));
+
+    // Retrieve saved theme mode (for simplicity, fallback to light mode)
+    // Replace this with your preferred method of storing/retrieving user preferences.
+    return ThemeMode
+        .dark; // Replace with ThemeMode.dark if default is dark mode
   }
 
   @override
@@ -30,9 +36,13 @@ class MyApp extends StatelessWidget {
     return FutureBuilder(
       future: _initializeApp(),
       builder: (context, snapshot) {
+        final themeMode = snapshot.data ?? ThemeMode.dark;
+
         if (snapshot.connectionState == ConnectionState.waiting) {
           return MaterialApp(
-            theme: ThemeData.dark(),
+            theme: ThemeData.light(),
+            darkTheme: ThemeData.dark(),
+            themeMode: themeMode,
             home: const SplashScreen(),
           );
         }
@@ -42,7 +52,9 @@ class MyApp extends StatelessWidget {
           builder: (context, userSnapshot) {
             if (userSnapshot.connectionState == ConnectionState.waiting) {
               return MaterialApp(
-                theme: ThemeData.dark(),
+                theme: ThemeData.light(),
+                darkTheme: ThemeData.dark(),
+                themeMode: themeMode,
                 home: const SplashScreen(),
               );
             }
