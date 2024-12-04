@@ -20,9 +20,9 @@ class ThemeProvider with ChangeNotifier {
 
   void setTheme(ThemeMode theme, {bool isAuto = false}) async {
     _currentTheme = theme;
-    _isAuto = isAuto; // Set auto mode
+    _isAuto = isAuto; // Set auto mode if isAuto is true
     await _saveThemePreference(theme, isAuto: isAuto); // Save to Firestore
-    notifyListeners();
+    notifyListeners(); // Notify listeners to rebuild UI
   }
 
   Future<void> initializeTheme() async {
@@ -50,6 +50,7 @@ class ThemeProvider with ChangeNotifier {
         _currentTheme = ThemeMode.dark;
         _isAuto = false;
       }
+      print("Loaded theme: ${_isAuto ? 'auto' : _currentTheme}");
     } catch (e) {
       print("Error loading theme preference: $e");
     }
@@ -69,6 +70,7 @@ class ThemeProvider with ChangeNotifier {
         {'theme': themeString},
         SetOptions(merge: true), // Merge with existing data
       );
+      print("Theme saved to Firestore: $themeString");
     } catch (e) {
       print("Error saving theme preference: $e");
     }
