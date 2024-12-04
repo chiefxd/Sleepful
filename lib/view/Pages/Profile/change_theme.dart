@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sleepful/providers/theme_provider.dart';
 
 class ChangeTheme extends StatefulWidget {
   const ChangeTheme({super.key});
@@ -10,14 +12,37 @@ class ChangeTheme extends StatefulWidget {
 class _ChangeThemeState extends State<ChangeTheme> {
   int _selectedTheme = 0; // 0: Light, 1: Dark, 2: Auto
 
-  Widget _buildThemeOption(int index, String iconPath, String label, String description) {
+  @override
+  void initState() {
+    super.initState();
+    // Initialization moved to didChangeDependencies
+  }
+
+@override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Get the current theme from the provider
+    final currentTheme = Provider.of<ThemeProvider>(context).currentTheme;
+
+    // Set _selectedTheme based on the current theme
+    setState(() { // Wrap in setState to rebuild the widget
+      _selectedTheme = currentTheme == ThemeMode.light
+          ? 0
+          : currentTheme == ThemeMode.dark
+              ? 1
+              : 2;
+    });
+  }
+
+  Widget _buildThemeOption(
+      int index, String iconPath, String label, String description) {
     return InkWell(
       onTap: () {
         setState(() {
           _selectedTheme = index;
         });
       },
-      child:Padding(
+      child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
@@ -29,7 +54,8 @@ class _ChangeThemeState extends State<ChangeTheme> {
                   borderRadius: BorderRadius.circular(20),
                   child: Image.asset(
                     iconPath,
-                    width: double.infinity, height: 100,
+                    width: double.infinity,
+                    height: 100,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -53,7 +79,8 @@ class _ChangeThemeState extends State<ChangeTheme> {
                         Text(
                           label,
                           style: TextStyle(
-                            fontSize: screenWidth * 0.042, // Responsive font size
+                            fontSize:
+                                screenWidth * 0.042, // Responsive font size
                             fontWeight: FontWeight.bold,
                             fontFamily: 'Montserrat',
                             color: Color(0xFFB4A9D6),
@@ -62,7 +89,8 @@ class _ChangeThemeState extends State<ChangeTheme> {
                         Text(
                           description,
                           style: TextStyle(
-                            fontSize: screenWidth * 0.03, // Responsive font size
+                            fontSize:
+                                screenWidth * 0.03, // Responsive font size
                             fontFamily: 'Montserrat',
                             color: Color(0xFFB4A9D6),
                           ),
@@ -152,8 +180,30 @@ class _ChangeThemeState extends State<ChangeTheme> {
                       width: buttonSize,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Handle save button press here
-                          // You can access the selected theme using _selectedTheme// and apply the theme accordingly.
+                          int selectedThemeIndex = _selectedTheme;
+                          ThemeMode newTheme;
+
+                          switch (selectedThemeIndex) {
+                            case 0:
+                              newTheme = ThemeMode.light;
+                              break;
+                            case 1:
+                              newTheme = ThemeMode.dark;
+                              break;
+                            case 2:
+                              newTheme = Provider.of<ThemeProvider>(context,
+                                      listen: false)
+                                  .getThemeBasedOnTime(); // Get time-based theme
+                              break;
+                            default:
+                              newTheme =
+                                  ThemeMode.dark; // Default to dark theme
+                          }
+
+                          Provider.of<ThemeProvider>(context, listen: false)
+                              .setTheme(newTheme);
+
+                          Navigator.pop(context);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF725FAC),

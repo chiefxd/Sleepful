@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sleepful/providers/theme_provider.dart';
 import 'package:sleepful/view/Pages/Profile/about_us.dart';
 import 'package:sleepful/view/Pages/Profile/change_password.dart';
 import 'package:sleepful/view/Pages/Profile/change_theme.dart';
@@ -14,7 +16,14 @@ void main() async {
 
   await Firebase.initializeApp();
 
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      // Wrap with ChangeNotifierProvider
+      create: (context) =>
+          ThemeProvider(), // Create an instance of your provider
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -25,9 +34,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Sleepful',
       theme: ThemeData(
-        scaffoldBackgroundColor: const Color(
-            0xFF120C23), // Set the default scaffold background color
+        // Define your light theme here
+        scaffoldBackgroundColor:
+            Colors.white, // Example: Set background to white
+        primarySwatch: Colors.blue, // Example: Set primary color to blue
+        // ... other light theme properties ...
       ),
+      darkTheme: ThemeData(
+        // Your existing dark theme
+        scaffoldBackgroundColor: const Color(0xFF120C23),
+      ),
+      themeMode: Provider.of<ThemeProvider>(context).currentTheme,
       routes: {
         '/signIn': (context) => const SignIn(),
         '/home': (context) => const HomePage(),
@@ -36,8 +53,9 @@ class MyApp extends StatelessWidget {
         '/change_theme': (context) => ChangeTheme(),
         '/about_us': (context) => AboutUs(),
       },
-        home: FutureBuilder(
-        future: Future.delayed(const Duration(seconds: 3)), // Simulate splash screen duration
+      home: FutureBuilder(
+        future: Future.delayed(
+            const Duration(seconds: 3)), // Simulate splash screen duration
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const SplashScreen(); // Show splash screen
@@ -48,7 +66,7 @@ class MyApp extends StatelessWidget {
               builder: (context, userSnapshot) {
                 // Keep showing SplashScreen while waiting for auth state
                 if (userSnapshot.connectionState == ConnectionState.waiting) {
-                  return const SplashScreen(); 
+                  return const SplashScreen();
                 } else if (userSnapshot.hasData) {
                   return const HomePage(); // User is signed in
                 } else {
