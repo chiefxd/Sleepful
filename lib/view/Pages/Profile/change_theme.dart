@@ -3,6 +3,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sleepful/providers/theme_provider.dart';
 
+import '../splash_screen.dart';
+
 class ChangeTheme extends StatefulWidget {
   const ChangeTheme({super.key});
 
@@ -212,13 +214,19 @@ class _ChangeThemeState extends State<ChangeTheme> {
                               newTheme = ThemeMode.dark;
                           }
 
-                          Provider.of<ThemeProvider>(context, listen: false)
-                              .setTheme(newTheme,
-                                  isAuto: isAuto); // Save theme and auto flag
+                          final themeProvider = Provider.of<ThemeProvider>(
+                              context,
+                              listen: false);
+                          themeProvider.setTheme(newTheme, isAuto: isAuto);
 
                           showToast('Theme updated successfully!');
 
-                          Navigator.pop(context);
+                          // Redirect to splash screen
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SplashScreen()),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF725FAC),

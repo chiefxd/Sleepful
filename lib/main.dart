@@ -13,15 +13,17 @@ import 'package:sleepful/view/Pages/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await Firebase.initializeApp();
 
+  // Get the currently signed-in user
   final User? currentUser = FirebaseAuth.instance.currentUser;
+
+  final themeProvider = ThemeProvider(currentUser!.uid);
+  await themeProvider.initializeTheme(); // Wait for theme to load
 
   runApp(
     ChangeNotifierProvider(
-      create: (context) =>
-          ThemeProvider(currentUser?.uid ?? ''), // Pass user ID or empty
+      create: (_) => themeProvider,
       child: const MyApp(),
     ),
   );

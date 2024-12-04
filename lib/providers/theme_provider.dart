@@ -25,6 +25,11 @@ class ThemeProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> initializeTheme() async {
+    await _loadThemePreference();
+    notifyListeners(); // Notify once the theme is loaded
+  }
+
   // Load theme preference from Firestore
   Future<void> _loadThemePreference() async {
     try {
@@ -38,14 +43,12 @@ class ThemeProvider with ChangeNotifier {
           _currentTheme = ThemeMode.dark;
           _isAuto = false;
         } else if (theme == 'auto') {
-          _isAuto = true; // Correctly enable auto mode
-          _currentTheme = getThemeBasedOnTime(); // Dynamically calculate
+          _isAuto = true;
+          _currentTheme = getThemeBasedOnTime();
         }
       } else {
-        // If no preference exists, set a default and save it
-        _currentTheme = ThemeMode.dark; // Default to dark
-        _isAuto = false; // Default to non-auto
-        await _saveThemePreference(_currentTheme);
+        _currentTheme = ThemeMode.dark;
+        _isAuto = false;
       }
     } catch (e) {
       print("Error loading theme preference: $e");
