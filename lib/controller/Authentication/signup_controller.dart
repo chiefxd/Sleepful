@@ -79,7 +79,6 @@ class SignupController {
   }
 
   // Validate inputs and call the sign-up function
-  // Validate inputs and call the sign-up function
   void validateAndSignUp() {
     if (nameController.text.trim().isEmpty) {
       showToast('Please enter your name');

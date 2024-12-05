@@ -151,6 +151,37 @@ class _EditPasswordState extends State<ChangePassword> {
                       width: buttonSize,
                       child: ElevatedButton(
                         onPressed: () async {
+                           // New password validations:
+                          if (_controller.newPassController.text.trim().isEmpty) {
+                            showToast('Please enter your new password');
+                            return;
+                          }
+                          if (_controller.newPassController.text.trim().length < 6) {
+                            showToast('New password must be at least 6 characters');
+                            return;
+                          }
+                          if (!_controller.newPassController.text.trim().contains(RegExp(r'[A-Z]'))) {
+                            showToast('New password must contain at least one uppercase letter');
+                            return;
+                          }
+                          if (!_controller.newPassController.text.trim().contains(RegExp(r'[a-z]'))) {
+                            showToast('New password must contain at least one lowercase letter');
+                            return;
+                          }
+                          if (!_controller.newPassController.text.trim().contains(RegExp(r'[0-9]'))) {
+                            showToast('New password must contain at least one number');
+                            return;
+                          }
+                          if (!_controller.newPassController.text.trim().contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]'))) {
+                            showToast('New password must contain at least one special character');
+                            return;
+                          }
+                          if (_controller.newPassController.text.trim() !=
+                              _controller.confirmNewPassController.text.trim()) {
+                            showToast("New passwords do not match");
+                            return;
+                          }
+
                           try {
                             // 1. Reauthenticate the user
                             final user = _auth.currentUser;
