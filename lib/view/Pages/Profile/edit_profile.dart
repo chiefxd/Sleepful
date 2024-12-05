@@ -10,8 +10,11 @@ import 'package:sleepful/controller/Profile/edit_profile_controller.dart';
 import 'package:sleepful/providers/user_data_provider.dart';
 
 class EditProfile extends StatefulWidget {
-  const EditProfile({Key? key, this.onProfilePictureUpdated}) : super(key: key);
+  const EditProfile(
+      {Key? key, this.onProfilePictureUpdated, this.onNameUpdated})
+      : super(key: key);
   final VoidCallback? onProfilePictureUpdated;
+  final Function(String)? onNameUpdated;
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -84,18 +87,20 @@ class _EditProfileState extends State<EditProfile> {
           isEditingName = false;
         });
 
-        // Use your custom showToast method to show success message
+        // Notify the Profile page of the updated name
+        if (widget.onNameUpdated != null) {
+          widget.onNameUpdated!(name);
+        }
+
         showToast('Profile updated successfully');
       }
     } catch (e) {
       print("Error saving to Firestore: $e");
-
-      // Use your custom showToast method to show error message
       showToast('Error updating profile');
     }
   }
 
-    // Callback function to notify Profile page
+  // Callback function to notify Profile page
   void _onProfilePictureUpdated() {
     if (widget.onProfilePictureUpdated != null) {
       widget.onProfilePictureUpdated!();
@@ -171,11 +176,15 @@ class _EditProfileState extends State<EditProfile> {
                     final directory = await getApplicationDocumentsDirectory();
                     final imagePath = '${directory.path}/profile_image.jpg';
 
+                    // Save the cropped image as the persistent profile image
                     await File(croppedFile.path).copy(imagePath);
 
                     setState(() {
                       _controller.selectedImage = File(imagePath);
                     });
+
+                    // Notify Profile page of the updated picture
+                    _onProfilePictureUpdated();
                   }
                 }
               },

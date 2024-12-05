@@ -5,6 +5,12 @@ class UserDataProvider extends ChangeNotifier {
   String _name = '';
   String _email = '';
 
+  // Getter for name
+  String get name => _name;
+
+  // Getter for email
+  String get email => _email;
+
   // Helper function to get user name from Firestore
   Future<String> getUserName(String uid) async {
     try {
@@ -66,13 +72,6 @@ class UserDataProvider extends ChangeNotifier {
       return ''; // Error occurred
     }
   }
-
-  // Getter for name
-  String get name => _name;
-
-  // Getter for email
-  String get email => _email;
-
 
   // Modified updateUserData method
   Future<void> updateUserData(String uid, Map<String, dynamic> data) async {
