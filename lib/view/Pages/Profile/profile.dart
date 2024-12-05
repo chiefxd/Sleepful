@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sleepful/providers/user_data_provider.dart';
+import 'package:sleepful/view/Pages/Profile/edit_profile.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -13,6 +17,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   String fullName = '';
   final UserDataProvider _userDataProvider = UserDataProvider();
+  String? _profilePicturePath; 
 
   @override
   void initState() {
@@ -23,6 +28,7 @@ class _ProfileState extends State<Profile> {
         _fetchFullName();
       }
     });
+    _loadSavedImagePath(); 
   }
 
   Future<void> _fetchFullName() async {
@@ -39,6 +45,18 @@ class _ProfileState extends State<Profile> {
         print('Error fetching user name: $e');
       }
       // Handle error, e.g., show an error message
+    }
+  }
+
+    // Function to load the saved image path
+  Future<void> _loadSavedImagePath() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final imagePath = '${directory.path}/profile_image.jpg';
+
+    if (await File(imagePath).exists()) {
+      setState(() {
+        _profilePicturePath = imagePath;
+      });
     }
   }
 
@@ -136,6 +154,20 @@ class _ProfileState extends State<Profile> {
               );
             },
           );
+        } else if ( text == 'Edit Profile') {
+          // Navigate to EditProfile and pass the callback
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EditProfile(
+                onProfilePictureUpdated: () {
+                  setState(() {
+                    _loadSavedImagePath(); // Reload image path when updated
+                  });
+                },
+              ),
+            ),
+          );
         } else {
           Navigator.pushNamed(context, routeName);
         }
@@ -208,7 +240,10 @@ class _ProfileState extends State<Profile> {
               // Profile Pic
               CircleAvatar(
                 radius: 75,
-                backgroundImage: AssetImage('assets/images/Contoh 1.png'),
+                backgroundImage: _profilePicturePath != null
+                    ? FileImage(File(_profilePicturePath!))
+                    : const AssetImage('assets/images/Contoh 1.png')
+                        as ImageProvider,
               ),
 
               SizedBox(height: 15),

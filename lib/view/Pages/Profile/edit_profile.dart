@@ -3,12 +3,15 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sleepful/controller/Profile/edit_profile_controller.dart';
 import 'package:sleepful/providers/user_data_provider.dart';
 
 class EditProfile extends StatefulWidget {
-  const EditProfile({super.key});
+  const EditProfile({Key? key, this.onProfilePictureUpdated}) : super(key: key);
+  final VoidCallback? onProfilePictureUpdated;
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -25,7 +28,21 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     super.initState();
+    _loadSavedImage();
     _fetchUserData();
+  }
+
+  Future<void> _loadSavedImage() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final directory = await getApplicationDocumentsDirectory();
+      final imagePath = '${directory.path}/profile_image.jpg';
+
+      if (await File(imagePath).exists()) {
+        setState(() {
+          _controller.selectedImage = File(imagePath);
+        });
+      }
+    });
   }
 
   Future<void> _fetchUserData() async {
@@ -78,6 +95,13 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
+    // Callback function to notify Profile page
+  void _onProfilePictureUpdated() {
+    if (widget.onProfilePictureUpdated != null) {
+      widget.onProfilePictureUpdated!();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -125,9 +149,34 @@ class _EditProfileState extends State<EditProfile> {
                     await picker.pickImage(source: ImageSource.gallery);
 
                 if (image != null) {
-                  setState(() {
-                    _controller.selectedImage = File(image.path);
-                  });
+                  CroppedFile? croppedFile = await ImageCropper().cropImage(
+                    sourcePath: image.path,
+                    aspectRatioPresets: [
+                      CropAspectRatioPreset.square,
+                      CropAspectRatioPreset.ratio3x2,
+                      CropAspectRatioPreset.original,
+                    ],
+                    uiSettings: [
+                      AndroidUiSettings(
+                        toolbarTitle: 'Cropper',
+                        toolbarColor: Color(0xFF120C23),
+                        toolbarWidgetColor: Colors.white,
+                        initAspectRatio: CropAspectRatioPreset.original,
+                        lockAspectRatio: false,
+                      ),
+                    ],
+                  );
+
+                  if (croppedFile != null) {
+                    final directory = await getApplicationDocumentsDirectory();
+                    final imagePath = '${directory.path}/profile_image.jpg';
+
+                    await File(croppedFile.path).copy(imagePath);
+
+                    setState(() {
+                      _controller.selectedImage = File(imagePath);
+                    });
+                  }
                 }
               },
               child: Column(
