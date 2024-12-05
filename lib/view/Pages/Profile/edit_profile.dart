@@ -1,8 +1,20 @@
+import 'dart:io';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sleepful/controller/Profile/edit_profile_controller.dart';
+import 'package:sleepful/providers/user_data_provider.dart';
 
 class EditProfile extends StatefulWidget {
-  const EditProfile({super.key});
+  const EditProfile(
+      {super.key, this.onProfilePictureUpdated, this.onNameUpdated});
+
+  final VoidCallback? onProfilePictureUpdated;
+  final Function(String)? onNameUpdated;
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -10,57 +22,98 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   final _controller = EditProfileController();
+  final UserDataProvider _userDataProvider = UserDataProvider();
+  bool isEditingName = false;
 
-  Widget _buildEditableIconRow(IconData icon, String text, double fontSize,
-      TextEditingController controller) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          InkWell(
-            onTap: () {},
-            child: Row(
-              children: [
-                Icon(icon, color: Color(0xFFB4A9D6)),
-                SizedBox(width: 10),
-                Text(
-                  text,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Montserrat',
-                    color: Color(0xFFB4A9D6),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          TextField(
-            controller: controller,
-            style: TextStyle(color: Color(0xFFB4A9D6), fontFamily: 'Montserrat', fontWeight: FontWeight.bold),
-            decoration: InputDecoration(
-              border: UnderlineInputBorder(),
-              hintText: 'Enter $text',
-              hintStyle: TextStyle(
-                fontSize: 12,
-              ),
-            ),
-          ),
-        ],
-      ),
+  String name = '';
+  String email = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedImage();
+    _fetchUserData();
+  }
+
+  Future<void> _loadSavedImage() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final directory = await getApplicationDocumentsDirectory();
+      final imagePath = '${directory.path}/profile_image.jpg';
+
+      if (await File(imagePath).exists()) {
+        setState(() {
+          _controller.selectedImage = File(imagePath);
+        });
+      }
+    });
+  }
+
+  Future<void> _fetchUserData() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        name = await _userDataProvider.getFullName(user.uid);
+        email = user.email ?? ''; // Directly use FirebaseAuth for email
+        setState(() {
+          _controller.nameController.text = name;
+        });
+      }
+    } catch (e) {
+      print("Error fetching user data: $e");
+    }
+  }
+
+  void showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.black,
+      textColor: Colors.white,
+      fontSize: 16.0,
     );
+  }
+
+  Future<void> _saveToFirestore() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await _userDataProvider.updateUserData(
+          user.uid,
+          {'name': _controller.nameController.text},
+        );
+        setState(() {
+          name = _controller.nameController.text;
+          isEditingName = false;
+        });
+
+        // Notify the Profile page of the updated name
+        if (widget.onNameUpdated != null) {
+          widget.onNameUpdated!(name);
+        }
+
+        showToast('Profile updated successfully');
+      }
+    } catch (e) {
+      print("Error saving to Firestore: $e");
+      showToast('Error updating profile');
+    }
+  }
+
+  // Callback function to notify Profile page
+  void _onProfilePictureUpdated() {
+    if (widget.onProfilePictureUpdated != null) {
+      widget.onProfilePictureUpdated!();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double titleFontSize = screenWidth * 0.06;
-    double subtitleFontSize = screenWidth * 0.04;
     double buttonFontSize = screenWidth * 0.05;
     double buttonSize = screenWidth * 0.3;
 
     return Scaffold(
-      // Section 1: Title and Back Button
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -77,112 +130,205 @@ class _EditProfileState extends State<EditProfile> {
             ),
           ),
         ),
-        title: Padding(
-          padding: const EdgeInsets.only(left: 0),
-          child: Text(
-            'Edit Profile',
-            style: TextStyle(
-              fontSize: titleFontSize,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Montserrat',
-              color: Color(0xFFB4A9D6),
-            ),
+        title: Text(
+          'Edit Profile',
+          style: TextStyle(
+            fontSize: screenWidth * 0.06,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Montserrat',
+            color: Color(0xFFB4A9D6),
           ),
         ),
       ),
-
-        // Section 2: Edit Profile Contents
-        body: Stack(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SingleChildScrollView(
+            SizedBox(height: 25),
+            // Profile Picture and Text Section
+            GestureDetector(
+              // Wrap both the CircleAvatar and Text in GestureDetector
+              onTap: () async {
+                final ImagePicker picker = ImagePicker();
+                final XFile? image =
+                    await picker.pickImage(source: ImageSource.gallery);
+
+                if (image != null) {
+                  CroppedFile? croppedFile = await ImageCropper().cropImage(
+                    sourcePath: image.path,
+                    aspectRatioPresets: [
+                      CropAspectRatioPreset.square,
+                      CropAspectRatioPreset.ratio3x2,
+                      CropAspectRatioPreset.original,
+                    ],
+                    uiSettings: [
+                      AndroidUiSettings(
+                        toolbarTitle: 'Cropper',
+                        toolbarColor: Color(0xFF120C23),
+                        toolbarWidgetColor: Colors.white,
+                        initAspectRatio: CropAspectRatioPreset.original,
+                        lockAspectRatio: false,
+                      ),
+                    ],
+                  );
+
+                  if (croppedFile != null) {
+                    final directory = await getApplicationDocumentsDirectory();
+                    final imagePath = '${directory.path}/profile_image.jpg';
+
+                    // Save the cropped image as the persistent profile image
+                    await File(croppedFile.path).copy(imagePath);
+
+                    setState(() {
+                      _controller.selectedImage = File(imagePath);
+                    });
+
+                    // Notify Profile page of the updated picture
+                    _onProfilePictureUpdated();
+                  }
+                }
+              },
               child: Column(
-                children: <Widget>[
-                  SizedBox(height: 25),
-
-                  // Profile Pic
-              GestureDetector( // or GestureDetector
-                onTap: () async {
-                  // final ImagePicker picker = ImagePicker();
-                  // final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-                  //
-                  // if (image != null) {
-                  //   // Update the profile picture using the selected image
-                  //   // ...
-                  // }
-                },
-                  child: CircleAvatar(
+                // Use a Column to arrange the CircleAvatar and Text
+                children: [
+                  CircleAvatar(
                     radius: 75,
-                    backgroundImage: AssetImage('assets/images/Contoh 1.png'),
+                    backgroundImage: _controller.selectedImage != null
+                        ? FileImage(_controller.selectedImage!)
+                        : AssetImage('assets/images/Contoh 1.png')
+                            as ImageProvider,
                   ),
-              ),
-
                   SizedBox(height: 15),
-
-                  // Change Picture Hint
                   Text(
-                    'Change Profile Picutre',
+                    'Change Profile Picture',
                     style: TextStyle(
-                      fontSize: subtitleFontSize,
+                      fontSize: screenWidth * 0.04,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Montserrat',
                       color: Color(0xFFB4A9D6),
                     ),
                   ),
+                ],
+              ),
+            ),
 
-                  SizedBox(height: 20),
+            SizedBox(height: 20),
 
-                  // Name and E-mail Text Field
-                  Column(
-                    children: [
-                      _buildEditableIconRow(
-                        Icons.person,
-                        'Name',
-                        subtitleFontSize,
-                        _controller.nameController, // Use the controller from the separate class
-                      ),
-                      _buildEditableIconRow(
-                        Icons.mail,
-                        'E-mail Address',
-                        subtitleFontSize,
-                        _controller.emailController, // Use the controller from the separate class
-                      ),
-                    ],
+            // Name
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Row(
+                children: [
+                  Text(
+                    'Name:',
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.04,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Montserrat',
+                      color: Color(0xFFB4A9D6),
+                    ),
                   ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(top: 25),
-                    child: Center(
-                      child: SizedBox(
-                        width: buttonSize,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            //logic nanti
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF725FAC),
-                            foregroundColor: Colors.white,
-                            textStyle: TextStyle(
+                  SizedBox(width: 10),
+                  // Editable name field
+                  Expanded(
+                    child: isEditingName
+                        ? TextField(
+                            controller: _controller.nameController,
+                            style: TextStyle(
+                              // Style applied to the TextField's text
+                              fontSize: screenWidth * 0.04,
+                              fontFamily: 'Montserrat',
+                              color: Color(0xFFB4A9D6),
+                            ),
+                            decoration: InputDecoration(
+                              hintText: 'Enter your name',
+                              hintStyle: TextStyle(
+                                fontSize: screenWidth * 0.04,
                                 fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.bold,
-                                fontSize: buttonFontSize),
-                            minimumSize: const Size(double.infinity, 40),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                                color: isEditingName
+                                    ? Color(0xFFD9CAB3)
+                                    : Color(0xFFB4A9D6),
+                              ),
+                            ),
+                          )
+                        : Text(
+                            name,
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.04,
+                              fontFamily: 'Montserrat',
+                              color: Color(0xFFB4A9D6),
                             ),
                           ),
-                          child: Text('Save', style: TextStyle(fontSize: buttonFontSize)
-                          ),
-                        ),
-                      ),
+                  ),
+                  // Edit button (removed check icon)
+                  if (!isEditingName) // Show only when not editing
+                    IconButton(
+                      icon: Icon(Icons.edit, color: Color(0xFFB4A9D6)),
+                      onPressed: () {
+                        setState(() {
+                          isEditingName = !isEditingName;
+                        });
+                      },
+                    ),
+                ],
+              ),
+            ),
+
+            SizedBox(height: 10),
+            // Email
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Row(
+                children: [
+                  Text(
+                    'Email:',
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.04,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Montserrat',
+                      color: Color(0xFFB4A9D6),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    email, // Display the fetched email
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.04,
+                      fontFamily: 'Montserrat',
+                      color: Color(0xFFB4A9D6),
                     ),
                   ),
                 ],
               ),
             ),
+
+            // Save Button (visible only when editing)
+            if (isEditingName)
+              Padding(
+                padding: const EdgeInsets.only(top: 30),
+                child: SizedBox(
+                  width: buttonSize,
+                  child: ElevatedButton(
+                    onPressed: _saveToFirestore,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF725FAC),
+                      foregroundColor: Colors.white,
+                      textStyle: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                        fontSize: buttonFontSize,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    child: Text('Save'),
+                  ),
+                ),
+              ),
           ],
         ),
-      );
+      ),
+    );
   }
 }

@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sleepful/controller/Authentication/change_password_controller.dart';
 
 class ChangePassword extends StatefulWidget {
@@ -10,6 +12,7 @@ class ChangePassword extends StatefulWidget {
 
 class _EditPasswordState extends State<ChangePassword> {
   final _controller = ChangePasswordController();
+  final _auth = FirebaseAuth.instance;
 
   Widget _buildEditableIconRow(IconData icon, String text, double fontSize,
       TextEditingController controller) {
@@ -38,7 +41,10 @@ class _EditPasswordState extends State<ChangePassword> {
           TextField(
             controller: controller,
             obscureText: true,
-            style: TextStyle(color: Color(0xFFB4A9D6), fontFamily: 'Montserrat', fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: Color(0xFFB4A9D6),
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.bold),
             decoration: InputDecoration(
               border: UnderlineInputBorder(),
               hintText: 'Enter $text',
@@ -59,6 +65,17 @@ class _EditPasswordState extends State<ChangePassword> {
     double subtitleFontSize = screenWidth * 0.04;
     double buttonFontSize = screenWidth * 0.05;
     double buttonSize = screenWidth * 0.3;
+
+    void showToast(String message) {
+      Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
 
     return Scaffold(
       // Section 1: Title and Back Button
@@ -107,20 +124,22 @@ class _EditPasswordState extends State<ChangePassword> {
                       Icons.password_rounded,
                       'Old Password',
                       subtitleFontSize,
-                      _controller.oldPassController, // Use the controller from the separate class
+                      _controller
+                          .oldPassController, // Use the controller from the separate class
                     ),
                     _buildEditableIconRow(
                       Icons.password_rounded,
                       'New Password',
                       subtitleFontSize,
-                      _controller.newPassController, // Use the controller from the separate class
+                      _controller
+                          .newPassController, // Use the controller from the separate class
                     ),
-
                     _buildEditableIconRow(
                       Icons.password_rounded,
                       'Confirm New Password',
                       subtitleFontSize,
-                      _controller.confirmNewPassController, // Use the controller from the separate class
+                      _controller
+                          .confirmNewPassController, // Use the controller from the separate class
                     ),
                   ],
                 ),
@@ -131,8 +150,68 @@ class _EditPasswordState extends State<ChangePassword> {
                     child: SizedBox(
                       width: buttonSize,
                       child: ElevatedButton(
-                        onPressed: () {
-                          //logic nanti
+                        onPressed: () async {
+                           // New password validations:
+                          if (_controller.newPassController.text.trim().isEmpty) {
+                            showToast('Please enter your new password');
+                            return;
+                          }
+                          if (_controller.newPassController.text.trim().length < 6) {
+                            showToast('New password must be at least 6 characters');
+                            return;
+                          }
+                          if (!_controller.newPassController.text.trim().contains(RegExp(r'[A-Z]'))) {
+                            showToast('New password must contain at least one uppercase letter');
+                            return;
+                          }
+                          if (!_controller.newPassController.text.trim().contains(RegExp(r'[a-z]'))) {
+                            showToast('New password must contain at least one lowercase letter');
+                            return;
+                          }
+                          if (!_controller.newPassController.text.trim().contains(RegExp(r'[0-9]'))) {
+                            showToast('New password must contain at least one number');
+                            return;
+                          }
+                          if (!_controller.newPassController.text.trim().contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]'))) {
+                            showToast('New password must contain at least one special character');
+                            return;
+                          }
+                          if (_controller.newPassController.text.trim() !=
+                              _controller.confirmNewPassController.text.trim()) {
+                            showToast("New passwords do not match");
+                            return;
+                          }
+
+                          try {
+                            // 1. Reauthenticate the user
+                            final user = _auth.currentUser;
+                            if (user != null) {
+                              final credential = EmailAuthProvider.credential(
+                                email: user.email!,
+                                password: _controller.oldPassController.text,
+                              );
+                              await user
+                                  .reauthenticateWithCredential(credential);
+
+                              // 2. Update the password
+                              await user.updatePassword(
+                                  _controller.newPassController.text);
+
+                              // 3. Show success message and navigate back using Fluttertoast
+                              showToast(
+                                  'Password changed successfully!'); // Call your showToast function
+                              Navigator.pop(context);
+                            }
+                          } on FirebaseAuthException catch (e) {
+                            // Handle errors using Fluttertoast
+                            String errorMessage = 'An error occurred';
+                            if (e.code == 'wrong-password') {
+                              errorMessage = 'Incorrect old password';
+                            } else if (e.code == 'weak-password') {
+                              errorMessage = 'New password is too weak';
+                            }
+                            showToast(errorMessage); // Call your showToast function
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF725FAC),
@@ -148,8 +227,8 @@ class _EditPasswordState extends State<ChangePassword> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                         ),
-                        child: Text('Save', style: TextStyle(fontSize: buttonFontSize)
-                        ),
+                        child: Text('Save',
+                            style: TextStyle(fontSize: buttonFontSize)),
                       ),
                     ),
                   ),

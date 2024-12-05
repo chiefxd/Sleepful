@@ -53,6 +53,7 @@ class SignupController {
       await FirebaseFirestore.instance
           .collection('Users')
           .doc(userCredential.user!.uid)
+
           .set({
         'name': nameController.text.trim(),
         'email': emailController.text.trim(),
@@ -101,6 +102,28 @@ class SignupController {
     }
     if (confirmPasswordController.text.trim().isEmpty) {
       showToast('Please confirm your password');
+      return;
+    }
+    
+    // Additional password validations:
+    if (!passwordController.text.trim().contains(RegExp(r'[A-Z]'))) {
+      showToast('Password must contain at least one uppercase letter');
+      return;
+    }
+    if (!passwordController.text.trim().contains(RegExp(r'[a-z]'))) {
+      showToast('Password must contain at least one lowercase letter');
+      return;
+    }
+    if (!passwordController.text.trim().contains(RegExp(r'[0-9]'))) {
+      showToast('Password must contain at least one number');
+      return;
+    }
+    if (!passwordController.text.trim().contains(RegExp(r'[0-9]'))) {
+      showToast('Password must contain at least one number');
+      return;
+    }
+    if (!passwordController.text.trim().contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]'))) {
+      showToast('Password must contain at least one special character');
       return;
     }
 

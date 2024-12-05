@@ -1,4 +1,4 @@
-// home_page.dart
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,17 +8,17 @@ import 'package:sleepful/view/Pages/Information/information_2.dart';
 import 'package:sleepful/view/Pages/Information/information_3.dart';
 import 'package:sleepful/view/Pages/Information/information_4.dart';
 import 'package:sleepful/view/Pages/Information/information_5.dart';
-import 'Plans/view_plans.dart';
-import 'Sleeping Stats/sleeping_stats.dart';
-import 'Information/information.dart';
-import '../Navbar/bottom_navbar.dart';
+
+import '../Components/Sections/home_info_card.dart';
+import '../Components/Sections/home_sounds.dart';
 import '../Components/button_with_text.dart';
 import '../Components/plus_button.dart';
-import 'Profile/profile.dart';
-import '../Components/Sections/home_sounds.dart';
-import '../Components/Sections/home_info_card.dart';
+import '../Navbar/bottom_navbar.dart';
+import 'Information/information.dart';
 import 'Information/information_1.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'Plans/view_plans.dart';
+import 'Profile/profile.dart';
+import 'Sleeping Stats/sleeping_stats.dart';
 
 class HomePage extends StatefulWidget {
   final int selectedIndex; // Add selectedIndex parameter
@@ -39,25 +39,26 @@ class _HomePageState extends State<HomePage> {
     // Listen for authentication state changes
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user != null) {
-        _fetchUserName();
+        _fetchUserData();
       }
     });
   }
 
+  Future<void> _fetchUserData() async {
+    await _fetchUserName();
+  }
+
   Future<void> _fetchUserName() async {
     try {
-      // Get the current user's UID
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        // Get the user's name using the provider
         userName = await _userDataProvider.getUserName(user.uid);
-        setState(() {}); // Update the UI
+        setState(() {}); // Update the UI with the new name
       }
     } catch (e) {
       if (kDebugMode) {
         print('Error fetching user name: $e');
       }
-      // Handle error, e.g., show an error message
     }
   }
 

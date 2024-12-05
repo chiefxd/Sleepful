@@ -1,8 +1,74 @@
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:io';
 
-class Profile extends StatelessWidget {
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:sleepful/providers/user_data_provider.dart';
+import 'package:sleepful/view/Pages/Profile/edit_profile.dart';
+
+class Profile extends StatefulWidget {
   const Profile({super.key});
+
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  String fullName = '';
+  final UserDataProvider _userDataProvider = UserDataProvider();
+  String? _profilePicturePath;
+
+  @override
+  void initState() {
+    super.initState();
+    // Listen for authentication state changes
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user != null) {
+        _fetchUserData();
+      }
+    });
+  }
+
+  Future<void> _fetchUserData() async {
+    await _fetchFullName();
+    await _loadSavedImagePath();
+  }
+
+  Future<void> _fetchFullName() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        fullName = await _userDataProvider.getFullName(user.uid);
+        setState(() {}); // Update the UI with the new name
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error fetching user name: $e');
+      }
+    }
+  }
+
+  Future<void> _loadSavedImagePath() async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final imagePath = '${directory.path}/profile_image.jpg';
+
+      if (await File(imagePath).exists()) {
+        setState(() {
+          _profilePicturePath = imagePath;
+        });
+      } else {
+        setState(() {
+          _profilePicturePath = null; // Default to placeholder
+        });
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error loading profile picture: $e');
+      }
+    }
+  }
 
   Widget _buildIconRow(IconData icon, String text, double fontSize,
       {required BuildContext context, required String routeName}) {
@@ -98,6 +164,22 @@ class Profile extends StatelessWidget {
               );
             },
           );
+        } else if (text == 'Edit Profile') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EditProfile(
+                onProfilePictureUpdated: () {
+                  _fetchUserData(); // Reload user data when profile is updated
+                },
+                onNameUpdated: (updatedName) {
+                  setState(() {
+                    fullName = updatedName; // Update the name directly
+                  });
+                },
+              ),
+            ),
+          );
         } else {
           Navigator.pushNamed(context, routeName);
         }
@@ -149,7 +231,7 @@ class Profile extends StatelessWidget {
         title: Padding(
           padding: const EdgeInsets.only(left: 0),
           child: Text(
-            'Edit Profile',
+            'Profile',
             style: TextStyle(
               fontSize: titleFontSize,
               fontWeight: FontWeight.bold,
@@ -170,14 +252,17 @@ class Profile extends StatelessWidget {
               // Profile Pic
               CircleAvatar(
                 radius: 75,
-                backgroundImage: AssetImage('assets/images/Contoh 1.png'),
+                backgroundImage: _profilePicturePath != null
+                    ? FileImage(File(_profilePicturePath!))
+                    : const AssetImage('assets/images/Contoh 1.png')
+                        as ImageProvider,
               ),
 
               SizedBox(height: 15),
 
               // User's Name
               Text(
-                'Stefan Santoso',
+                '$fullName',
                 style: TextStyle(
                     fontSize: titleFontSize,
                     fontWeight: FontWeight.bold,

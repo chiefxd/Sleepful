@@ -28,7 +28,7 @@ class SignInController {
   }
 
   // Sign-in function
-  Future<void> signInWithEmailAndPassword(BuildContext context) async {
+   Future<void> signInWithEmailAndPassword(BuildContext context) async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text.trim(),
@@ -52,7 +52,7 @@ class SignInController {
       showToast('An error occurred. Please try again.');
     }
   }
-
+  
   // Validate inputs and call the sign-in function
   void validateAndSignIn(BuildContext context) {
     if (emailController.text.trim().isEmpty) {
@@ -71,6 +71,25 @@ class SignInController {
       showToast('Password must be at least 6 characters');
       return;
     }
+
+    // Additional password validations:
+    if (!passwordController.text.trim().contains(RegExp(r'[A-Z]'))) {
+      showToast('Password must contain at least one uppercase letter');
+      return;
+    }
+    if (!passwordController.text.trim().contains(RegExp(r'[a-z]'))) {
+      showToast('Password must contain at least one lowercase letter');
+      return;
+    }
+    if (!passwordController.text.trim().contains(RegExp(r'[0-9]'))) {
+      showToast('Password must contain at least one number');
+      return;
+    }
+    if (!passwordController.text.trim().contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]'))) {
+      showToast('Password must contain at least one special character');
+      return;
+    }
+
 
     signInWithEmailAndPassword(context);
   }

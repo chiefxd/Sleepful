@@ -206,7 +206,7 @@ class _SignInState extends State<SignIn> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const ForgotPassword()),
+                                builder: (context) => ForgotPassword()),
                           );
                         },
                         child: Text(
