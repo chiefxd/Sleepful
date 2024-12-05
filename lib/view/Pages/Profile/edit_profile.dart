@@ -12,6 +12,7 @@ import 'package:sleepful/providers/user_data_provider.dart';
 class EditProfile extends StatefulWidget {
   const EditProfile(
       {super.key, this.onProfilePictureUpdated, this.onNameUpdated});
+
   final VoidCallback? onProfilePictureUpdated;
   final Function(String)? onNameUpdated;
 
