@@ -19,8 +19,20 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    _initializeApp(); // Initialize theme mode
+    _listenForAuthChanges(); // Listen for auth changes
+  }
 
   Future<ThemeMode> _initializeApp() async {
     // Simulate a delay
@@ -32,6 +44,13 @@ class MyApp extends StatelessWidget {
         .dark; // Replace with ThemeMode.dark if default is dark mode
   }
 
+    void _listenForAuthChanges() {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      //This will now rebuild the UI with the new user.
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -39,19 +58,11 @@ class MyApp extends StatelessWidget {
       builder: (context, snapshot) {
         final themeMode = snapshot.data ?? ThemeMode.dark;
 
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return MaterialApp(
-            theme: ThemeData.light(),
-            darkTheme: ThemeData.dark(),
-            themeMode: themeMode,
-            home: const SplashScreen(),
-          );
-        }
-
         return StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, userSnapshot) {
-            if (userSnapshot.connectionState == ConnectionState.waiting) {
+            // Check for active connection state to avoid UI rebuild before user data available.
+            if (userSnapshot.connectionState != ConnectionState.active) {
               return MaterialApp(
                 theme: ThemeData.light(),
                 darkTheme: ThemeData.dark(),
@@ -63,7 +74,6 @@ class MyApp extends StatelessWidget {
             final User? currentUser = userSnapshot.data;
 
             return MultiProvider(
-              // Use MultiProvider
               providers: [
                 ChangeNotifierProvider<ThemeProvider>(
                   key: ValueKey(currentUser?.uid ?? 'default'),
@@ -75,7 +85,6 @@ class MyApp extends StatelessWidget {
                 ),
               ],
               child: Builder(builder: (context) {
-                // Fetch user data when the user is logged in
                 if (currentUser != null) {
                   Provider.of<UserDataProvider>(context, listen: false)
                       .fetchAndSetUserData(currentUser.uid);
