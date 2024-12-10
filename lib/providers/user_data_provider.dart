@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 class UserDataProvider extends ChangeNotifier {
@@ -132,5 +133,16 @@ class UserDataProvider extends ChangeNotifier {
     } catch (e) {
       print("Error creating points field: $e");
     }
+  }
+
+  Future<void> deductPoints(int pointsToDeduct) async {
+    _points -= pointsToDeduct;
+    notifyListeners();
+
+    // Update points in Firestore
+    final userDoc = FirebaseFirestore.instance
+        .collection('Users')
+        .doc(FirebaseAuth.instance.currentUser!.uid);
+    await userDoc.update({'points': _points});
   }
 }
