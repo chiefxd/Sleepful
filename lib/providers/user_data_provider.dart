@@ -4,12 +4,16 @@ import 'package:flutter/foundation.dart';
 class UserDataProvider extends ChangeNotifier {
   String _name = '';
   String _email = '';
+  int _points = 0;
 
   // Getter for name
   String get name => _name;
 
   // Getter for email
   String get email => _email;
+
+  // Getter for points
+  int get points => _points;
 
   // Helper function to get user name from Firestore
   Future<String> getUserName(String uid) async {
@@ -100,10 +104,33 @@ class UserDataProvider extends ChangeNotifier {
       if (snapshot.exists) {
         _name = snapshot.data()?['name'] ?? '';
         _email = snapshot.data()?['email'] ?? '';
-        notifyListeners(); // Notify listeners after setting initial data
+        if (snapshot.data()!.containsKey('points')) {
+          // 'points' field exists, fetch the value
+          _points = snapshot.data()?['points'] ?? 0;
+        } else {
+          // 'points' field does not exist, create it
+          await _createPointsField(uid);
+          _points = 0;
+        }
+      } else {
+        // New user - Create 'points' field with 0 value
+        await _createPointsField(uid); // Call the function to create the field
+        _points = 0;
       }
+      notifyListeners();
     } catch (e) {
       print("Error fetching user data: $e");
+    }
+  }
+
+  // Function to create the 'points' field
+  Future<void> _createPointsField(String uid) async {
+    try {
+      final userDoc = FirebaseFirestore.instance.collection('Users').doc(uid);
+      await userDoc
+          .set({'points': 0}, SetOptions(merge: true)); // Use merge: true
+    } catch (e) {
+      print("Error creating points field: $e");
     }
   }
 }

@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sleepful/providers/theme_provider.dart';
+import 'package:sleepful/providers/user_data_provider.dart';
 import 'package:sleepful/view/Pages/Authentication/signin_page.dart';
 import 'package:sleepful/view/Pages/Profile/about_us.dart';
 import 'package:sleepful/view/Pages/Profile/change_password.dart';
@@ -61,12 +62,24 @@ class MyApp extends StatelessWidget {
 
             final User? currentUser = userSnapshot.data;
 
-            return ChangeNotifierProvider<ThemeProvider>(
-              key: ValueKey(
-                  currentUser?.uid ?? 'default'), // Replace provider on login
-              create: (_) => ThemeProvider(currentUser?.uid ?? 'default')
-                ..initializeTheme(),
+            return MultiProvider(
+              // Use MultiProvider
+              providers: [
+                ChangeNotifierProvider<ThemeProvider>(
+                  key: ValueKey(currentUser?.uid ?? 'default'),
+                  create: (_) => ThemeProvider(currentUser?.uid ?? 'default')
+                    ..initializeTheme(),
+                ),
+                ChangeNotifierProvider<UserDataProvider>(
+                  create: (_) => UserDataProvider(),
+                ),
+              ],
               child: Builder(builder: (context) {
+                // Fetch user data when the user is logged in
+                if (currentUser != null) {
+                  Provider.of<UserDataProvider>(context, listen: false)
+                      .fetchAndSetUserData(currentUser.uid);
+                }
                 return MaterialApp(
                   title: 'Sleepful',
                   theme: ThemeData(

@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sleepful/providers/user_data_provider.dart';
 import '../../Navbar/bottom_navbar.dart';
 import '../../Components/plus_button.dart';
 import 'rewards_card.dart';
@@ -14,6 +17,16 @@ class RewardsPage extends StatelessWidget {
     double subtitleFontSize = screenWidth * 0.04; // 4% of screen width for subtitles
     double largeTextFontSize = screenWidth * 0.16; // 16% of screen width for large text
     double smallTextFontSize = screenWidth * 0.04;
+
+    final userData = Provider.of<UserDataProvider>(context);
+
+    // Call fetchAndSetUserData after the first frame
+   WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userId = FirebaseAuth.instance.currentUser!.uid;
+      print('Calling fetchAndSetUserData with userId: $userId');
+      Provider.of<UserDataProvider>(context, listen: false)
+          .fetchAndSetUserData(userId);
+   });
 
     List<String> imagePaths = [
       'assets/images/Contoh 1.png',
@@ -129,7 +142,7 @@ class RewardsPage extends StatelessWidget {
                                 },
                                 blendMode: BlendMode.srcIn,
                                 child: Text(
-                                  '10 Points',
+                                  '${userData.points} Points',
                                   style: TextStyle(
                                     fontSize: largeTextFontSize,
                                     fontWeight: FontWeight.bold,
