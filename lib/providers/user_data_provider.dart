@@ -6,6 +6,7 @@ class UserDataProvider extends ChangeNotifier {
   String _name = '';
   String _email = '';
   int _points = 0;
+  
 
   // Getter for name
   String get name => _name;
