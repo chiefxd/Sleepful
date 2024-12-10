@@ -16,7 +16,24 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  runApp(const MyApp());
+  // Initialize UserDataProvider and fetch user data
+  final userDataProvider = UserDataProvider();
+  final user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    await userDataProvider.fetchAndSetUserData(user.uid);
+  }
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<UserDataProvider>.value(value: userDataProvider),
+        ChangeNotifierProvider<ThemeProvider>(
+          create: (_) => ThemeProvider(user?.uid ?? 'default')..initializeTheme(),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -40,13 +57,12 @@ class _MyAppState extends State<MyApp> {
 
     // Retrieve saved theme mode (for simplicity, fallback to light mode)
     // Replace this with your preferred method of storing/retrieving user preferences.
-    return ThemeMode
-        .dark; // Replace with ThemeMode.dark if default is dark mode
+    return ThemeMode.dark;
   }
 
-    void _listenForAuthChanges() {
+  void _listenForAuthChanges() {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      //This will now rebuild the UI with the new user.
+      // This will now rebuild the UI with the new user.
       setState(() {});
     });
   }
@@ -73,43 +89,25 @@ class _MyAppState extends State<MyApp> {
 
             final User? currentUser = userSnapshot.data;
 
-            return MultiProvider(
-              providers: [
-                ChangeNotifierProvider<ThemeProvider>(
-                  key: ValueKey(currentUser?.uid ?? 'default'),
-                  create: (_) => ThemeProvider(currentUser?.uid ?? 'default')
-                    ..initializeTheme(),
-                ),
-                ChangeNotifierProvider<UserDataProvider>(
-                  create: (_) => UserDataProvider(),
-                ),
-              ],
-              child: Builder(builder: (context) {
-                if (currentUser != null) {
-                  Provider.of<UserDataProvider>(context, listen: false)
-                      .fetchAndSetUserData(currentUser.uid);
-                }
-                return MaterialApp(
-                  title: 'Sleepful',
-                  theme: ThemeData(
-                    scaffoldBackgroundColor: Colors.white,
-                    primarySwatch: Colors.blue,
-                  ),
-                  darkTheme: ThemeData(
-                    scaffoldBackgroundColor: const Color(0xFF120C23),
-                  ),
-                  themeMode: Provider.of<ThemeProvider>(context).currentTheme,
-                  routes: {
-                    '/signIn': (context) => const SignIn(),
-                    '/home': (context) => const HomePage(),
-                    '/editProfile': (context) => EditProfile(),
-                    '/change_password': (context) => ChangePassword(),
-                    '/change_theme': (context) => ChangeTheme(),
-                    '/about_us': (context) => AboutUs(),
-                  },
-                  home: currentUser != null ? const HomePage() : const SignIn(),
-                );
-              }),
+            return MaterialApp(
+              title: 'Sleepful',
+              theme: ThemeData(
+                scaffoldBackgroundColor: Colors.white,
+                primarySwatch: Colors.blue,
+              ),
+              darkTheme: ThemeData(
+                scaffoldBackgroundColor: const Color(0xFF120C23),
+              ),
+              themeMode: Provider.of<ThemeProvider>(context).currentTheme,
+              routes: {
+                '/signIn': (context) => const SignIn(),
+                '/home': (context) => const HomePage(),
+                '/editProfile': (context) => EditProfile(),
+                '/change_password': (context) => ChangePassword(),
+                '/change_theme': (context) => ChangeTheme(),
+                '/about_us': (context) => AboutUs(),
+              },
+              home: currentUser != null ? const HomePage() : const SignIn(),
             );
           },
         );
