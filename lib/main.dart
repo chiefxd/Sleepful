@@ -28,9 +28,8 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider<UserDataProvider>.value(value: userDataProvider),
-        ChangeNotifierProvider(create: (context) => RewardsProvider()..fetchUnlockedSounds(),),
-        ChangeNotifierProvider<ThemeProvider>(
-          create: (_) => ThemeProvider(user?.uid ?? 'default')..initializeTheme(),
+        ChangeNotifierProvider(
+          create: (context) => RewardsProvider()..fetchUnlockedSounds(),
         ),
       ],
       child: const MyApp(),
@@ -46,72 +45,96 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  late UserDataProvider _userDataProvider;
+
   @override
   void initState() {
     super.initState();
-    _initializeApp(); // Initialize theme mode
-    _listenForAuthChanges(); // Listen for auth changes
+    _initializeApp();
+    _listenForAuthChanges();
   }
 
-  Future<ThemeMode> _initializeApp() async {
-    // Simulate a delay
-    await Future.delayed(const Duration(seconds: 2));
-
-    // Retrieve saved theme mode (for simplicity, fallback to light mode)
-    // Replace this with your preferred method of storing/retrieving user preferences.
-    return ThemeMode.dark;
+  void _initializeApp() async {
+    // Initialize user data provider and fetch initial data
+    _userDataProvider = UserDataProvider();
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await _userDataProvider.fetchAndSetUserData(user.uid);
+    }
   }
 
   void _listenForAuthChanges() {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      // This will now rebuild the UI with the new user.
-      setState(() {});
+      // When auth state changes, update the user-specific providers
+      if (user != null) {
+        _userDataProvider.fetchAndSetUserData(user.uid).then((_) {
+          setState(() {}); // Rebuild UI with new user data
+        });
+      } else {
+        setState(() {}); // Rebuild UI when user logs out
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _initializeApp(),
-      builder: (context, snapshot) {
-        final themeMode = snapshot.data ?? ThemeMode.dark;
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, userSnapshot) {
+        if (userSnapshot.connectionState != ConnectionState.active) {
+          return MaterialApp(
+            theme: ThemeData.light(),
+            darkTheme: ThemeData.dark(),
+            themeMode: ThemeMode.system, // Use system theme when no user
+            home: const SplashScreen(),
+          );
+        }
 
-        return StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, userSnapshot) {
-            // Check for active connection state to avoid UI rebuild before user data available.
-            if (userSnapshot.connectionState != ConnectionState.active) {
+        final User? currentUser = userSnapshot.data;
+
+        if (currentUser == null) {
+          // Force dark theme for SignIn page even when user is logged out
+          return MaterialApp(
+            theme: ThemeData.light(),
+            darkTheme: ThemeData.dark(),
+            themeMode: ThemeMode.dark, // Always dark mode for SignIn
+            home: const SignIn(),
+          );
+        }
+
+        return MultiProvider(
+          providers: [
+            ChangeNotifierProvider<UserDataProvider>.value(
+                value: _userDataProvider),
+            ChangeNotifierProvider<ThemeProvider>(
+              create: (_) => ThemeProvider(currentUser.uid)..initializeTheme(),
+            ),
+          ],
+          child: Consumer<ThemeProvider>(
+            builder: (context, themeProvider, child) {
               return MaterialApp(
-                theme: ThemeData.light(),
-                darkTheme: ThemeData.dark(),
-                themeMode: themeMode,
-                home: const SplashScreen(),
+                title: 'Sleepful',
+                theme: ThemeData(
+                  scaffoldBackgroundColor: Colors.white,
+                  primarySwatch: Colors.blue,
+                ),
+                darkTheme: ThemeData(
+                  scaffoldBackgroundColor: const Color(0xFF120C23),
+                ),
+                themeMode: themeProvider
+                    .currentTheme, // Use the current theme for logged-in users
+                routes: {
+                  '/signIn': (context) => const SignIn(),
+                  '/home': (context) => const HomePage(),
+                  '/editProfile': (context) => EditProfile(),
+                  '/change_password': (context) => ChangePassword(),
+                  '/change_theme': (context) => ChangeTheme(),
+                  '/about_us': (context) => AboutUs(),
+                },
+                home: const HomePage(),
               );
-            }
-
-            final User? currentUser = userSnapshot.data;
-
-            return MaterialApp(
-              title: 'Sleepful',
-              theme: ThemeData(
-                scaffoldBackgroundColor: Colors.white,
-                primarySwatch: Colors.blue,
-              ),
-              darkTheme: ThemeData(
-                scaffoldBackgroundColor: const Color(0xFF120C23),
-              ),
-              themeMode: Provider.of<ThemeProvider>(context).currentTheme,
-              routes: {
-                '/signIn': (context) => const SignIn(),
-                '/home': (context) => const HomePage(),
-                '/editProfile': (context) => EditProfile(),
-                '/change_password': (context) => ChangePassword(),
-                '/change_theme': (context) => ChangeTheme(),
-                '/about_us': (context) => AboutUs(),
-              },
-              home: currentUser != null ? const HomePage() : const SignIn(),
-            );
-          },
+            },
+          ),
         );
       },
     );
