@@ -31,6 +31,11 @@ void main() async {
         ChangeNotifierProvider(
           create: (context) => RewardsProvider()..fetchUnlockedSounds(),
         ),
+        // We'll provide ThemeProvider later when the user is authenticated.
+        ChangeNotifierProvider<ThemeProvider>(
+          create: (_) => ThemeProvider('default')
+            ..initializeTheme(), // Initialize with default if no user
+        ),
       ],
       child: const MyApp(),
     ),
@@ -45,71 +50,69 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late UserDataProvider _userDataProvider;
+  bool _isInitializing = true; // Variable to control the splash screen display
 
   @override
   void initState() {
     super.initState();
     _initializeApp();
-    _listenForAuthChanges();
+    _listenForAuthChanges(); // Listen for auth changes
   }
 
-  void _initializeApp() async {
-    // Initialize user data provider and fetch initial data
-    _userDataProvider = UserDataProvider();
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      await _userDataProvider.fetchAndSetUserData(user.uid);
-    }
+  // Simulate a delay for the splash screen to show
+  Future<void> _initializeApp() async {
+    await Future.delayed(
+        const Duration(seconds: 2)); // Show splash for 2 seconds
+    setState(() {
+      _isInitializing = false; // After the delay, stop showing the splash
+    });
   }
 
   void _listenForAuthChanges() {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      // When auth state changes, update the user-specific providers
-      if (user != null) {
-        _userDataProvider.fetchAndSetUserData(user.uid).then((_) {
-          setState(() {}); // Rebuild UI with new user data
-        });
-      } else {
-        setState(() {}); // Rebuild UI when user logs out
-      }
+      // This will now rebuild the UI with the new user.
+      setState(() {});
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    // If the app is still initializing, show the SplashScreen
+    if (_isInitializing) {
+      return MaterialApp(
+        theme: ThemeData.light(),
+        darkTheme: ThemeData.dark(),
+        themeMode: ThemeMode.system, // Default theme for loading state
+        home: const SplashScreen(),
+      );
+    }
+
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, userSnapshot) {
         if (userSnapshot.connectionState != ConnectionState.active) {
+          // Return SplashScreen if the authentication state is not yet determined
           return MaterialApp(
             theme: ThemeData.light(),
             darkTheme: ThemeData.dark(),
-            themeMode: ThemeMode.system, // Use system theme when no user
+            themeMode: ThemeMode.system, // Default theme for loading state
             home: const SplashScreen(),
           );
         }
 
         final User? currentUser = userSnapshot.data;
 
-        if (currentUser == null) {
-          // Force dark theme for SignIn page even when user is logged out
-          return MaterialApp(
-            theme: ThemeData.light(),
-            darkTheme: ThemeData.dark(),
-            themeMode: ThemeMode.dark, // Always dark mode for SignIn
-            home: const SignIn(),
-          );
-        }
-
+        // If the user is logged in, update ThemeProvider with user UID
         return MultiProvider(
           providers: [
             ChangeNotifierProvider<UserDataProvider>.value(
-                value: _userDataProvider),
+                value: context.read<UserDataProvider>()),
             ChangeNotifierProvider<ThemeProvider>(
-              create: (_) => ThemeProvider(currentUser.uid)..initializeTheme(),
+              create: (_) => ThemeProvider(currentUser?.uid ?? 'default')
+                ..initializeTheme(),
             ),
           ],
+          // MaterialApp with ThemeProvider
           child: Consumer<ThemeProvider>(
             builder: (context, themeProvider, child) {
               return MaterialApp(
@@ -122,7 +125,7 @@ class _MyAppState extends State<MyApp> {
                   scaffoldBackgroundColor: const Color(0xFF120C23),
                 ),
                 themeMode: themeProvider
-                    .currentTheme, // Use the current theme for logged-in users
+                    .currentTheme, // Get the current theme from ThemeProvider
                 routes: {
                   '/signIn': (context) => const SignIn(),
                   '/home': (context) => const HomePage(),
@@ -131,7 +134,7 @@ class _MyAppState extends State<MyApp> {
                   '/change_theme': (context) => ChangeTheme(),
                   '/about_us': (context) => AboutUs(),
                 },
-                home: const HomePage(),
+                home: currentUser != null ? const HomePage() : const SignIn(),
               );
             },
           ),
