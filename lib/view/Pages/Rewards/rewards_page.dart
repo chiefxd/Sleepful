@@ -36,6 +36,15 @@ class RewardsPage extends StatelessWidget {
       'assets/images/Long.png',
     ];
 
+    // Unique ID for each card
+    List<String> soundId = [
+      'reward_sound_1',
+      'reward_sound_2',
+      'reward_sound_3',
+      'reward_sound_4',
+      'reward_sound_5',
+    ];
+
     // Unique titles for each card
     List<String> titles = [
       'Title A',
@@ -209,7 +218,8 @@ class RewardsPage extends StatelessWidget {
                                     child: RewardsCard(
                                       title: titles[index], // Dynamic title
                                       minutes: minutes[index], // Dynamic minutes
-                                      imagePath: imagePaths[index], // Replace with your image path
+                                      imagePath: imagePaths[index],
+                                      soundId: soundId[index], // Replace with your image path
                                       points: points[index],
                                     ),
                                   );

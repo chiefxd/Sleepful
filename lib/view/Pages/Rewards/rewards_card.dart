@@ -7,6 +7,7 @@ class RewardsCard extends StatelessWidget {
   final String title;
   final String minutes;
   final String imagePath;
+  final String soundId;
 
   // final VoidCallback unlockPoints;
   final int points;
@@ -16,6 +17,7 @@ class RewardsCard extends StatelessWidget {
     required this.title,
     required this.minutes,
     required this.imagePath,
+    required this.soundId,
     // required this.unlockPoints,
     required this.points,
   });
@@ -71,6 +73,7 @@ class RewardsCard extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => RewardsRedeem(
+                      soundId: soundId,
                       imagePath: imagePath,
                       title: title,
                       minutes: minutes,

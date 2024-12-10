@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sleepful/providers/rewards_provider.dart';
 import 'package:sleepful/providers/theme_provider.dart';
 import 'package:sleepful/providers/user_data_provider.dart';
 import 'package:sleepful/view/Pages/Authentication/signin_page.dart';
@@ -27,6 +28,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider<UserDataProvider>.value(value: userDataProvider),
+        ChangeNotifierProvider(create: (context) => RewardsProvider()..fetchUnlockedSounds(),),
         ChangeNotifierProvider<ThemeProvider>(
           create: (_) => ThemeProvider(user?.uid ?? 'default')..initializeTheme(),
         ),

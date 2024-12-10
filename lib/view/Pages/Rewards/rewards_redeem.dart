@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sleepful/providers/rewards_provider.dart';
 import 'package:sleepful/providers/user_data_provider.dart';
 
 class RewardsRedeem extends StatelessWidget {
@@ -8,6 +9,7 @@ class RewardsRedeem extends StatelessWidget {
   final String minutes;
   final int points;
   final int selectedIndex;
+  final String soundId; 
 
   const RewardsRedeem(
       {super.key,
@@ -15,6 +17,7 @@ class RewardsRedeem extends StatelessWidget {
       required this.title,
       required this.minutes,
       required this.points,
+      required this.soundId,
       this.selectedIndex = 2}); // Initialize imagePath
 
   @override
@@ -129,6 +132,11 @@ class RewardsRedeem extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: hasEnoughPoints
                               ? () {
+                                  final rewardsProvider =
+                                      Provider.of<RewardsProvider>(context,
+                                          listen: false);
+                                  rewardsProvider.unlockSound(soundId); // Assuming 'title' is used as soundId
+
                                   // Deduct points and navigate back
                                   userData.deductPoints(points);
                                   Navigator.pop(context);
@@ -141,8 +149,8 @@ class RewardsRedeem extends StatelessWidget {
                                     0xFF5A5A5A), // Use a gray color for disabled state
                             shape: RoundedRectangleBorder(
                               borderRadius: hasEnoughPoints
-                                ? BorderRadius.circular(8.0)
-                                : BorderRadius.circular(8.0),
+                                  ? BorderRadius.circular(8.0)
+                                  : BorderRadius.circular(8.0),
                             ),
                           ),
                           child: Text(
