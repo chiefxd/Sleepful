@@ -42,7 +42,7 @@ class _SoundsComfortState extends State<SoundsComfort> {
   }
 
   Future<void> _initAudioPlayer() async {
-    await player.setAudioSource(AudioSource.asset('assets/audio/your_audio_file.mp3'));
+    await player.setAudioSource(AudioSource.asset('assets/sounds/comfort.mp3'));
   }
 
   @override

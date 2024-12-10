@@ -45,7 +45,7 @@ class _SoundsNightState extends State<SoundsNight> {
   }
 
   Future<void> _initAudioPlayer() async {
-    await player.setAudioSource(AudioSource.asset('assets/audio/your_audio_file.mp3'));
+    await player.setAudioSource(AudioSource.asset('assets/sounds/night.mp3'));
   }
 
   @override

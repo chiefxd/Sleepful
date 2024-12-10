@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
-
 class SoundsWinter extends StatefulWidget {
   const SoundsWinter({super.key});
   @override
@@ -37,8 +36,11 @@ class _SoundsWinterState extends State<SoundsWinter> {
 
   Future<void> _initAudioPlayer() async {
     // await player.setAudioSource(AudioSource.uri(Uri.parse('https://youtu.be/6bwBUO02kwc')));
-    await player.setAudioSource(AudioSource.asset('assets/sounds/winter contoh.mp3'));
-
+    await player.setAudioSource(AudioSource.asset('assets/sounds/winter.mp3'));
+    // final youtube = YoutubeExplode();
+    // final youtubeContent = await youtube.videos.get(youtubeUrl);
+    // final manifest = await youtube.videos.streamsClient.getManifest('Sz_wWzgh-vQ');
+    // final audioStream = manifest.audioOnly.withHighestBitrate();
   }
 
   @override
