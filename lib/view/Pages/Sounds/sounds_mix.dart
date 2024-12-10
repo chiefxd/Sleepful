@@ -42,7 +42,7 @@ class _SoundsMixState extends State<SoundsMix> {
   }
 
   Future<void> _initAudioPlayer() async {
-    await player.setAudioSource(AudioSource.asset('assets/audio/your_audio_file.mp3'));
+    await player.setAudioSource(AudioSource.asset('assets/sounds/mix.mp3'));
   }
 
   @override
