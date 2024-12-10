@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sleepful/providers/rewards_provider.dart';
+import 'package:sleepful/view/Pages/Sounds/sound_player.dart';
 import '../../Pages/Sounds/sounds_lofi.dart';
 import '../../Pages/Sounds/sounds_winter.dart';
 import '../../Pages/Sounds/sound_part.dart';
@@ -96,6 +97,13 @@ class SoundSquares extends StatelessWidget {
           } else if (index == 4) {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => SoundsComfort()));
+          } else if (index == 5) {
+            Navigator.push(
+           context,
+           MaterialPageRoute(
+             builder: (context) => SoundPlayer(soundTitle: item.soundTitle),
+           ),
+         );
           }
         },
         child: Card(
