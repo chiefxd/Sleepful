@@ -4,12 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sleepful/providers/rewards_provider.dart';
 import 'package:sleepful/view/Pages/Sounds/sound_player.dart';
-import '../../Pages/Sounds/sounds_lofi.dart';
-import '../../Pages/Sounds/sounds_winter.dart';
 import '../../Pages/Sounds/sound_part.dart';
-import '../../Pages/Sounds/sounds_sad.dart';
-import '../../Pages/Sounds/sounds_night.dart';
-import '../../Pages/Sounds/sounds_mix.dart';
 
 class SoundSquares extends StatelessWidget {
   const SoundSquares({super.key});
@@ -77,34 +72,13 @@ class SoundSquares extends StatelessWidget {
     double subtitleFontSize = screenWidth * 0.035;
 
     return GestureDetector(
-        onTap: () {
-          // Navigation logic based on index
-          if (index == 0) {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => SoundsRain()));
-          } else if (index == 1) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SoundsNight()));
-          } else if (index == 2) {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => SoundsMix()));
-          } else if (index == 3) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        SoundsWinter())); // Add more conditions for other items as needed
-          } else if (index == 4) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SoundsComfort()));
-          } else if (index == 5) {
-            Navigator.push(
-           context,
-           MaterialPageRoute(
-             builder: (context) => SoundPlayer(soundTitle: item.soundTitle),
-           ),
-         );
-          }
+          onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SoundPlayer(soundTitle: item.soundTitle),
+            ),
+          );
         },
         child: Card(
           color: Colors.transparent,
