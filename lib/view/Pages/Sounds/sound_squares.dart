@@ -45,7 +45,7 @@ class SoundSquares extends StatelessWidget {
         SoundPart(
           soundPictures: "assets/images/comfort.jpeg",
           soundTitle: "Midnight",
-          soundGenre: "Ambience, Soothing",
+          soundGenre: "Soothing",
           soundDuration: "17m",
         ),
         ...unlockedSoundsData,
