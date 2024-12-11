@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../Sounds/sounds.dart';
+import 'package:provider/provider.dart';
+import 'package:sleepful/providers/rewards_provider.dart';
+import 'package:sleepful/providers/user_data_provider.dart';
 
 class RewardsRedeem extends StatelessWidget {
   final String imagePath; // Add imagePath parameter
@@ -7,13 +9,15 @@ class RewardsRedeem extends StatelessWidget {
   final String minutes;
   final int points;
   final int selectedIndex;
+  final String soundId; 
 
   const RewardsRedeem(
       {super.key,
       required this.imagePath,
-        required this.title,
-        required this.minutes,
-        required this.points,
+      required this.title,
+      required this.minutes,
+      required this.points,
+      required this.soundId,
       this.selectedIndex = 2}); // Initialize imagePath
 
   @override
@@ -25,6 +29,11 @@ class RewardsRedeem extends StatelessWidget {
     double largeTextFontSize = screenWidth * 0.06; // Adjusted for title
     double smallTextFontSize = screenWidth * 0.035;
     double bottomText = screenWidth * 0.05;
+
+    final userData = Provider.of<UserDataProvider>(context);
+
+    // Check if user has enough points
+    bool hasEnoughPoints = userData.points >= points;
 
     return Scaffold(
       body: Stack(
@@ -120,24 +129,36 @@ class RewardsRedeem extends StatelessWidget {
                       ),
                       SizedBox(width: 24.0), // Space between text and button
                       Expanded(
-                        // Wrap the button in an Expanded widget
                         child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => SoundPage()),
-                            );
-                          },
+                          onPressed: hasEnoughPoints
+                              ? () {
+                                  final rewardsProvider =
+                                      Provider.of<RewardsProvider>(context,
+                                          listen: false);
+                                  rewardsProvider.unlockSound(soundId); // Assuming 'title' is used as soundId
+
+                                  // Deduct points and navigate back
+                                  userData.deductPoints(points);
+                                  Navigator.pop(context);
+                                }
+                              : null, // Disable button if not enough points
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFFE4DCFF), // Background color
+                            backgroundColor: hasEnoughPoints
+                                ? Color(0xFFE4DCFF)
+                                : Color(
+                                    0xFF5A5A5A), // Use a gray color for disabled state
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0), // Rounded corners
+                              borderRadius: hasEnoughPoints
+                                  ? BorderRadius.circular(8.0)
+                                  : BorderRadius.circular(8.0),
                             ),
                           ),
                           child: Text(
-                            'Redeem',
+                            hasEnoughPoints ? 'Redeem' : 'Insufficient Points',
                             style: TextStyle(
-                              color: Color(0xFF120C23),
+                              color: hasEnoughPoints
+                                  ? Color(0xFF120C23)
+                                  : Colors.white,
                               fontSize: bottomText,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Montserrat',

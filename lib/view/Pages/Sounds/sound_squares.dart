@@ -1,6 +1,9 @@
 // import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sleepful/providers/rewards_provider.dart';
+import 'package:sleepful/view/Pages/Sounds/sound_player.dart';
 import '../../Pages/Sounds/sounds_lofi.dart';
 import '../../Pages/Sounds/sounds_winter.dart';
 import '../../Pages/Sounds/sound_part.dart';
@@ -9,64 +12,64 @@ import '../../Pages/Sounds/sounds_night.dart';
 import '../../Pages/Sounds/sounds_mix.dart';
 
 class SoundSquares extends StatelessWidget {
-  List<SoundPart> soundAvailable = [
-    SoundPart(
-      soundPictures: "assets/images/rain.jpg",
-      soundTitle: "Rain",
-      soundGenre: "Relaxing",
-      soundDuration: "30m",
-    ),
-    SoundPart(
-      soundPictures: "assets/images/night.jpg",
-      soundTitle: "Night",
-      soundGenre: "Calm, Soothing",
-      soundDuration: "28m",
-    ),
-    SoundPart(
-      soundPictures: "assets/images/mix.jpg",
-      soundTitle: "Mix",
-      soundGenre: "Relaxing",
-      soundDuration: "42m",
-    ),
-    SoundPart(
-      soundPictures: "assets/images/winter.jpg",
-      soundTitle: "Winter",
-      soundGenre: "Ambient",
-      soundDuration: "15m",
-    ),
-    SoundPart(
-      soundPictures: "assets/images/comfort.jpeg",
-      soundTitle: "Comfort",
-      soundGenre: "Calm, Ambient",
-      soundDuration: "17m",
-    ),
-  ];
-
-  SoundSquares({super.key});
+  const SoundSquares({super.key});
 
   @override
   Widget build(BuildContext context) {
+    return Consumer<RewardsProvider>(
+        builder: (context, rewardsProvider, child) {
+      final unlockedSoundsData = rewardsProvider.unlockedSounds;
 
-    // double screenWidth = MediaQuery.of(context).size.width;
-    // double titleFontSize = screenWidth * 0.055;
-    // double subtitleFontSize = screenWidth * 0.035;
+      // Combine default sounds and unlocked sounds
+      List<dynamic> allSounds = [
+        SoundPart(
+          soundPictures: "assets/images/rain.jpg",
+          soundTitle: "Rain",
+          soundGenre: "Relaxing",
+          soundDuration: "30m",
+        ),
+        SoundPart(
+          soundPictures: "assets/images/night.jpg",
+          soundTitle: "Night",
+          soundGenre: "Calm, Soothing",
+          soundDuration: "28m",
+        ),
+        SoundPart(
+          soundPictures: "assets/images/mix.jpg",
+          soundTitle: "Mix",
+          soundGenre: "Relaxing",
+          soundDuration: "42m",
+        ),
+        SoundPart(
+          soundPictures: "assets/images/winter.jpg",
+          soundTitle: "Winter",
+          soundGenre: "Ambient",
+          soundDuration: "15m",
+        ),
+        SoundPart(
+          soundPictures: "assets/images/comfort.jpeg",
+          soundTitle: "Comfort",
+          soundGenre: "Calm, Ambient",
+          soundDuration: "17m",
+        ),
+        ...unlockedSoundsData,
+      ];
 
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        childAspectRatio: 0.55, // Adjust as needed
-      ),
-      itemCount: soundAvailable.length,
-      padding: const EdgeInsets.all(16),
-      itemBuilder: (context, index) {
-        final item = soundAvailable[index];
-        return _buildGridItem(context, index, item);
-      },
-    );
+      return GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          childAspectRatio: 0.55, // Adjust as needed
+        ),
+        itemCount: allSounds.length,
+        itemBuilder: (context, index) {
+          final item = allSounds[index];
+          return _buildGridItem(context, index, item);
+        },
+      );
+    });
   }
-
 
   Widget _buildGridItem(BuildContext context, int index, SoundPart item) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -75,30 +78,45 @@ class SoundSquares extends StatelessWidget {
 
     return GestureDetector(
         onTap: () {
-      // Navigation logic based on index
-      if (index == 0) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => SoundsRain()));
-      } else if (index == 1) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => SoundsNight()));
-      } else if (index == 2) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => SoundsMix()));
-      } else if (index == 3) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => SoundsWinter())); // Add more conditions for other items as needed
-      }else if (index == 4) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => SoundsComfort()));
-      }
-    },
-        child:  Card(
-        color: Colors.transparent,
+          // Navigation logic based on index
+          if (index == 0) {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => SoundsRain()));
+          } else if (index == 1) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => SoundsNight()));
+          } else if (index == 2) {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => SoundsMix()));
+          } else if (index == 3) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        SoundsWinter())); // Add more conditions for other items as needed
+          } else if (index == 4) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => SoundsComfort()));
+          } else if (index == 5) {
+            Navigator.push(
+           context,
+           MaterialPageRoute(
+             builder: (context) => SoundPlayer(soundTitle: item.soundTitle),
+           ),
+         );
+          }
+        },
+        child: Card(
+          color: Colors.transparent,
           elevation: 0,
-
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Align(
                 alignment: Alignment.topCenter,
-                child:AspectRatio(aspectRatio: 1.0,
-                  child:ClipRRect(
+                child: AspectRatio(
+                  aspectRatio: 1.0,
+                  child: ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
                     child: Image.asset(
                       item.soundPictures,
@@ -113,30 +131,26 @@ class SoundSquares extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Center(
-                      child:Text(
-                          item.soundTitle,
+                      child: Text(item.soundTitle,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: titleFontSize,
                             fontFamily: 'Montserrat',
                             color: Color(0xFFAB9FD1),
-                          )
-                      ),
+                          )),
                     ),
-
                     Center(
-                      child:Text(
-                          item.soundGenre,
-                          style:TextStyle(
+                      child: Text(item.soundGenre,
+                          style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: subtitleFontSize,
                             fontFamily: 'Montserrat',
                             color: Color(0xFF6A5B9A),
-                          )
-                      ),
+                          )),
                     ),
-                    const SizedBox(height: 3.0,),
-
+                    const SizedBox(
+                      height: 3.0,
+                    ),
                     Center(
                       child: Text(
                         item.soundDuration,
@@ -153,8 +167,7 @@ class SoundSquares extends StatelessWidget {
               ),
             ],
           ),
-        )
-    );
+        ));
   }
 }
 

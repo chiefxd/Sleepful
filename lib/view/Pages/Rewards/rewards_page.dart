@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sleepful/providers/user_data_provider.dart';
 import '../../Navbar/bottom_navbar.dart';
 import '../../Components/plus_button.dart';
 import 'rewards_card.dart';
@@ -15,12 +18,31 @@ class RewardsPage extends StatelessWidget {
     double largeTextFontSize = screenWidth * 0.16; // 16% of screen width for large text
     double smallTextFontSize = screenWidth * 0.04;
 
+    final userData = Provider.of<UserDataProvider>(context);
+
+    // Call fetchAndSetUserData after the first frame
+   WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userId = FirebaseAuth.instance.currentUser!.uid;
+      print('Calling fetchAndSetUserData with userId: $userId');
+      Provider.of<UserDataProvider>(context, listen: false)
+          .fetchAndSetUserData(userId);
+   });
+
     List<String> imagePaths = [
       'assets/images/Contoh 1.png',
       'assets/images/Contoh 2.png',
       'assets/images/Contoh 3.png',
       'assets/images/Contoh 1.png',
       'assets/images/Long.png',
+    ];
+
+    // Unique ID for each card
+    List<String> soundId = [
+      'reward_sound_1',
+      'reward_sound_2',
+      'reward_sound_3',
+      'reward_sound_4',
+      'reward_sound_5',
     ];
 
     // Unique titles for each card
@@ -129,7 +151,7 @@ class RewardsPage extends StatelessWidget {
                                 },
                                 blendMode: BlendMode.srcIn,
                                 child: Text(
-                                  '10 Points',
+                                  '${userData.points} Points',
                                   style: TextStyle(
                                     fontSize: largeTextFontSize,
                                     fontWeight: FontWeight.bold,
@@ -196,7 +218,8 @@ class RewardsPage extends StatelessWidget {
                                     child: RewardsCard(
                                       title: titles[index], // Dynamic title
                                       minutes: minutes[index], // Dynamic minutes
-                                      imagePath: imagePaths[index], // Replace with your image path
+                                      imagePath: imagePaths[index],
+                                      soundId: soundId[index], // Replace with your image path
                                       points: points[index],
                                     ),
                                   );

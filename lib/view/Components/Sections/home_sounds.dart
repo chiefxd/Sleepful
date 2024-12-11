@@ -12,6 +12,7 @@ class SoundsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+   
     return Padding(
       padding: const EdgeInsets.only(
           left: 20, right: 20), // Add padding of 20 pixels
@@ -33,7 +34,7 @@ class SoundsSection extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const SoundPage()),
+                    MaterialPageRoute(builder: (context) => SoundPage()),
                   );
                 },
                 child: Text(
@@ -68,8 +69,8 @@ class SoundsSection extends StatelessWidget {
                 _buildSoundItem(context, 'Winter', 'assets/images/winter.jpg',
                     SoundsWinter()),
                 // Fifth Image
-                _buildSoundItem(
-                    context, 'Comfort', 'assets/images/comfort.jpeg', SoundsComfort()),
+                _buildSoundItem(context, 'Comfort',
+                    'assets/images/comfort.jpeg', SoundsComfort()),
               ],
             ),
           ),
@@ -78,9 +79,10 @@ class SoundsSection extends StatelessWidget {
     );
   }
 
-  Widget _buildSoundItem(BuildContext context, String label, String imagePath, Widget nextPage) {
+  Widget _buildSoundItem(
+      BuildContext context, String label, String imagePath, Widget nextPage) {
     double screenWidth = MediaQuery.of(context).size.width;
-  
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
