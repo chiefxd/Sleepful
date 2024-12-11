@@ -68,6 +68,23 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  final lightTheme = ThemeData(
+    scaffoldBackgroundColor: Color(0xFFE4DCFF),
+    // primaryColor: Colors.white,
+    // colorScheme: ColorScheme.light(
+    //   primary: Colors.blue, // Customize primary color for light theme
+    //   onPrimary: Colors.black, // Customize onPrimary color for light theme
+    //   // ... other color properties
+    // ),
+    // iconTheme: const IconThemeData(color: Colors.red, opacity: 0.8),
+    // primarySwatch: Colors.blue,
+    // textTheme: const TextTheme(
+    //   bodyLarge:
+    //       TextStyle(color: Colors.deepPurple), // Dark purple for light theme
+    //   // ... other text styles
+    // ),
+  );
+
   void _listenForAuthChanges() {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       // This will now rebuild the UI with the new user.
@@ -80,7 +97,7 @@ class _MyAppState extends State<MyApp> {
     // If the app is still initializing, show the SplashScreen
     if (_isInitializing) {
       return MaterialApp(
-        theme: ThemeData.light(),
+        theme: lightTheme,
         darkTheme: ThemeData.dark(),
         themeMode: ThemeMode.system, // Default theme for loading state
         home: const SplashScreen(),
@@ -93,7 +110,7 @@ class _MyAppState extends State<MyApp> {
         if (userSnapshot.connectionState != ConnectionState.active) {
           // Return SplashScreen if the authentication state is not yet determined
           return MaterialApp(
-            theme: ThemeData.light(),
+            theme: lightTheme,
             darkTheme: ThemeData.dark(),
             themeMode: ThemeMode.system, // Default theme for loading state
             home: const SplashScreen(),
@@ -117,10 +134,7 @@ class _MyAppState extends State<MyApp> {
             builder: (context, themeProvider, child) {
               return MaterialApp(
                 title: 'Sleepful',
-                theme: ThemeData(
-                  scaffoldBackgroundColor: Colors.white,
-                  primarySwatch: Colors.blue,
-                ),
+                theme: lightTheme,
                 darkTheme: ThemeData(
                   scaffoldBackgroundColor: const Color(0xFF120C23),
                 ),

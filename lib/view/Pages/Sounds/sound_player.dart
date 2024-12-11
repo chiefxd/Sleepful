@@ -88,34 +88,34 @@ class _SoundPlayerState extends State<SoundPlayer> {
 
   List<Map<String, dynamic>> sounds = [
     {
-      'soundTitle': 'Rain',
+      'soundTitle': 'Cloudy',
       'audioPath': 'assets/sounds/rain.mp3',
       'imagePath': 'assets/images/rain.jpg',
-      'genre': 'Relaxing'
+      'genre': 'Rain, Relaxing'
     },
     {
-      'soundTitle': 'Night',
+      'soundTitle': 'Fireplace',
       'audioPath': 'assets/sounds/night.mp3',
       'imagePath': 'assets/images/night.jpg',
-      'genre': 'Calm, Soothing'
+      'genre': 'Cozy, Ambience'
     },
     {
-      'soundTitle': 'Mix',
+      'soundTitle': 'Sleep Mix',
       'audioPath': 'assets/sounds/mix.mp3',
       'imagePath': 'assets/images/mix.jpg',
-      'genre': 'Relaxing'
+      'genre': 'Relaxing, Calm'
     },
     {
-      'soundTitle': 'Winter',
+      'soundTitle': 'Frosty',
       'audioPath': 'assets/sounds/winter.mp3',
       'imagePath': 'assets/images/winter.jpg',
-      'genre': 'Ambient'
+      'genre': 'Calm, Cold'
     },
     {
-      'soundTitle': 'Comfort',
+      'soundTitle': 'Midnight',
       'audioPath': 'assets/sounds/comfort.mp3',
       'imagePath': 'assets/images/comfort.jpeg',
-      'genre': 'Calm, Ambient'
+      'genre': 'Ambience, Soothing'
     },
     {
       'soundTitle': 'Title A',
