@@ -115,7 +115,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
       'soundTitle': 'Midnight',
       'audioPath': 'assets/sounds/comfort.mp3',
       'imagePath': 'assets/images/comfort.jpeg',
-      'genre': 'Ambience, Soothing'
+      'genre': 'Soothing'
     },
     {
       'soundTitle': 'Title A',
