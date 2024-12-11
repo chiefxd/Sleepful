@@ -189,14 +189,14 @@ class UserDataProvider extends ChangeNotifier {
 
       if (_lastRewardTime == null) {
         // First time user opens the app, give reward
-        _points += 2;
+        _points += 1;
         _lastRewardTime = DateTime.now();
         // Update Firestore
         await userDoc
             .update({'lastRewardTime': _lastRewardTime, 'points': _points});
         notifyListeners();
         // Show toast notification
-        showToast("You have been awarded 2 daily points!");
+        showToast("You have been awarded 1 daily points!");
         return; // Exit to avoid further checks
       }
 
@@ -205,7 +205,7 @@ class UserDataProvider extends ChangeNotifier {
 
       if (timeSinceLastReward >= const Duration(hours: 24)) {
         // More than 24 hours have passed
-        _points += 2; // Always award points if 24 hours have passed
+        _points += 1; // Always award points if 24 hours have passed
         _lastRewardTime = DateTime.now();
 
         // Update Firestore
@@ -213,7 +213,7 @@ class UserDataProvider extends ChangeNotifier {
             .update({'lastRewardTime': _lastRewardTime, 'points': _points});
         notifyListeners();
         // Show toast notification
-        showToast("You have been awarded 2 daily points!");
+        showToast("You have been awarded 1 daily points!");
       }
     } catch (e) {
       print("Error updating reward data in Firestore: $e");

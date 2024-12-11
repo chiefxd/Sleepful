@@ -56,42 +56,42 @@ class SoundsSection extends StatelessWidget {
                 // First Image
                 _buildSoundItem(
                     context,
-                    'Rain',
+                    'Cloudy',
                     'assets/images/rain.jpg',
                     SoundPlayer(
-                      soundTitle: 'Rain',
+                      soundTitle: 'Cloudy',
                     )),
                 // Second Image
                 _buildSoundItem(
                     context,
-                    'Night',
+                    'Fireplace',
                     'assets/images/night.jpg',
                     SoundPlayer(
-                      soundTitle: 'Night',
+                      soundTitle: 'Fireplace',
                     )),
                 // Third Image
                 _buildSoundItem(
                     context,
-                    'Mix',
+                    'Sleep Mix',
                     'assets/images/mix.jpg',
                     SoundPlayer(
-                      soundTitle: 'Mix',
+                      soundTitle: 'Sleep Mix',
                     )),
                 // Fourth Image
                 _buildSoundItem(
                     context,
-                    'Winter',
+                    'Frosty',
                     'assets/images/winter.jpg',
                     SoundPlayer(
-                      soundTitle: 'Winter',
+                      soundTitle: 'Frosty',
                     )),
                 // Fifth Image
                 _buildSoundItem(
                     context,
-                    'Comfort',
+                    'Midnight',
                     'assets/images/comfort.jpeg',
                     SoundPlayer(
-                      soundTitle: 'Comfort',
+                      soundTitle: 'Midnight',
                     )),
               ],
             ),

@@ -68,6 +68,23 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  final lightTheme = ThemeData(
+    scaffoldBackgroundColor: Color(0xFFE4DCFF),
+    // primaryColor: Colors.white,
+    // colorScheme: ColorScheme.light(
+    //   primary: Colors.blue, // Customize primary color for light theme
+    //   onPrimary: Colors.black, // Customize onPrimary color for light theme
+    //   // ... other color properties
+    // ),
+    // iconTheme: const IconThemeData(color: Colors.red, opacity: 0.8),
+    // primarySwatch: Colors.blue,
+    // textTheme: const TextTheme(
+    //   bodyLarge:
+    //       TextStyle(color: Colors.deepPurple), // Dark purple for light theme
+    //   // ... other text styles
+    // ),
+  );
+
   void _listenForAuthChanges() {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       // This will now rebuild the UI with the new user.
