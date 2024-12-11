@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sleepful/providers/rewards_provider.dart';
 import 'package:sleepful/providers/user_data_provider.dart';
@@ -34,6 +35,18 @@ class RewardsRedeem extends StatelessWidget {
 
     // Check if user has enough points
     bool hasEnoughPoints = userData.points >= points;
+
+    // Show Toast
+    void showToast(String message) {
+      Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
 
     return Scaffold(
       body: Stack(
@@ -141,6 +154,9 @@ class RewardsRedeem extends StatelessWidget {
                                   // Deduct points and navigate back
                                   userData.deductPoints(points);
                                   Navigator.pop(context);
+
+                                  showToast(
+                                      "Successfully Redeemed!\nGo Check your Sound Page");
                                 }
                               : null, // Disable button if not enough points
                           style: ElevatedButton.styleFrom(
