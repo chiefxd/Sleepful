@@ -97,7 +97,7 @@ class _MyAppState extends State<MyApp> {
     // If the app is still initializing, show the SplashScreen
     if (_isInitializing) {
       return MaterialApp(
-        theme: ThemeData.light(),
+        theme: lightTheme,
         darkTheme: ThemeData.dark(),
         themeMode: ThemeMode.system, // Default theme for loading state
         home: const SplashScreen(),
@@ -110,7 +110,7 @@ class _MyAppState extends State<MyApp> {
         if (userSnapshot.connectionState != ConnectionState.active) {
           // Return SplashScreen if the authentication state is not yet determined
           return MaterialApp(
-            theme: ThemeData.light(),
+            theme: lightTheme,
             darkTheme: ThemeData.dark(),
             themeMode: ThemeMode.system, // Default theme for loading state
             home: const SplashScreen(),
@@ -134,10 +134,7 @@ class _MyAppState extends State<MyApp> {
             builder: (context, themeProvider, child) {
               return MaterialApp(
                 title: 'Sleepful',
-                theme: ThemeData(
-                  scaffoldBackgroundColor: Colors.white,
-                  primarySwatch: Colors.blue,
-                ),
+                theme: lightTheme,
                 darkTheme: ThemeData(
                   scaffoldBackgroundColor: const Color(0xFF120C23),
                 ),
