@@ -9,7 +9,7 @@ class RewardsRedeem extends StatelessWidget {
   final String minutes;
   final int points;
   final int selectedIndex;
-  final String soundId; 
+  final String soundId;
 
   const RewardsRedeem(
       {super.key,
@@ -135,7 +135,8 @@ class RewardsRedeem extends StatelessWidget {
                                   final rewardsProvider =
                                       Provider.of<RewardsProvider>(context,
                                           listen: false);
-                                  rewardsProvider.unlockSound(soundId); // Assuming 'title' is used as soundId
+                                  rewardsProvider.unlockSound(
+                                      soundId); // Assuming 'title' is used as soundId
 
                                   // Deduct points and navigate back
                                   userData.deductPoints(points);
@@ -147,6 +148,9 @@ class RewardsRedeem extends StatelessWidget {
                                 ? Color(0xFFE4DCFF)
                                 : Color(
                                     0xFF5A5A5A), // Use a gray color for disabled state
+                            disabledBackgroundColor: const Color(
+                                0xFFAB9FD1), // Background color for disabled state
+                            disabledForegroundColor: Colors.black,
                             shape: RoundedRectangleBorder(
                               borderRadius: hasEnoughPoints
                                   ? BorderRadius.circular(8.0)
