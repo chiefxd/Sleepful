@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
+
+import '../../Pages/Sounds/sound_player.dart';
 import '../../Pages/Sounds/sounds.dart';
-import '../../Pages/Sounds/sounds_sad.dart';
-import '../../Pages/Sounds/sounds_night.dart';
-import '../../Pages/Sounds/sounds_mix.dart';
-import '../../Pages/Sounds/sounds_winter.dart';
-import '../../Pages/Sounds/sounds_lofi.dart';
 
 class SoundsSection extends StatelessWidget {
   const SoundsSection({super.key});
@@ -12,7 +9,7 @@ class SoundsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-   
+
     return Padding(
       padding: const EdgeInsets.only(
           left: 20, right: 20), // Add padding of 20 pixels
@@ -58,19 +55,44 @@ class SoundsSection extends StatelessWidget {
               children: [
                 // First Image
                 _buildSoundItem(
-                    context, 'Sad', 'assets/images/rain.jpg', SoundsRain()),
+                    context,
+                    'Rain',
+                    'assets/images/rain.jpg',
+                    SoundPlayer(
+                      soundTitle: 'Rain',
+                    )),
                 // Second Image
                 _buildSoundItem(
-                    context, 'Night', 'assets/images/night.jpg', SoundsNight()),
+                    context,
+                    'Night',
+                    'assets/images/night.jpg',
+                    SoundPlayer(
+                      soundTitle: 'Night',
+                    )),
                 // Third Image
                 _buildSoundItem(
-                    context, 'Mix', 'assets/images/mix.jpg', SoundsMix()),
+                    context,
+                    'Mix',
+                    'assets/images/mix.jpg',
+                    SoundPlayer(
+                      soundTitle: 'Mix',
+                    )),
                 // Fourth Image
-                _buildSoundItem(context, 'Winter', 'assets/images/winter.jpg',
-                    SoundsWinter()),
+                _buildSoundItem(
+                    context,
+                    'Winter',
+                    'assets/images/winter.jpg',
+                    SoundPlayer(
+                      soundTitle: 'Winter',
+                    )),
                 // Fifth Image
-                _buildSoundItem(context, 'Comfort',
-                    'assets/images/comfort.jpeg', SoundsComfort()),
+                _buildSoundItem(
+                    context,
+                    'Comfort',
+                    'assets/images/comfort.jpeg',
+                    SoundPlayer(
+                      soundTitle: 'Comfort',
+                    )),
               ],
             ),
           ),

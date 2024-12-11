@@ -18,6 +18,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
   bool audioPlay = false;
   late String audioPath; // To store audio path
   late String imagePath; // To store image path
+  late String genre; // To store genre
 
   @override
   void initState() {
@@ -36,15 +37,29 @@ class _SoundPlayerState extends State<SoundPlayer> {
         _sliderMaxValue = duration?.inSeconds.toDouble() ?? 0.0;
       });
     });
-    // Handle audio interruptions (e.g., phone calls)
+
     player.playingStream.listen((playing) {
       if (!playing) {
-        // Audio was interrupted, pause playback
         setState(() {
           audioPlay = false;
         });
       }
     });
+
+    // Automatically play audio
+    player.play().then((_) {
+      setState(() {
+        audioPlay = true;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    // Stop and dispose of the audio player
+    player.stop();
+    player.dispose();
+    super.dispose();
   }
 
   // Initialize audio session to handle interruptions
@@ -53,16 +68,14 @@ class _SoundPlayerState extends State<SoundPlayer> {
     await audioSession.configure(const AudioSessionConfiguration.speech());
     audioSession.interruptionEventStream.listen((event) {
       if (event.begin) {
-        // Another app is requesting audio focus, pause playback
         if (audioPlay) {
           player.pause();
           setState(() {
-            audioPlay = false; 
+            audioPlay = false;
           });
         }
       } else {
-        // Interruption ended, resume playback if it was playing before
-        if (audioPlay) { // Or use a flag to remember previous state
+        if (audioPlay) {
           player.play();
         }
       }
@@ -77,52 +90,62 @@ class _SoundPlayerState extends State<SoundPlayer> {
     {
       'soundTitle': 'Rain',
       'audioPath': 'assets/sounds/rain.mp3',
-      'imagePath': 'assets/images/rain.jpg'
+      'imagePath': 'assets/images/rain.jpg',
+      'genre': 'Relaxing'
     },
     {
       'soundTitle': 'Night',
       'audioPath': 'assets/sounds/night.mp3',
-      'imagePath': 'assets/images/night.jpg'
+      'imagePath': 'assets/images/night.jpg',
+      'genre': 'Calm, Soothing'
     },
     {
       'soundTitle': 'Mix',
       'audioPath': 'assets/sounds/mix.mp3',
-      'imagePath': 'assets/images/mix.jpg'
+      'imagePath': 'assets/images/mix.jpg',
+      'genre': 'Relaxing'
     },
     {
       'soundTitle': 'Winter',
       'audioPath': 'assets/sounds/winter.mp3',
-      'imagePath': 'assets/images/winter.jpg'
+      'imagePath': 'assets/images/winter.jpg',
+      'genre': 'Ambient'
     },
     {
       'soundTitle': 'Comfort',
       'audioPath': 'assets/sounds/comfort.mp3',
-      'imagePath': 'assets/images/comfort.jpg'
+      'imagePath': 'assets/images/comfort.jpeg',
+      'genre': 'Calm, Ambient'
     },
     {
       'soundTitle': 'Title A',
       'audioPath': 'assets/sounds/winter contoh.mp3',
-      'imagePath': 'assets/images/Contoh 1.png'
+      'imagePath': 'assets/images/Contoh 1.png',
+      'genre': 'Relaxing'
     },
     {
       'soundTitle': 'Title B',
       'audioPath': 'assets/sounds/winter contoh.mp3',
-      'imagePath': 'assets/images/Contoh 2.png'
+      'imagePath': 'assets/images/Contoh 2.png',
+      'genre': 'Relaxing'
     },
     {
       'soundTitle': 'Title C',
       'audioPath': 'assets/sounds/winter contoh.mp3',
-      'imagePath': 'assets/images/Contoh 3.png'
+      'imagePath': 'assets/images/Contoh 3.png',
+      'genre': 'Relaxing'
     },
     {
       'soundTitle': 'Title D',
       'audioPath': 'assets/sounds/winter contoh.mp3',
-      'imagePath': 'assets/images/Contoh 1.png'
+      'imagePath': 'assets/images/Contoh 1.png',
+      'genre': 'Relaxing'
     },
     {
       'soundTitle': 'Title E',
       'audioPath': 'assets/sounds/winter contoh.mp3',
-      'imagePath': 'assets/images/Long.png'
+      'imagePath': 'assets/images/Long.png',
+      'genre': 'Relaxing'
     },
   ];
 
@@ -137,22 +160,31 @@ class _SoundPlayerState extends State<SoundPlayer> {
     if (soundData.isNotEmpty) {
       audioPath = soundData['audioPath'];
       imagePath = soundData['imagePath'];
+      genre = soundData['genre'];
     } else {
       // Handle the case when the sound is not found
       audioPath = 'assets/sounds/default.mp3'; // Default sound if not found
       imagePath = 'assets/images/default.jpg'; // Default image if not found
+      genre = 'Relaxing';
     }
+  }
+
+  String _formatDuration(Duration duration) {
+    final minutes = duration.inMinutes;
+    final seconds = duration.inSeconds % 60;
+    return '$minutes:${seconds.toString().padLeft(2, '0')}';
   }
 
   @override
   Widget build(BuildContext context) {
-
-    
     double screenWidth = MediaQuery.of(context).size.width;
     double menuFontSize = screenWidth * 0.06;
-    // double titleFontSize = screenWidth * 0.079;
-    // double subtitleFontSize = screenWidth * 0.045;
-    // double miniFontSize = screenWidth * 0.035;
+    double titleFontSize = screenWidth * 0.079;
+    double subtitleFontSize = screenWidth * 0.045;
+    double miniFontSize = screenWidth * 0.035;
+
+    final totalDuration = Duration(seconds: _sliderMaxValue.toInt());
+    final currentPosition = Duration(seconds: _currentSliderValue.toInt());
 
     return Scaffold(
       appBar: AppBar(
@@ -184,42 +216,163 @@ class _SoundPlayerState extends State<SoundPlayer> {
           ),
         ),
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Display the sound image
-            Image.asset(imagePath),
-
-            // Playback controls
-            Slider(
-              value: _currentSliderValue,
-              max: _sliderMaxValue,
-              onChanged: (value) {
-                setState(() {
-                  _currentSliderValue = value;
-                  player.seek(Duration(seconds: value.toInt()));
-                });
-              },
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Align(
+                alignment: Alignment.center,
+                child: AspectRatio(
+                  aspectRatio: 1.0,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image.asset(
+                      imagePath,
+                      width: 289,
+                      height: 289,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
             ),
-            IconButton(
-              icon: Icon(audioPlay ? Icons.pause : Icons.play_arrow),
-              onPressed: () {
-                setState(() {
-                  audioPlay = !audioPlay;
-                  if (audioPlay) {
-                    player.play();
-                  } else {
-                    player.pause();
-                  }
-                });
-              },
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Text(
+                      widget.soundTitle,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: titleFontSize,
+                        fontFamily: 'Montserrat',
+                        color: Color(0xFFAB9FD1),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 5.0),
+                  Center(
+                    child: Column(
+                      children: [
+                        Text(
+                          '$genre',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: subtitleFontSize,
+                            fontFamily: 'Montserrat',
+                            color: Color(0xFF6A5B9A),
+                          ),
+                        ),
+                        const SizedBox(height: 5.0),
+                        Text(
+                          "${totalDuration.inMinutes} minutes",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: miniFontSize,
+                            fontFamily: 'Montserrat',
+                            color: Color(0xFF6A5B9A),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    _formatDuration(currentPosition),
+                    style: TextStyle(
+                      fontSize: miniFontSize,
+                      fontFamily: 'Montserrat',
+                      color: Color(0xFF6A5B9A),
+                    ),
+                  ),
+                  Text(
+                    _formatDuration(totalDuration),
+                    style: TextStyle(
+                      fontSize: miniFontSize,
+                      fontFamily: 'Montserrat',
+                      color: Color(0xFF6A5B9A),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SliderTheme(
+              data: SliderThemeData(
+                activeTrackColor: Color(0xFF6A5B9A),
+                inactiveTrackColor: Color(0xFFB4A9D6),
+                thumbColor: Color(0xFF6A5B9A),
+                thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6.0),
+                trackHeight: 3.0,
+              ),
+              child: Slider(
+                value: _currentSliderValue,
+                max: _sliderMaxValue,
+                onChanged: (value) {
+                  setState(() {
+                    _currentSliderValue = value;
+                    player.seek(Duration(seconds: value.toInt()));
+                  });
+                },
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  iconSize: 30.0,
+                  color: Color(0xFF6A5B9A),
+                  icon: const Icon(Icons.fast_rewind),
+                  onPressed: () {
+                    player.seek(Duration(
+                        seconds: (_currentSliderValue - 10)
+                            .clamp(0, _sliderMaxValue)
+                            .toInt()));
+                  },
+                ),
+                const SizedBox(width: 15.0),
+                IconButton(
+                  iconSize: 30.0,
+                  color: Color(0xFF6A5B9A),
+                  icon: Icon(audioPlay ? Icons.pause : Icons.play_arrow),
+                  onPressed: () {
+                    setState(() {
+                      audioPlay = !audioPlay;
+                      if (audioPlay) {
+                        player.play();
+                      } else {
+                        player.pause();
+                      }
+                    });
+                  },
+                ),
+                const SizedBox(width: 15.0),
+                IconButton(
+                  iconSize: 30.0,
+                  color: Color(0xFF6A5B9A),
+                  icon: const Icon(Icons.fast_forward),
+                  onPressed: () {
+                    player.seek(Duration(
+                        seconds: (_currentSliderValue + 10)
+                            .clamp(0, _sliderMaxValue)
+                            .toInt()));
+                  },
+                ),
+              ],
             ),
           ],
         ),
       ),
     );
   }
-
-  // ... (Rest of your SoundPlayerPage code - playback controls, UI, etc.) ...
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sleepful/providers/rewards_provider.dart';
 import 'package:sleepful/view/Pages/Sounds/sound_player.dart';
+
 import '../../Pages/Sounds/sound_part.dart';
 
 class SoundSquares extends StatelessWidget {
@@ -27,13 +28,13 @@ class SoundSquares extends StatelessWidget {
           soundPictures: "assets/images/night.jpg",
           soundTitle: "Night",
           soundGenre: "Calm, Soothing",
-          soundDuration: "28m",
+          soundDuration: "17m",
         ),
         SoundPart(
           soundPictures: "assets/images/mix.jpg",
           soundTitle: "Mix",
           soundGenre: "Relaxing",
-          soundDuration: "42m",
+          soundDuration: "36m",
         ),
         SoundPart(
           soundPictures: "assets/images/winter.jpg",
@@ -72,7 +73,7 @@ class SoundSquares extends StatelessWidget {
     double subtitleFontSize = screenWidth * 0.035;
 
     return GestureDetector(
-          onTap: () {
+        onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -145,24 +146,21 @@ class SoundSquares extends StatelessWidget {
   }
 }
 
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return GridView.builder(
-  //       itemCount: SoundAvailable.length,
-  //       padding: EdgeInsets.all(10),
-  //       gridDelegate:
-  //       SliverGridDelegateWithFixedCrossAxisCount
-  //         (crossAxisCount: 2),
-  //       itemBuilder: (context, index) {
-  //         return SoundPart(
-  //             pictures: SoundAvailable[index].pictures,
-  //             soundTitle: SoundAvailable[index].soundTitle,
-  //             soundGenre: SoundAvailable[index].soundGenre,
-  //             soundDuration: SoundAvailable[index].soundDuration
-  //         );
-  //       },
-  //   );
-  // }
-
-
+// @override
+// Widget build(BuildContext context) {
+//   return GridView.builder(
+//       itemCount: SoundAvailable.length,
+//       padding: EdgeInsets.all(10),
+//       gridDelegate:
+//       SliverGridDelegateWithFixedCrossAxisCount
+//         (crossAxisCount: 2),
+//       itemBuilder: (context, index) {
+//         return SoundPart(
+//             pictures: SoundAvailable[index].pictures,
+//             soundTitle: SoundAvailable[index].soundTitle,
+//             soundGenre: SoundAvailable[index].soundGenre,
+//             soundDuration: SoundAvailable[index].soundDuration
+//         );
+//       },
+//   );
+// }
