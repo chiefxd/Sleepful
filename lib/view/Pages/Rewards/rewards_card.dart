@@ -1,6 +1,8 @@
 // import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sleepful/providers/rewards_provider.dart';
 import 'rewards_redeem.dart';
 
 class RewardsCard extends StatelessWidget {
@@ -24,6 +26,10 @@ class RewardsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final rewardsProvider = Provider.of<RewardsProvider>(context);
+    final isUnlocked =
+        rewardsProvider.isRewardUnlocked(soundId); // Check if unlocked
+
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -67,24 +73,31 @@ class RewardsCard extends StatelessWidget {
           SizedBox(
             height: 24, // Set your desired height for the button
             child: ElevatedButton(
-              onPressed: () {
-                // Navigate to RewardsRedeem and pass the imagePath
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => RewardsRedeem(
-                      soundId: soundId,
-                      imagePath: imagePath,
-                      title: title,
-                      minutes: minutes,
-                      points: points,
-                    ),
-                  ),
-                );
-              },
+              onPressed: isUnlocked
+                  ? null
+                  : () {
+                      // Navigate to RewardsRedeem and pass the imagePath
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RewardsRedeem(
+                            soundId: soundId,
+                            imagePath: imagePath,
+                            title: title,
+                            minutes: minutes,
+                            points: points,
+                          ),
+                        ),
+                      );
+                    },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFAB9FD1),
                 // Button color
+                // Button color (for enabled state)
+                disabledBackgroundColor: const Color(
+                    0xFFAB9FD1), // Background color for disabled state
+                disabledForegroundColor:
+                    Colors.black, // Foreground color for disabled state
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -95,7 +108,7 @@ class RewardsCard extends StatelessWidget {
                 ),
               ),
               child: Text(
-                'Unlock for $points pts',
+                isUnlocked ? 'Redeemed' : 'Unlock for $points pts',
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,

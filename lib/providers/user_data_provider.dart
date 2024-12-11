@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class UserDataProvider extends ChangeNotifier {
   String _name = '';
@@ -19,6 +21,18 @@ class UserDataProvider extends ChangeNotifier {
 
   // Getter for lastRewardTime
   DateTime? get lastRewardTime => _lastRewardTime;
+
+  // Show Toast
+  void showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.black,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+  }
 
   // Helper function to get user name from Firestore
   Future<String> getUserName(String uid) async {
@@ -168,6 +182,7 @@ class UserDataProvider extends ChangeNotifier {
   }
 
   // Function to check and award daily points
+// Function to check and award daily points
   Future<void> _checkAndAwardDailyPoints(String uid) async {
     try {
       final userDoc = FirebaseFirestore.instance.collection('Users').doc(uid);
@@ -177,8 +192,11 @@ class UserDataProvider extends ChangeNotifier {
         _points += 2;
         _lastRewardTime = DateTime.now();
         // Update Firestore
-        await userDoc.update({'lastRewardTime': _lastRewardTime, 'points': _points});
+        await userDoc
+            .update({'lastRewardTime': _lastRewardTime, 'points': _points});
         notifyListeners();
+        // Show toast notification
+        showToast("You have been awarded 2 daily points!");
         return; // Exit to avoid further checks
       }
 
@@ -187,32 +205,18 @@ class UserDataProvider extends ChangeNotifier {
 
       if (timeSinceLastReward >= const Duration(hours: 24)) {
         // More than 24 hours have passed
+        _points += 2; // Always award points if 24 hours have passed
+        _lastRewardTime = DateTime.now();
 
-        // Calculate the next reward time (24 hours from the last reward time)
-        final nextRewardTime = _lastRewardTime!.add(const Duration(hours: 24));
-
-        if (now.isBefore(nextRewardTime)) {
-          // If the current time is before the next reward time (within the 24-hour window)
-          // Give the reward
-          _points += 2;
-          _lastRewardTime = DateTime.now();
-          // Update Firestore
-          await userDoc.update({'lastRewardTime': _lastRewardTime, 'points': _points});
-          notifyListeners();
-        } else {
-          // More than 24 hours passed, but user didn't open the app before 24 hours from last reward
-          // Do not give reward here; user missed the opportunity.
-
-          // Now set _lastRewardTime to a point in the past so it is awarded next day
-          // Correct logic to reflect a missed opportunity - do not award points.
-          _lastRewardTime = nextRewardTime;
-          // Update Firestore to reflect skipped reward - update to nextRewardTime
-          await userDoc.update({'lastRewardTime': _lastRewardTime}); 
-        }
+        // Update Firestore
+        await userDoc
+            .update({'lastRewardTime': _lastRewardTime, 'points': _points});
+        notifyListeners();
+        // Show toast notification
+        showToast("You have been awarded 2 daily points!");
       }
     } catch (e) {
       print("Error updating reward data in Firestore: $e");
-      // Consider handling errors, e.g., reverting local changes or showing an error message
     }
   }
 }

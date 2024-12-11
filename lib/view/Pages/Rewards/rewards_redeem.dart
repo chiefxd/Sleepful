@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sleepful/providers/rewards_provider.dart';
 import 'package:sleepful/providers/user_data_provider.dart';
@@ -9,7 +10,7 @@ class RewardsRedeem extends StatelessWidget {
   final String minutes;
   final int points;
   final int selectedIndex;
-  final String soundId; 
+  final String soundId;
 
   const RewardsRedeem(
       {super.key,
@@ -34,6 +35,18 @@ class RewardsRedeem extends StatelessWidget {
 
     // Check if user has enough points
     bool hasEnoughPoints = userData.points >= points;
+
+    // Show Toast
+    void showToast(String message) {
+      Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
 
     return Scaffold(
       body: Stack(
@@ -135,11 +148,15 @@ class RewardsRedeem extends StatelessWidget {
                                   final rewardsProvider =
                                       Provider.of<RewardsProvider>(context,
                                           listen: false);
-                                  rewardsProvider.unlockSound(soundId); // Assuming 'title' is used as soundId
+                                  rewardsProvider.unlockSound(
+                                      soundId); // Assuming 'title' is used as soundId
 
                                   // Deduct points and navigate back
                                   userData.deductPoints(points);
                                   Navigator.pop(context);
+
+                                  showToast(
+                                      "Successfully Redeemed!\nGo Check your Sound Page");
                                 }
                               : null, // Disable button if not enough points
                           style: ElevatedButton.styleFrom(
@@ -147,6 +164,9 @@ class RewardsRedeem extends StatelessWidget {
                                 ? Color(0xFFE4DCFF)
                                 : Color(
                                     0xFF5A5A5A), // Use a gray color for disabled state
+                            disabledBackgroundColor: const Color(
+                                0xFFAB9FD1), // Background color for disabled state
+                            disabledForegroundColor: Colors.black,
                             shape: RoundedRectangleBorder(
                               borderRadius: hasEnoughPoints
                                   ? BorderRadius.circular(8.0)

@@ -47,7 +47,7 @@ class RewardsProvider extends ChangeNotifier {
     ),
     RewardSound(
       id: 'reward_sound_3',
-      imagePaths: 'assets/images/rain.png', // Assuming this is your image path
+      imagePaths: 'assets/images/rain.jpg', // Assuming this is your image path
       titles: 'Title C', // Assuming this is your title
       minutes: '4m', // Assuming this is your duration
       points: 15, // Assuming this is the points required
@@ -55,7 +55,7 @@ class RewardsProvider extends ChangeNotifier {
     RewardSound(
       id: 'reward_sound_4',
       imagePaths:
-          'assets/images/winter.png', // Assuming this is your image path
+          'assets/images/winter.jpg', // Assuming this is your image path
       titles: 'Title D', // Assuming this is your title
       minutes: '8m', // Assuming this is your duration
       points: 20, // Assuming this is the points required
@@ -71,6 +71,16 @@ class RewardsProvider extends ChangeNotifier {
     // ... more reward sounds
   ];
 
+  final Set<String> _unlockedRewardIds = {}; // Store unlocked reward IDs
+
+  // Getter to access unlocked reward IDs
+  Set<String> get unlockedRewardIds => _unlockedRewardIds;
+
+  // Add the following method to check if a reward is unlocked
+  bool isRewardUnlocked(String soundId) {
+    return _unlockedRewardIds.contains(soundId);
+  }
+
   List<RewardSound> get unlockedSounds =>
       _rewardSounds.where((sound) => sound.isUnlocked).toList();
 
@@ -79,6 +89,10 @@ class RewardsProvider extends ChangeNotifier {
     final soundIndex = _rewardSounds.indexWhere((sound) => sound.id == soundId);
     if (soundIndex != -1) {
       _rewardSounds[soundIndex].isUnlocked = true;
+
+      // Add the soundId to the set of unlocked reward IDs
+      _unlockedRewardIds.add(soundId);
+
       notifyListeners();
 
       // Create a new document in 'redeemedSounds' subcollection

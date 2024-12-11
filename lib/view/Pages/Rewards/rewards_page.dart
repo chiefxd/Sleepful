@@ -14,19 +14,21 @@ class RewardsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double subtitleFontSize = screenWidth * 0.04; // 4% of screen width for subtitles
-    double largeTextFontSize = screenWidth * 0.16; // 16% of screen width for large text
+    double subtitleFontSize =
+        screenWidth * 0.04; // 4% of screen width for subtitles
+    double largeTextFontSize =
+        screenWidth * 0.16; // 16% of screen width for large text
     double smallTextFontSize = screenWidth * 0.04;
 
     final userData = Provider.of<UserDataProvider>(context);
 
     // Call fetchAndSetUserData after the first frame
-   WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       final userId = FirebaseAuth.instance.currentUser!.uid;
       print('Calling fetchAndSetUserData with userId: $userId');
       Provider.of<UserDataProvider>(context, listen: false)
           .fetchAndSetUserData(userId);
-   });
+    });
 
     List<String> imagePaths = [
       'assets/images/Contoh 1.png',
@@ -83,7 +85,8 @@ class RewardsPage extends StatelessWidget {
                   elevation: 0,
                   leading: GestureDetector(
                     onTap: () {
-                      Navigator.of(context).pop(); // Go back to the previous screen
+                      Navigator.of(context)
+                          .pop(); // Go back to the previous screen
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
@@ -181,19 +184,34 @@ class RewardsPage extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              const SizedBox(height: 20),
+                              Text(
+                                '2 points will be awarded every 24 hours',
+                                style: TextStyle(
+                                  fontSize: subtitleFontSize,
+                                  color: Color(0xFFB4A9D6),
+                                  fontFamily: 'Montserrat',
+                                ),
+                              ),
+                              const SizedBox(height: 10),
                               // Add some space before the next text
                               Padding(
-                                padding: const EdgeInsets.only(left: 20, right: 20, top: 20), // Add padding of 20 pixels
+                                padding: const EdgeInsets.only(
+                                    left: 20,
+                                    right: 20,
+                                    top: 20), // Add padding of 20 pixels
                                 child: Align(
-                                  alignment: Alignment.centerLeft, // Align to the left
+                                  alignment:
+                                      Alignment.centerLeft, // Align to the left
                                   child: Text(
                                     'Sounds',
                                     style: TextStyle(
-                                      fontSize: screenWidth * 0.07, // Set the font size to 28
-                                      fontWeight: FontWeight.bold, // Set the font weight to bold
+                                      fontSize: screenWidth *
+                                          0.07, // Set the font size to 28
+                                      fontWeight: FontWeight
+                                          .bold, // Set the font weight to bold
                                       fontFamily: 'Montserrat',
-                                      color: Color(0xFFE4DCFF), // Set the text color to 0xFFA594F9
+                                      color: Color(
+                                          0xFFE4DCFF), // Set the text color to 0xFFA594F9
                                     ),
                                   ),
                                 ),
@@ -202,7 +220,8 @@ class RewardsPage extends StatelessWidget {
                               GridView.builder(
                                 physics: const NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
-                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,
                                   childAspectRatio: 0.74,
                                   crossAxisSpacing: 20,
@@ -212,14 +231,20 @@ class RewardsPage extends StatelessWidget {
                                 itemBuilder: (context, index) {
                                   return Padding(
                                     padding: EdgeInsets.only(
-                                      left: index % 2 == 0 ? 20.0 : 0.0, // Add left padding for left column cards
-                                      right: index % 2 == 1 ? 20.0 : 0.0, // Add right padding for right column cards
+                                      left: index % 2 == 0
+                                          ? 20.0
+                                          : 0.0, // Add left padding for left column cards
+                                      right: index % 2 == 1
+                                          ? 20.0
+                                          : 0.0, // Add right padding for right column cards
                                     ),
                                     child: RewardsCard(
                                       title: titles[index], // Dynamic title
-                                      minutes: minutes[index], // Dynamic minutes
+                                      minutes:
+                                          minutes[index], // Dynamic minutes
                                       imagePath: imagePaths[index],
-                                      soundId: soundId[index], // Replace with your image path
+                                      soundId: soundId[
+                                          index], // Replace with your image path
                                       points: points[index],
                                     ),
                                   );

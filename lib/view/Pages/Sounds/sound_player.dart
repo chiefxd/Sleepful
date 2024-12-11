@@ -1,3 +1,4 @@
+import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -17,12 +18,14 @@ class _SoundPlayerState extends State<SoundPlayer> {
   bool audioPlay = false;
   late String audioPath; // To store audio path
   late String imagePath; // To store image path
+  late String genre; // To store genre
 
   @override
   void initState() {
     super.initState();
     _setAudioAndImagePaths(widget.soundTitle);
     _initAudioPlayer();
+    _initAudioSession();
 
     player.positionStream.listen((position) {
       setState(() {
@@ -34,91 +37,342 @@ class _SoundPlayerState extends State<SoundPlayer> {
         _sliderMaxValue = duration?.inSeconds.toDouble() ?? 0.0;
       });
     });
+
+    player.playingStream.listen((playing) {
+      if (!playing) {
+        setState(() {
+          audioPlay = false;
+        });
+      }
+    });
+
+    // Automatically play audio
+    player.play().then((_) {
+      setState(() {
+        audioPlay = true;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    // Stop and dispose of the audio player
+    player.stop();
+    player.dispose();
+    super.dispose();
+  }
+
+  // Initialize audio session to handle interruptions
+  Future<void> _initAudioSession() async {
+    final audioSession = await AudioSession.instance;
+    await audioSession.configure(const AudioSessionConfiguration.speech());
+    audioSession.interruptionEventStream.listen((event) {
+      if (event.begin) {
+        if (audioPlay) {
+          player.pause();
+          setState(() {
+            audioPlay = false;
+          });
+        }
+      } else {
+        if (audioPlay) {
+          player.play();
+        }
+      }
+    });
   }
 
   Future<void> _initAudioPlayer() async {
     await player.setAudioSource(AudioSource.asset(audioPath));
   }
 
+  List<Map<String, dynamic>> sounds = [
+    {
+      'soundTitle': 'Rain',
+      'audioPath': 'assets/sounds/rain.mp3',
+      'imagePath': 'assets/images/rain.jpg',
+      'genre': 'Relaxing'
+    },
+    {
+      'soundTitle': 'Night',
+      'audioPath': 'assets/sounds/night.mp3',
+      'imagePath': 'assets/images/night.jpg',
+      'genre': 'Calm, Soothing'
+    },
+    {
+      'soundTitle': 'Mix',
+      'audioPath': 'assets/sounds/mix.mp3',
+      'imagePath': 'assets/images/mix.jpg',
+      'genre': 'Relaxing'
+    },
+    {
+      'soundTitle': 'Winter',
+      'audioPath': 'assets/sounds/winter.mp3',
+      'imagePath': 'assets/images/winter.jpg',
+      'genre': 'Ambient'
+    },
+    {
+      'soundTitle': 'Comfort',
+      'audioPath': 'assets/sounds/comfort.mp3',
+      'imagePath': 'assets/images/comfort.jpeg',
+      'genre': 'Calm, Ambient'
+    },
+    {
+      'soundTitle': 'Title A',
+      'audioPath': 'assets/sounds/winter contoh.mp3',
+      'imagePath': 'assets/images/Contoh 1.png',
+      'genre': 'Relaxing'
+    },
+    {
+      'soundTitle': 'Title B',
+      'audioPath': 'assets/sounds/winter contoh.mp3',
+      'imagePath': 'assets/images/Contoh 2.png',
+      'genre': 'Relaxing'
+    },
+    {
+      'soundTitle': 'Title C',
+      'audioPath': 'assets/sounds/winter contoh.mp3',
+      'imagePath': 'assets/images/Contoh 3.png',
+      'genre': 'Relaxing'
+    },
+    {
+      'soundTitle': 'Title D',
+      'audioPath': 'assets/sounds/winter contoh.mp3',
+      'imagePath': 'assets/images/Contoh 1.png',
+      'genre': 'Relaxing'
+    },
+    {
+      'soundTitle': 'Title E',
+      'audioPath': 'assets/sounds/winter contoh.mp3',
+      'imagePath': 'assets/images/Long.png',
+      'genre': 'Relaxing'
+    },
+  ];
+
   void _setAudioAndImagePaths(String soundTitle) {
-    switch (soundTitle) {
-      case 'Rain':
-        audioPath = 'assets/sounds/rain contoh.mp3';
-        imagePath = 'assets/images/rain.jpg';
-        break;
-      case 'Night':
-        audioPath = 'assets/sounds/night contoh.mp3';
-        imagePath = 'assets/images/night.jpg';
-        break;
-      case 'Mix':
-        audioPath = 'assets/sounds/mix contoh.mp3';
-        imagePath = 'assets/images/mix.jpg';
-        break;
-      case 'Winter':
-        audioPath = 'assets/sounds/winter contoh.mp3';
-        imagePath = 'assets/images/winter.jpg';
-        break;
-      case 'Comfort':
-        audioPath = 'assets/sounds/comfort contoh.mp3';
-        imagePath = 'assets/images/comfort.jpeg';
-        break;
-      case 'Title A':
-        audioPath = 'assets/sounds/TitleA.mp3';
-        imagePath = 'assets/images/Contoh 1.png';
-        break;
-      case 'Title B':
-        audioPath = 'assets/sounds/TitleB.mp3';
-        imagePath = 'assets/images/Contoh 2.png';
-        break;
-      // Add cases for other sounds...
-      default:
-        audioPath = 'assets/sounds/default.mp3'; // Default sound if not found
-        imagePath = 'assets/images/default.jpg'; // Default image if not found
+    // Attempt to find the sound in the list
+    final soundData = sounds.firstWhere(
+      (sound) => sound['soundTitle'] == soundTitle,
+      orElse: () => {}, // Return an empty map if not found
+    );
+
+    // Use the retrieved data if found
+    if (soundData.isNotEmpty) {
+      audioPath = soundData['audioPath'];
+      imagePath = soundData['imagePath'];
+      genre = soundData['genre'];
+    } else {
+      // Handle the case when the sound is not found
+      audioPath = 'assets/sounds/default.mp3'; // Default sound if not found
+      imagePath = 'assets/images/default.jpg'; // Default image if not found
+      genre = 'Relaxing';
     }
   }
-  
+
+  String _formatDuration(Duration duration) {
+    final minutes = duration.inMinutes;
+    final seconds = duration.inSeconds % 60;
+    return '$minutes:${seconds.toString().padLeft(2, '0')}';
+  }
+
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double menuFontSize = screenWidth * 0.06;
+    double titleFontSize = screenWidth * 0.079;
+    double subtitleFontSize = screenWidth * 0.045;
+    double miniFontSize = screenWidth * 0.035;
+
+    final totalDuration = Duration(seconds: _sliderMaxValue.toInt());
+    final currentPosition = Duration(seconds: _currentSliderValue.toInt());
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.soundTitle),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Display the sound image
-            Image.asset(imagePath), 
-
-            // Playback controls
-            Slider(
-              value: _currentSliderValue,
-              max: _sliderMaxValue,
-              onChanged: (value) {
-                setState(() {
-                  _currentSliderValue = value;
-                  player.seek(Duration(seconds: value.toInt()));
-                });
-              },
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Image.asset(
+              'assets/images/buttonBack.png',
+              width: 48,
+              height: 48,
             ),
-            IconButton(
-              icon: Icon(audioPlay ? Icons.pause : Icons.play_arrow),
-              onPressed: () {
-                setState(() {
-                  audioPlay = !audioPlay;
-                  if (audioPlay) {
-                    player.play();
-                  } else {
-                    player.pause();
-                  }
-                });
-              },
+          ),
+        ),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 0),
+          child: Text(
+            widget.soundTitle,
+            style: TextStyle(
+              fontSize: menuFontSize,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Montserrat',
+              color: Color(0xFFAB9FD1),
+            ),
+          ),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Align(
+                alignment: Alignment.center,
+                child: AspectRatio(
+                  aspectRatio: 1.0,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image.asset(
+                      imagePath,
+                      width: 289,
+                      height: 289,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Text(
+                      widget.soundTitle,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: titleFontSize,
+                        fontFamily: 'Montserrat',
+                        color: Color(0xFFAB9FD1),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 5.0),
+                  Center(
+                    child: Column(
+                      children: [
+                        Text(
+                          '$genre',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: subtitleFontSize,
+                            fontFamily: 'Montserrat',
+                            color: Color(0xFF6A5B9A),
+                          ),
+                        ),
+                        const SizedBox(height: 5.0),
+                        Text(
+                          "${totalDuration.inMinutes} minutes",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: miniFontSize,
+                            fontFamily: 'Montserrat',
+                            color: Color(0xFF6A5B9A),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    _formatDuration(currentPosition),
+                    style: TextStyle(
+                      fontSize: miniFontSize,
+                      fontFamily: 'Montserrat',
+                      color: Color(0xFF6A5B9A),
+                    ),
+                  ),
+                  Text(
+                    _formatDuration(totalDuration),
+                    style: TextStyle(
+                      fontSize: miniFontSize,
+                      fontFamily: 'Montserrat',
+                      color: Color(0xFF6A5B9A),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SliderTheme(
+              data: SliderThemeData(
+                activeTrackColor: Color(0xFF6A5B9A),
+                inactiveTrackColor: Color(0xFFB4A9D6),
+                thumbColor: Color(0xFF6A5B9A),
+                thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6.0),
+                trackHeight: 3.0,
+              ),
+              child: Slider(
+                value: _currentSliderValue,
+                max: _sliderMaxValue,
+                onChanged: (value) {
+                  setState(() {
+                    _currentSliderValue = value;
+                    player.seek(Duration(seconds: value.toInt()));
+                  });
+                },
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  iconSize: 30.0,
+                  color: Color(0xFF6A5B9A),
+                  icon: const Icon(Icons.fast_rewind),
+                  onPressed: () {
+                    player.seek(Duration(
+                        seconds: (_currentSliderValue - 10)
+                            .clamp(0, _sliderMaxValue)
+                            .toInt()));
+                  },
+                ),
+                const SizedBox(width: 15.0),
+                IconButton(
+                  iconSize: 30.0,
+                  color: Color(0xFF6A5B9A),
+                  icon: Icon(audioPlay ? Icons.pause : Icons.play_arrow),
+                  onPressed: () {
+                    setState(() {
+                      audioPlay = !audioPlay;
+                      if (audioPlay) {
+                        player.play();
+                      } else {
+                        player.pause();
+                      }
+                    });
+                  },
+                ),
+                const SizedBox(width: 15.0),
+                IconButton(
+                  iconSize: 30.0,
+                  color: Color(0xFF6A5B9A),
+                  icon: const Icon(Icons.fast_forward),
+                  onPressed: () {
+                    player.seek(Duration(
+                        seconds: (_currentSliderValue + 10)
+                            .clamp(0, _sliderMaxValue)
+                            .toInt()));
+                  },
+                ),
+              ],
             ),
           ],
         ),
       ),
     );
   }
-
-  // ... (Rest of your SoundPlayerPage code - playback controls, UI, etc.) ...
 }
