@@ -76,6 +76,8 @@ class _MyAppState extends State<MyApp> {
       tertiary: Color(0xFF37256C),
       surface: Color(0xFFE4DDFA),
       error: Color(0xFF37256C), //button
+      onError: Color(0xFF37256C),
+      onSurface: Color(0xFF37256C),
     ),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: Color(0xFF37256C)),
@@ -87,12 +89,13 @@ class _MyAppState extends State<MyApp> {
   final darkTheme = ThemeData(
     scaffoldBackgroundColor: const Color(0xFF120C23),
     colorScheme: ColorScheme.dark(
-      primary: Color(0xFFB4A9D6),
-      secondary: Color(0xFFAB9FD1),
-      tertiary: Colors.white,
-      surface: Color(0xFF1F1249),
-      error: Color(0xFF725FAC),
-    ),
+        primary: Color(0xFFB4A9D6),
+        secondary: Color(0xFFAB9FD1),
+        tertiary: Colors.white,
+        surface: Color(0xFF1F1249),
+        error: Color(0xFF725FAC),
+        onError: Color(0xFF6A5ACD),
+        onSurface: Color(0xFF7D64CA)),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: Color(0xFFB4A9D6)),
       bodyMedium: TextStyle(color: Color(0xFFB4A9D6)),

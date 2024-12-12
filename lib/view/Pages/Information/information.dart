@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../Pages/Information/info_squares.dart';
 
+import '../../Pages/Information/info_squares.dart';
 
 class Information extends StatelessWidget {
   const Information({super.key});
@@ -8,7 +8,8 @@ class Information extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack( // Use Stack to position the PlusButton
+      body: Stack(
+        // Use Stack to position the PlusButton
         children: [
           NestedScrollView(
             headerSliverBuilder: (context, innerIsScrolled) {
@@ -18,7 +19,8 @@ class Information extends StatelessWidget {
                   elevation: 0,
                   leading: GestureDetector(
                     onTap: () {
-                      Navigator.of(context).pop(); // Go back to the previous screen
+                      Navigator.of(context)
+                          .pop(); // Go back to the previous screen
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
@@ -31,13 +33,16 @@ class Information extends StatelessWidget {
                   ),
                   title: Padding(
                     padding: const EdgeInsets.only(left: 0),
-                    child: const Text(
+                    child: Text(
                       'Information',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        fontFamily: 'Montserrat', // Ensure the same font family is used
-                        color: Color(0xFFB4A9D6), // Use the same color as in profile.dart
+                        fontFamily:
+                            'Montserrat', // Ensure the same font family is used
+                        color: Theme.of(context)
+                            .colorScheme
+                            .primary, // Use the same color as in profile.dart
                       ),
                     ),
                   ),
@@ -54,8 +59,7 @@ class Information extends StatelessWidget {
               child: Column(
                 children: [
                   Expanded(
-                    child:InfoSquares(),
-
+                    child: InfoSquares(),
                   ),
                   // BottomNavbar(selectedIndex: -1),
                 ],
@@ -71,5 +75,4 @@ class Information extends StatelessWidget {
       ),
     );
   }
-
 }

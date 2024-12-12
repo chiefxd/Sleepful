@@ -49,7 +49,7 @@ class _BreathingExerciseState extends State<BreathingExercise> {
               fontSize: titleFontSize,
               fontWeight: FontWeight.bold,
               fontFamily: 'Montserrat',
-              color: Color(0xFFB4A9D6),
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
         ),
@@ -83,8 +83,9 @@ class _BreathingExerciseState extends State<BreathingExercise> {
                           height: 300,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border:
-                                Border.all(color: Color(0xFF7D64CA), width: 5),
+                            border: Border.all(
+                                color: Theme.of(context).colorScheme.onSurface,
+                                width: 5),
                           ),
                         ),
 
@@ -100,7 +101,7 @@ class _BreathingExerciseState extends State<BreathingExercise> {
                               : 240,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Color(0xFF7D64CA),
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                           child: Center(
                             child: Text(
@@ -132,7 +133,7 @@ class _BreathingExerciseState extends State<BreathingExercise> {
                               fontSize: breatheFontSize,
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFFB4A9D6),
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
 
@@ -141,7 +142,7 @@ class _BreathingExerciseState extends State<BreathingExercise> {
                           // Pick Time Button
                           Container(
                             decoration: BoxDecoration(
-                              color: Color(0xFF1F124A),
+                              color: Theme.of(context).colorScheme.error,
                               borderRadius: BorderRadius.circular(20),
                             ),
                             padding: EdgeInsets.symmetric(
