@@ -29,14 +29,14 @@ class _AboutUsState extends State<AboutUs> {
       padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
       child: Row(
         children: [
-          Icon(icon, color: Color(0xFFB4A9D6)),
+          Icon(icon, color: Theme.of(context).colorScheme.primary),
           SizedBox(width: 10),
           Text(
             text,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontFamily: 'Montserrat',
-              color: Color(0xFFB4A9D6),
+              color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
           ),
         ],
@@ -77,7 +77,7 @@ class _AboutUsState extends State<AboutUs> {
               fontSize: titleFontSize,
               fontWeight: FontWeight.bold,
               fontFamily: 'Montserrat',
-              color: Color(0xFFB4A9D6),
+              color: Theme.of(context).textTheme.bodyLarge?.color,
             ),
           ),
         ),
@@ -106,7 +106,7 @@ class _AboutUsState extends State<AboutUs> {
                     fontSize: titleFontSize,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Montserrat',
-                    color: Color(0xFFB4A9D6)),
+                    color: Theme.of(context).textTheme.bodyMedium?.color),
               ),
 
               SizedBox(height: 0),
@@ -117,7 +117,7 @@ class _AboutUsState extends State<AboutUs> {
                 style: TextStyle(
                     fontSize: subtitleFontSize,
                     fontFamily: 'Montserrat',
-                    color: Color(0xFFB4A9D6)),
+                    color: Theme.of(context).textTheme.bodyMedium?.color),
               ),
 
               SizedBox(height: 20),
@@ -138,7 +138,7 @@ class _AboutUsState extends State<AboutUs> {
                           style: TextStyle(
                             fontSize: miniFontSize,
                             fontFamily: 'Montserrat',
-                            color: Color(0xFFB4A9D6),
+                            color: Theme.of(context).textTheme.bodyMedium?.color,
                           ),
                         ),
                       ),
@@ -154,7 +154,7 @@ class _AboutUsState extends State<AboutUs> {
                           style: TextStyle(
                             fontSize: miniFontSize,
                             fontFamily: 'Montserrat',
-                            color: Color(0xFFB4A9D6),
+                            color: Theme.of(context).textTheme.bodyMedium?.color,
                           ),
                         ),
                       ),
@@ -174,7 +174,7 @@ class _AboutUsState extends State<AboutUs> {
               style: TextStyle(
                 fontSize: miniFontSize,
                 fontFamily: 'Montserrat',
-                color: Color(0xFFB4A9D6),
+                color: Theme.of(context).textTheme.bodySmall?.color,
               ),
             ),
           ),

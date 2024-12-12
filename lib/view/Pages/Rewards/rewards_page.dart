@@ -185,7 +185,7 @@ class RewardsPage extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                '2 points will be awarded every 24 hours',
+                                '1 point will be awarded every 24 hours',
                                 style: TextStyle(
                                   fontSize: subtitleFontSize,
                                   color: Color(0xFFB4A9D6),

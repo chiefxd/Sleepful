@@ -69,20 +69,33 @@ class _MyAppState extends State<MyApp> {
   }
 
   final lightTheme = ThemeData(
-    scaffoldBackgroundColor: Color(0xFFE4DCFF),
-    // primaryColor: Colors.white,
-    // colorScheme: ColorScheme.light(
-    //   primary: Colors.blue, // Customize primary color for light theme
-    //   onPrimary: Colors.black, // Customize onPrimary color for light theme
-    //   // ... other color properties
-    // ),
-    // iconTheme: const IconThemeData(color: Colors.red, opacity: 0.8),
-    // primarySwatch: Colors.blue,
-    // textTheme: const TextTheme(
-    //   bodyLarge:
-    //       TextStyle(color: Colors.deepPurple), // Dark purple for light theme
-    //   // ... other text styles
-    // ),
+    scaffoldBackgroundColor: const Color(0xFFE4DCFF),
+    colorScheme: ColorScheme.light(
+      primary: Color(0xFF120C23), // Example primary color in color scheme
+      // secondary: Colors.pink, // Example secondary color
+      // onPrimary: Colors.white, // Text color on primary buttons
+      // onSecondary: Colors.black, // Text color on secondary buttons
+    ),
+    textTheme: const TextTheme(
+      bodyLarge: TextStyle(color: Color(0xFF120C23)),
+      bodyMedium: TextStyle(color: Color(0xFF120C23)),
+      bodySmall: TextStyle(color: Color(0xFF120C23)), // Example body text color
+    ),
+  );
+
+  final darkTheme = ThemeData(
+    scaffoldBackgroundColor: const Color(0xFF120C23),
+    colorScheme: ColorScheme.dark(
+      primary: Color(0xFFB4A9D6), // Example primary color in color scheme
+      // secondary: Colors.pink, // Example secondary color
+      // onPrimary: Colors.white, // Text color on primary buttons
+      // onSecondary: Colors.black, // Text color on secondary buttons
+    ),
+    textTheme: const TextTheme(
+      bodyLarge: TextStyle(color: Color(0xFFB4A9D6)),
+      bodyMedium: TextStyle(color: Color(0xFFB4A9D6)),
+      bodySmall: TextStyle(color: Color(0xFFB4A9D6)), // Example body text color
+    ),
   );
 
   void _listenForAuthChanges() {
@@ -98,8 +111,8 @@ class _MyAppState extends State<MyApp> {
     if (_isInitializing) {
       return MaterialApp(
         theme: lightTheme,
-        darkTheme: ThemeData.dark(),
-        themeMode: ThemeMode.system, // Default theme for loading state
+        darkTheme: darkTheme,
+        themeMode: ThemeMode.dark, // Default theme for loading state
         home: const SplashScreen(),
       );
     }
@@ -111,8 +124,8 @@ class _MyAppState extends State<MyApp> {
           // Return SplashScreen if the authentication state is not yet determined
           return MaterialApp(
             theme: lightTheme,
-            darkTheme: ThemeData.dark(),
-            themeMode: ThemeMode.system, // Default theme for loading state
+            darkTheme: darkTheme,
+            themeMode: ThemeMode.dark, // Default theme for loading state
             home: const SplashScreen(),
           );
         }
@@ -135,9 +148,7 @@ class _MyAppState extends State<MyApp> {
               return MaterialApp(
                 title: 'Sleepful',
                 theme: lightTheme,
-                darkTheme: ThemeData(
-                  scaffoldBackgroundColor: const Color(0xFF120C23),
-                ),
+                darkTheme: darkTheme,
                 themeMode: themeProvider
                     .currentTheme, // Get the current theme from ThemeProvider
                 routes: {
