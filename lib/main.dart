@@ -72,8 +72,8 @@ class _MyAppState extends State<MyApp> {
     scaffoldBackgroundColor: const Color(0xFFECE9F6),
     colorScheme: ColorScheme.light(
       primary: Color(0xFF37256C),
-      secondary: Color(0xFF37256C),
-      tertiary: Colors.white,
+      secondary: Color(0xFF1F1249),
+      tertiary: Color(0xFF37256C),
       surface: Color(0xFFE4DDFA),
       error: Color(0xFF37256C), //button
     ),
@@ -88,7 +88,7 @@ class _MyAppState extends State<MyApp> {
     scaffoldBackgroundColor: const Color(0xFF120C23),
     colorScheme: ColorScheme.dark(
       primary: Color(0xFFB4A9D6),
-      secondary: Color(0xFF6048A6),
+      secondary: Color(0xFFAB9FD1),
       tertiary: Colors.white,
       surface: Color(0xFF1F1249),
       error: Color(0xFF725FAC),

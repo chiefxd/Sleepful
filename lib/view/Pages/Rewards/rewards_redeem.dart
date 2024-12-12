@@ -81,7 +81,7 @@ class RewardsRedeem extends StatelessWidget {
                               fontSize: largeTextFontSize,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Montserrat',
-                              color: Color(0xFFE4DCFF),
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                           Text(
@@ -89,7 +89,7 @@ class RewardsRedeem extends StatelessWidget {
                             style: TextStyle(
                               fontSize: smallTextFontSize,
                               fontFamily: 'Montserrat',
-                              color: Color(0xFFE4DCFF),
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ],
@@ -102,7 +102,7 @@ class RewardsRedeem extends StatelessWidget {
                         style: TextStyle(
                           fontSize: subtitleFontSize,
                           fontFamily: 'Montserrat',
-                          color: Color(0xFFE4DCFF),
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                       SizedBox(height: 16.0),
@@ -112,7 +112,7 @@ class RewardsRedeem extends StatelessWidget {
                         style: TextStyle(
                           fontSize: smallTextFontSize,
                           fontFamily: 'Montserrat',
-                          color: Color(0xFFE4DCFF),
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                     ],

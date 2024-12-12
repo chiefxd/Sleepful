@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sleepful/providers/rewards_provider.dart';
+
 import 'rewards_redeem.dart';
 
 class RewardsCard extends StatelessWidget {
@@ -34,7 +35,7 @@ class RewardsCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      color: Colors.transparent,
+      color: Theme.of(context).colorScheme.surface,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -55,7 +56,7 @@ class RewardsCard extends StatelessWidget {
             title,
             style: TextStyle(
               fontSize: 24,
-              color: Color(0xFFE4DCFF),
+              color: Theme.of(context).colorScheme.primary,
               fontWeight: FontWeight.bold,
               fontFamily: 'Montserrat',
             ),
@@ -64,7 +65,7 @@ class RewardsCard extends StatelessWidget {
             minutes,
             style: TextStyle(
               fontSize: 14,
-              color: Color(0xFFE4DCFF),
+              color: Theme.of(context).colorScheme.primary,
               fontWeight: FontWeight.bold,
               fontFamily: 'Montserrat',
             ),
@@ -91,11 +92,12 @@ class RewardsCard extends StatelessWidget {
                       );
                     },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFAB9FD1),
+                backgroundColor: Theme.of(context).colorScheme.primary,
                 // Button color
                 // Button color (for enabled state)
-                disabledBackgroundColor: const Color(
-                    0xFFAB9FD1), // Background color for disabled state
+                disabledBackgroundColor: Theme.of(context)
+                    .colorScheme
+                    .primary, // Background color for disabled state
                 disabledForegroundColor:
                     Colors.black, // Foreground color for disabled state
                 shape: RoundedRectangleBorder(
@@ -108,11 +110,12 @@ class RewardsCard extends StatelessWidget {
                 ),
               ),
               child: Text(
-                isUnlocked ? 'Redeemed' : 'Unlock for $points pts',
+                isUnlocked ? 'Redeemed' : 'Redeem for $points pts',
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Theme.of(context).colorScheme.surface,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Montserrat',
+                  fontSize: 12,
                 ),
               ),
             ),

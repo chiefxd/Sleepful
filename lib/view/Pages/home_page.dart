@@ -138,14 +138,14 @@ class _HomePageState extends State<HomePage> {
                         height: 36,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Theme.of(context).colorScheme.secondary,
+                          color: Theme.of(context).colorScheme.error,
                           border:
                               Border.all(width: 2, color: Colors.transparent),
                         ),
                         child: Center(
                           child: Icon(
                             Icons.person,
-                            color: Theme.of(context).colorScheme.tertiary,
+                            color: Colors.white,
                             size: 20,
                           ),
                         ),
@@ -394,7 +394,7 @@ class _HomePageState extends State<HomePage> {
                                               .surface,
                                           titleColor: Theme.of(context)
                                               .colorScheme
-                                              .primary,
+                                              .tertiary,
                                           titleFontSize: titleFontCardSize,
                                           readMoreFontSize: readMoreFontSize,
                                         ),
@@ -420,7 +420,7 @@ class _HomePageState extends State<HomePage> {
                                               .surface,
                                           titleColor: Theme.of(context)
                                               .colorScheme
-                                              .primary,
+                                              .tertiary,
                                           titleFontSize: titleFontCardSize,
                                           readMoreFontSize: readMoreFontSize,
                                         ),
@@ -446,7 +446,7 @@ class _HomePageState extends State<HomePage> {
                                               .surface,
                                           titleColor: Theme.of(context)
                                               .colorScheme
-                                              .primary,
+                                              .tertiary,
                                           titleFontSize: titleFontCardSize,
                                           readMoreFontSize: readMoreFontSize,
                                         ),
@@ -472,7 +472,7 @@ class _HomePageState extends State<HomePage> {
                                               .surface,
                                           titleColor: Theme.of(context)
                                               .colorScheme
-                                              .primary,
+                                              .tertiary,
                                           titleFontSize: titleFontCardSize,
                                           readMoreFontSize: readMoreFontSize,
                                         ),
@@ -498,7 +498,7 @@ class _HomePageState extends State<HomePage> {
                                               .surface,
                                           titleColor: Theme.of(context)
                                               .colorScheme
-                                              .primary,
+                                              .tertiary,
                                           titleFontSize: titleFontCardSize,
                                           readMoreFontSize: readMoreFontSize,
                                         ),

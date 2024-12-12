@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
 
 class SleepingStats extends StatefulWidget {
   const SleepingStats({super.key});
@@ -57,7 +57,7 @@ class _SleepingStatsState extends State<SleepingStats> {
               fontSize: titleFontSize,
               fontWeight: FontWeight.bold,
               fontFamily: 'Montserrat',
-              color: Color(0xFFB4A9D6),
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
         ),
@@ -74,7 +74,7 @@ class _SleepingStatsState extends State<SleepingStats> {
             Text(
               "HIGHLIGHTS",
               style: TextStyle(
-                color: Color(0xFFE4DCFF),
+                color: Theme.of(context).colorScheme.primary,
                 fontSize: secondTitleFontSize,
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.w900,
@@ -84,7 +84,7 @@ class _SleepingStatsState extends State<SleepingStats> {
             Text(
               "On March 18th 2024, You've slept 9 hours!",
               style: TextStyle(
-                color: Color(0xFFE4DCFF),
+                color: Theme.of(context).colorScheme.primary,
                 fontSize: smallFontSize,
                 fontFamily: 'Montserrat',
               ),
@@ -121,7 +121,7 @@ class _SleepingStatsState extends State<SleepingStats> {
                             child: Text(
                               value.toInt().toString(),
                               style: TextStyle(
-                                  color: Color(0xFFE4DCFF),
+                                  color: Theme.of(context).colorScheme.primary,
                                   fontSize: tinyFontSize),
                             ),
                           );
@@ -153,12 +153,12 @@ class _SleepingStatsState extends State<SleepingStats> {
                                     child: Text(
                                       days[value.toInt()],
                                       maxLines: 2,
-                                      overflow:
-                                          TextOverflow.ellipsis,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                        color: Color(0xFFE4DCFF),
-                                        fontSize:
-                                            bigFontSize,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        fontSize: bigFontSize,
                                       ),
                                     ),
                                   ),
@@ -167,12 +167,12 @@ class _SleepingStatsState extends State<SleepingStats> {
                                     child: Text(
                                       "${17 + value.toInt()}/3",
                                       maxLines: 2,
-                                      overflow:
-                                          TextOverflow.ellipsis,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                        color: Color(0xFFE4DCFF),
-                                        fontSize:
-                                            bigFontSize,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        fontSize: bigFontSize,
                                       ),
                                     ),
                                   ),
@@ -277,7 +277,7 @@ class _SleepingStatsState extends State<SleepingStats> {
               "Things you should do to keep your sleeping time good:",
               style: TextStyle(
                   fontSize: smallFontSize,
-                  color: Color(0xFFE4DCFF),
+                  color: Theme.of(context).colorScheme.primary,
                   fontFamily: 'Montserrat',
                   fontWeight: FontWeight.bold),
             ),
@@ -286,7 +286,7 @@ class _SleepingStatsState extends State<SleepingStats> {
               "• Drink more water\n• Breathing Exercise\n• Work on your thesis",
               style: TextStyle(
                 fontSize: smallFontSize,
-                color: Color(0xFFE4DCFF),
+                color: Theme.of(context).colorScheme.primary,
                 fontFamily: 'Montserrat',
               ),
             ),
@@ -305,7 +305,7 @@ class _SleepingStatsState extends State<SleepingStats> {
         barRods: [
           BarChartRodData(
             toY: value,
-            color: Color(0xFFE4DCFF),
+            color: Theme.of(context).colorScheme.primary,
             width: 20,
             borderRadius: BorderRadius.circular(6),
           ),
