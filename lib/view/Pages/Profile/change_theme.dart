@@ -85,7 +85,7 @@ class _ChangeThemeState extends State<ChangeTheme> {
                           _selectedTheme = value!;
                         });
                       },
-                      activeColor: Color(0xFFB4A9D6),
+                      activeColor: Theme.of(context).colorScheme.primary,
                     ),
                     SizedBox(width: 10),
                     Column(
@@ -98,7 +98,7 @@ class _ChangeThemeState extends State<ChangeTheme> {
                                 screenWidth * 0.042, // Responsive font size
                             fontWeight: FontWeight.bold,
                             fontFamily: 'Montserrat',
-                            color: Color(0xFFB4A9D6),
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
                         Text(
@@ -107,7 +107,7 @@ class _ChangeThemeState extends State<ChangeTheme> {
                             fontSize:
                                 screenWidth * 0.03, // Responsive font size
                             fontFamily: 'Montserrat',
-                            color: Color(0xFFB4A9D6),
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
                       ],
@@ -155,7 +155,7 @@ class _ChangeThemeState extends State<ChangeTheme> {
               fontSize: titleFontSize,
               fontWeight: FontWeight.bold,
               fontFamily: 'Montserrat',
-              color: Color(0xFFB4A9D6),
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
         ),
@@ -229,7 +229,7 @@ class _ChangeThemeState extends State<ChangeTheme> {
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF725FAC),
+                          backgroundColor: Theme.of(context).colorScheme.error,
                           foregroundColor: Colors.white,
                           textStyle: TextStyle(
                             fontFamily: 'Montserrat',

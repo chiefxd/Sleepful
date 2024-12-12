@@ -24,7 +24,10 @@ class SoundsSection extends StatelessWidget {
                   fontSize: screenWidth * 0.07, // Set the font size to 28
                   fontWeight: FontWeight.bold, // Set the font weight to bold
                   fontFamily: 'Montserrat',
-                  color: Color(0xFFE4DCFF), // Set the text color to 0xFFA594F9
+                  color: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.color, // Set the text color to 0xFFA594F9
                 ),
               ),
               GestureDetector(
@@ -40,8 +43,10 @@ class SoundsSection extends StatelessWidget {
                     fontSize: screenWidth * 0.04,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Montserrat',
-                    color:
-                        Color(0x8CE4DCFF), // Set the text color to 0xFFCDC1FF
+                    color: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.color, // Set the text color to 0xFFCDC1FF
                   ),
                 ),
               ),
@@ -130,7 +135,7 @@ class SoundsSection extends StatelessWidget {
               label,
               style: TextStyle(
                 fontSize: screenWidth * 0.04,
-                color: Colors.white,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Montserrat',
               ), // Adjust text style as needed

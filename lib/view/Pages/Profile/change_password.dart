@@ -25,14 +25,14 @@ class _EditPasswordState extends State<ChangePassword> {
             onTap: () {},
             child: Row(
               children: [
-                Icon(icon, color: Color(0xFFB4A9D6)),
+                Icon(icon, color: Theme.of(context).colorScheme.primary),
                 SizedBox(width: 10),
                 Text(
                   text,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Montserrat',
-                    color: Color(0xFFB4A9D6),
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ],
@@ -42,7 +42,7 @@ class _EditPasswordState extends State<ChangePassword> {
             controller: controller,
             obscureText: true,
             style: TextStyle(
-                color: Color(0xFFB4A9D6),
+                color: Theme.of(context).colorScheme.primary,
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.bold),
             decoration: InputDecoration(
@@ -50,6 +50,7 @@ class _EditPasswordState extends State<ChangePassword> {
               hintText: 'Enter $text',
               hintStyle: TextStyle(
                 fontSize: 12,
+                color: Theme.of(context).textTheme.bodySmall?.color,
               ),
             ),
           ),
@@ -103,7 +104,7 @@ class _EditPasswordState extends State<ChangePassword> {
               fontSize: titleFontSize,
               fontWeight: FontWeight.bold,
               fontFamily: 'Montserrat',
-              color: Color(0xFFB4A9D6),
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
         ),
@@ -151,33 +152,50 @@ class _EditPasswordState extends State<ChangePassword> {
                       width: buttonSize,
                       child: ElevatedButton(
                         onPressed: () async {
-                           // New password validations:
-                          if (_controller.newPassController.text.trim().isEmpty) {
+                          // New password validations:
+                          if (_controller.newPassController.text
+                              .trim()
+                              .isEmpty) {
                             showToast('Please enter your new password');
                             return;
                           }
-                          if (_controller.newPassController.text.trim().length < 6) {
-                            showToast('New password must be at least 6 characters');
+                          if (_controller.newPassController.text.trim().length <
+                              6) {
+                            showToast(
+                                'New password must be at least 6 characters');
                             return;
                           }
-                          if (!_controller.newPassController.text.trim().contains(RegExp(r'[A-Z]'))) {
-                            showToast('New password must contain at least one uppercase letter');
+                          if (!_controller.newPassController.text
+                              .trim()
+                              .contains(RegExp(r'[A-Z]'))) {
+                            showToast(
+                                'New password must contain at least one uppercase letter');
                             return;
                           }
-                          if (!_controller.newPassController.text.trim().contains(RegExp(r'[a-z]'))) {
-                            showToast('New password must contain at least one lowercase letter');
+                          if (!_controller.newPassController.text
+                              .trim()
+                              .contains(RegExp(r'[a-z]'))) {
+                            showToast(
+                                'New password must contain at least one lowercase letter');
                             return;
                           }
-                          if (!_controller.newPassController.text.trim().contains(RegExp(r'[0-9]'))) {
-                            showToast('New password must contain at least one number');
+                          if (!_controller.newPassController.text
+                              .trim()
+                              .contains(RegExp(r'[0-9]'))) {
+                            showToast(
+                                'New password must contain at least one number');
                             return;
                           }
-                          if (!_controller.newPassController.text.trim().contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]'))) {
-                            showToast('New password must contain at least one special character');
+                          if (!_controller.newPassController.text
+                              .trim()
+                              .contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]'))) {
+                            showToast(
+                                'New password must contain at least one special character');
                             return;
                           }
                           if (_controller.newPassController.text.trim() !=
-                              _controller.confirmNewPassController.text.trim()) {
+                              _controller.confirmNewPassController.text
+                                  .trim()) {
                             showToast("New passwords do not match");
                             return;
                           }
@@ -210,11 +228,12 @@ class _EditPasswordState extends State<ChangePassword> {
                             } else if (e.code == 'weak-password') {
                               errorMessage = 'New password is too weak';
                             }
-                            showToast(errorMessage); // Call your showToast function
+                            showToast(
+                                errorMessage); // Call your showToast function
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF725FAC),
+                          backgroundColor: Theme.of(context).colorScheme.error,
                           foregroundColor: Colors.white,
                           textStyle: TextStyle(
                               fontFamily: 'Montserrat',

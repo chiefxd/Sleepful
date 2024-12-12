@@ -96,14 +96,21 @@ class _HomePageState extends State<HomePage> {
                     Expanded(
                       child: ShaderMask(
                         shaderCallback: (Rect bounds) {
-                          return const LinearGradient(
+                          final bool isDarkMode =
+                              Theme.of(context).brightness == Brightness.dark;
+                          final Color baseColor = isDarkMode
+                              ? Color(0xFFB4A9D6)
+                              : Color(0xFF37256C);
+                          return LinearGradient(
                             begin: Alignment.centerLeft,
                             end: Alignment.centerRight,
-                            stops: [0, 0.28, 1],
+                            stops: const [0, 0.28, 1],
                             colors: [
-                              Color(0xFF6048A6),
-                              Color(0xFF8F7FC2),
-                              Color(0xFFB4A9D6),
+                              Color.lerp(baseColor, Colors.white,
+                                  0.2)!, // Lighten the color
+                              baseColor, // Base color
+                              Color.lerp(baseColor, Colors.black,
+                                  0.2)!, // Darken the color
                             ],
                           ).createShader(bounds);
                         },
@@ -131,14 +138,14 @@ class _HomePageState extends State<HomePage> {
                         height: 36,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Color(0xFF6048A6),
+                          color: Theme.of(context).colorScheme.secondary,
                           border:
-                              Border.all(color: Color(0xFF6048A6), width: 2),
+                              Border.all(width: 2, color: Colors.transparent),
                         ),
-                        child: const Center(
+                        child: Center(
                           child: Icon(
                             Icons.person,
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.tertiary,
                             size: 20,
                           ),
                         ),
@@ -173,20 +180,31 @@ class _HomePageState extends State<HomePage> {
                                   'You\'ve slept for',
                                   style: TextStyle(
                                     fontSize: smallTextFontSize,
-                                    color: Color(0xFFB4A9D6),
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.color,
                                     fontFamily: 'Montserrat',
                                   ),
                                 ),
                                 ShaderMask(
                                   shaderCallback: (Rect bounds) {
-                                    return const LinearGradient(
+                                    final bool isDarkMode =
+                                        Theme.of(context).brightness ==
+                                            Brightness.dark;
+                                    final Color baseColor = isDarkMode
+                                        ? Color(0xFFB4A9D6)
+                                        : Color(0xFF37256C);
+                                    return LinearGradient(
                                       begin: Alignment.centerLeft,
                                       end: Alignment.centerRight,
-                                      stops: [0, 0.28, 1],
+                                      stops: const [0, 0.28, 1],
                                       colors: [
-                                        Color(0xFF6048A6),
-                                        Color(0xFF8F7FC2),
-                                        Color(0xFFB4A9D6),
+                                        Color.lerp(baseColor, Colors.white,
+                                            0.0)!, // Lighten the color
+                                        baseColor, // Base color
+                                        Color.lerp(baseColor, Colors.black,
+                                            0.0)!, // Darken the color
                                       ],
                                     ).createShader(bounds);
                                   },
@@ -207,7 +225,10 @@ class _HomePageState extends State<HomePage> {
                                         text: 'Your goal is: ',
                                         style: TextStyle(
                                           fontSize: subtitleFontSize,
-                                          color: Color(0xFFB4A9D6),
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.color,
                                           fontFamily: 'Montserrat',
                                         ),
                                       ),
@@ -215,7 +236,10 @@ class _HomePageState extends State<HomePage> {
                                         text: '8 Hours',
                                         style: TextStyle(
                                           fontSize: subtitleFontSize,
-                                          color: Color(0xFFB4A9D6),
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.color,
                                           fontFamily: 'Montserrat',
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -224,7 +248,10 @@ class _HomePageState extends State<HomePage> {
                                         text: ' per day',
                                         style: TextStyle(
                                           fontSize: subtitleFontSize,
-                                          color: Color(0xFFB4A9D6),
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.color,
                                           fontFamily: 'Montserrat',
                                         ),
                                       ),
@@ -248,11 +275,14 @@ class _HomePageState extends State<HomePage> {
                                     SizedBox(
                                       width: buttonSize,
                                       child: ButtonWithText(
-                                        icon: Icons.calendar_month,
-                                        text: 'View\nPlans',
-                                        nextPage: ViewPlans(),
-                                        textColor: Color(0xFFE4DCFF),
-                                      ),
+                                          icon: Icons.calendar_month,
+                                          text: 'View\nPlans',
+                                          nextPage: ViewPlans(),
+                                          textColor: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.color,
+                                          buttonColor: Colors.transparent),
                                     ),
                                     SizedBox(
                                       width: buttonSize,
@@ -260,7 +290,10 @@ class _HomePageState extends State<HomePage> {
                                         icon: Icons.bar_chart,
                                         text: 'Sleeping\nStats',
                                         nextPage: SleepingStats(),
-                                        textColor: Color(0xFFE4DCFF),
+                                        textColor: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.color,
                                       ),
                                     ),
                                     SizedBox(
@@ -275,7 +308,10 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         text: 'Breathing\nExercise',
                                         nextPage: const BreathingExercise(),
-                                        textColor: Color(0xFFE4DCFF),
+                                        textColor: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.color,
                                       ),
                                     ),
                                   ],
@@ -303,7 +339,10 @@ class _HomePageState extends State<HomePage> {
                                         fontSize: screenWidth * 0.07,
                                         fontWeight: FontWeight.bold,
                                         fontFamily: 'Montserrat',
-                                        color: Color(0xFFE4DCFF),
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.color,
                                       ),
                                     ),
                                     GestureDetector(
@@ -321,7 +360,10 @@ class _HomePageState extends State<HomePage> {
                                           fontSize: screenWidth * 0.04,
                                           fontWeight: FontWeight.bold,
                                           fontFamily: 'Montserrat',
-                                          color: Color(0x8CE4DCFF),
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.color,
                                         ),
                                       ),
                                     ),
@@ -347,8 +389,12 @@ class _HomePageState extends State<HomePage> {
                                           imagePath: 'assets/images/info 1.jpg',
                                           onReadMore:
                                               () {}, // Remove this callback
-                                          cardColor: const Color(0xFF1F1249),
-                                          titleColor: Colors.white,
+                                          cardColor: Theme.of(context)
+                                              .colorScheme
+                                              .surface,
+                                          titleColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                           titleFontSize: titleFontCardSize,
                                           readMoreFontSize: readMoreFontSize,
                                         ),
@@ -369,8 +415,12 @@ class _HomePageState extends State<HomePage> {
                                           imagePath: 'assets/images/info 2.jpg',
                                           onReadMore:
                                               () {}, // Remove this callback
-                                          cardColor: const Color(0xFF1F1249),
-                                          titleColor: Colors.white,
+                                          cardColor: Theme.of(context)
+                                              .colorScheme
+                                              .surface,
+                                          titleColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                           titleFontSize: titleFontCardSize,
                                           readMoreFontSize: readMoreFontSize,
                                         ),
@@ -391,8 +441,12 @@ class _HomePageState extends State<HomePage> {
                                           imagePath: 'assets/images/info 3.jpg',
                                           onReadMore:
                                               () {}, // Remove this callback
-                                          cardColor: const Color(0xFF1F1249),
-                                          titleColor: Colors.white,
+                                          cardColor: Theme.of(context)
+                                              .colorScheme
+                                              .surface,
+                                          titleColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                           titleFontSize: titleFontCardSize,
                                           readMoreFontSize: readMoreFontSize,
                                         ),
@@ -413,8 +467,12 @@ class _HomePageState extends State<HomePage> {
                                           imagePath: 'assets/images/info 4.jpg',
                                           onReadMore:
                                               () {}, // Remove this callback
-                                          cardColor: const Color(0xFF1F1249),
-                                          titleColor: Colors.white,
+                                          cardColor: Theme.of(context)
+                                              .colorScheme
+                                              .surface,
+                                          titleColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                           titleFontSize: titleFontCardSize,
                                           readMoreFontSize: readMoreFontSize,
                                         ),
@@ -435,8 +493,12 @@ class _HomePageState extends State<HomePage> {
                                           imagePath: 'assets/images/info 5.jpg',
                                           onReadMore:
                                               () {}, // Remove this callback
-                                          cardColor: const Color(0xFF1F1249),
-                                          titleColor: Colors.white,
+                                          cardColor: Theme.of(context)
+                                              .colorScheme
+                                              .surface,
+                                          titleColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                           titleFontSize: titleFontCardSize,
                                           readMoreFontSize: readMoreFontSize,
                                         ),

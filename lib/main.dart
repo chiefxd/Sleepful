@@ -69,32 +69,34 @@ class _MyAppState extends State<MyApp> {
   }
 
   final lightTheme = ThemeData(
-    scaffoldBackgroundColor: const Color(0xFFE4DCFF),
+    scaffoldBackgroundColor: const Color(0xFFECE9F6),
     colorScheme: ColorScheme.light(
-      primary: Color(0xFF120C23), // Example primary color in color scheme
-      // secondary: Colors.pink, // Example secondary color
-      // onPrimary: Colors.white, // Text color on primary buttons
-      // onSecondary: Colors.black, // Text color on secondary buttons
+      primary: Color(0xFF37256C),
+      secondary: Color(0xFF37256C),
+      tertiary: Colors.white,
+      surface: Color(0xFFE4DDFA),
+      error: Color(0xFF37256C), //button
     ),
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Color(0xFF120C23)),
-      bodyMedium: TextStyle(color: Color(0xFF120C23)),
-      bodySmall: TextStyle(color: Color(0xFF120C23)), // Example body text color
+      bodyLarge: TextStyle(color: Color(0xFF37256C)),
+      bodyMedium: TextStyle(color: Color(0xFF37256C)),
+      bodySmall: TextStyle(color: Colors.grey),
     ),
   );
 
   final darkTheme = ThemeData(
     scaffoldBackgroundColor: const Color(0xFF120C23),
     colorScheme: ColorScheme.dark(
-      primary: Color(0xFFB4A9D6), // Example primary color in color scheme
-      // secondary: Colors.pink, // Example secondary color
-      // onPrimary: Colors.white, // Text color on primary buttons
-      // onSecondary: Colors.black, // Text color on secondary buttons
+      primary: Color(0xFFB4A9D6),
+      secondary: Color(0xFF6048A6),
+      tertiary: Colors.white,
+      surface: Color(0xFF1F1249),
+      error: Color(0xFF725FAC),
     ),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: Color(0xFFB4A9D6)),
       bodyMedium: TextStyle(color: Color(0xFFB4A9D6)),
-      bodySmall: TextStyle(color: Color(0xFFB4A9D6)), // Example body text color
+      bodySmall: TextStyle(color: Color(0xFFB4A9D6)),
     ),
   );
 
