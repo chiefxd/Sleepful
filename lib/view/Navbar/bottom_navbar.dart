@@ -19,7 +19,7 @@ class BottomNavbarState extends State<BottomNavbar> {
   @override
   Widget build(BuildContext context) {
     Color iconText = Theme.of(context).colorScheme.tertiary;
-    Color navbarColor = Theme.of(context).colorScheme.onSecondary;
+    Color navbarColor = Theme.of(context).colorScheme.onPrimary;
 
     // Determine if the current page is one of the specified pages
     bool isOnMainPage = widget.selectedIndex >= 0 && widget.selectedIndex <= 3;
