@@ -78,6 +78,8 @@ class _MyAppState extends State<MyApp> {
       error: Color(0xFF37256C), //button
       onError: Color(0xFF37256C),
       onSurface: Color(0xFF37256C),
+      onSecondary: Color(0xFFE8E2FB),
+      onTertiary: Color(0xFF37256C),
     ),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: Color(0xFF37256C)),
@@ -95,7 +97,9 @@ class _MyAppState extends State<MyApp> {
         surface: Color(0xFF1F1249),
         error: Color(0xFF725FAC),
         onError: Color(0xFF6A5ACD),
-        onSurface: Color(0xFF7D64CA)),
+        onSurface: Color(0xFF7D64CA),
+        onSecondary: Color(0xFF1F1249),
+        onTertiary: Color(0xFF725FAC)),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: Color(0xFFB4A9D6)),
       bodyMedium: TextStyle(color: Color(0xFFB4A9D6)),
