@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-
+// import 'package:sleepful/view/Pages/Plans/time_picker_page.dart';
+import '../../Navbar/bottom_navbar.dart';
+import '../../Components/plus_button.dart';
+import '../../../controller/Plans/time_picker_controller.dart';
 import '../../Components/plus_button.dart';
 import '../../Navbar/bottom_navbar.dart';
 
@@ -11,23 +14,77 @@ class AddPlans extends StatefulWidget {
 }
 
 class AddPlansState extends State<AddPlans> {
+  final TimePickerController controller = TimePickerController();
+  final TextEditingController titleController = TextEditingController();
+
   // Change to public
-  bool isStartSelected = true; // Track if Start button is selected
+  // bool isStartSelected = true; // Track if Start button is selected
+  //
+  // int selectedStartHour = 12; // Default hour for start
+  // int selectedStartMinute = 0; // Default minute for start
+  // int selectedEndHour = 12; // Default hour for end
+  // int selectedEndMinute = 0; // Default minute for end
+  // bool isStartAM = true; // Track AM/PM for start
+  // bool isEndAM = true; // Track AM/PM for end
+  //
+  // int selectedHourIndex = 0; // Default selected hour index
+  // int selectedMinuteIndex = 0; // Default selected minute index
+  //
+  // // void _toggleButton(bool isStart) {
+  // //   setState(() {
+  // //     isStartSelected = isStart; // Update the selected button state
+  // //   });
+  // // }
+  //
+  //
+  //
+  // int selectedHour = 12; // Default hour
+  // int selectedMinute = 0; // Default minute
+  // String selectedPeriod = 'AM';
+  //
+  // final List<int> hours = List.generate(24, (index) => (index % 12) + 1);
+  // final List<int> minutes = List.generate(60, (index) => index % 60);
+  // final List<String> periods = ['AM', 'PM'];
+  //
+  // // Use FixedExtentScrollController
+  // final FixedExtentScrollController hourController =
+  //     FixedExtentScrollController(initialItem: 12 + 5999);
+  // final FixedExtentScrollController minuteController =
+  //     FixedExtentScrollController(initialItem: 0 + 6000);
+  // final FixedExtentScrollController periodController =
+  //     FixedExtentScrollController(initialItem: 0);
+  //
+  // void resetTime() {
+  //   setState(() {
+  //     selectedHour = 12; // Reset to default hour
+  //     selectedMinute = 0; // Reset to default minute
+  //     selectedPeriod = 'AM';
+  //   });
+  //
+  //   // Reset the scroll position
+  //   hourController.jumpToItem(12 + 5999); // Reset to default hour
+  //   minuteController.jumpToItem(0 + 6000); // Reset to default minute
+  //   periodController.jumpToItem(0);
+  // }
+  // void _toggleButton(bool isStart) {
+  //   setState(() {
+  //     isStartSelected = isStart; // Update the selected button state
+  //     selectedHour = 12; // Reset to default hour
+  //     selectedMinute = 0; // Reset to default minute
+  //     selectedPeriod = 'AM';
+  //   });
+  //   hourController.jumpToItem(12 + 5999); // Reset to default hour
+  //   minuteController.jumpToItem(0 + 6000); // Reset to default minute
+  //   periodController.jumpToItem(0);
+  // }
 
-  int selectedStartHour = 12; // Default hour for start
-  int selectedStartMinute = 0; // Default minute for start
-  int selectedEndHour = 12; // Default hour for end
-  int selectedEndMinute = 0; // Default minute for end
-  bool isStartAM = true; // Track AM/PM for start
-  bool isEndAM = true; // Track AM/PM for end
-
-  int selectedHourIndex = 0; // Default selected hour index
-  int selectedMinuteIndex = 0; // Default selected minute index
-
-  void _toggleButton(bool isStart) {
-    setState(() {
-      isStartSelected = isStart; // Update the selected button state
-    });
+  @override
+  void dispose() {
+    controller.hourController.dispose();
+    controller.minuteController.dispose();
+    controller.periodController.dispose();
+    titleController.dispose();
+    super.dispose();
   }
 
   // void _updateStartTime(int hour, int minute, bool isAM) {
@@ -105,22 +162,34 @@ class AddPlansState extends State<AddPlans> {
                         width: 100,
                         height: 200,
                         child: ListWheelScrollView.useDelegate(
+                          // controller: hourController,
+                          controller: controller.hourController,
                           itemExtent: 80,
-                          physics: const FixedExtentScrollPhysics(),
+                          physics: FixedExtentScrollPhysics(),
                           onSelectedItemChanged: (index) {
+                            // setState(() {
+                            //   selectedHourIndex =
+                            //       index; // Update selected hour index
+                            //   selectedStartHour = (index % 12) +
+                            //       1; // Update selected hour value
+                            // });
                             setState(() {
-                              selectedHourIndex =
-                                  index; // Update selected hour index
-                              selectedStartHour = (index % 12) +
-                                  1; // Update selected hour value
+                              // selectedHour = hours[index % hours.length];
+                              controller.selectedHour = controller
+                                  .hours[index % controller.hours.length];
                             });
                           },
                           childDelegate: ListWheelChildBuilderDelegate(
                             builder: (context, index) {
-                              int hour = (index % 12) + 1;
+                              // int hour = (index % 12) + 1;
+                              // bool isSelected =
+                              //     (hours[index % hours.length] == selectedHour);
+                              bool isSelected = (controller
+                                      .hours[index % controller.hours.length] ==
+                                  controller.selectedHour);
                               return Container(
                                 decoration: BoxDecoration(
-                                  color: index == selectedHourIndex
+                                  color: isSelected
                                       ? Theme.of(context).colorScheme.onError
                                       : Colors.transparent,
                                   // Change color if selected
@@ -131,12 +200,17 @@ class AddPlansState extends State<AddPlans> {
                                 ),
                                 alignment: Alignment.center,
                                 child: Text(
-                                  hour.toString().padLeft(2, '0'),
+                                  // hours[index % hours.length]
+                                  //     .toString()
+                                  controller
+                                      .hours[index % controller.hours.length]
+                                      .toString()
+                                      .padLeft(2, '0'),
                                   style: TextStyle(
                                     fontSize: 54,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'Montserrat',
-                                    color: index == selectedHourIndex
+                                    color: isSelected
                                         ? Colors.white
                                         : Theme.of(context)
                                             .colorScheme
@@ -145,6 +219,8 @@ class AddPlansState extends State<AddPlans> {
                                 ),
                               );
                             },
+                            // childCount: hours.length * 1000,
+                            childCount: controller.hours.length * 1000,
                           ),
                         ),
                       ),
@@ -154,8 +230,8 @@ class AddPlansState extends State<AddPlans> {
                         height: 80, // Set a height for the colon
                         child: Container(
                           decoration: BoxDecoration(
-                            color: (selectedHourIndex != -1 ||
-                                    selectedMinuteIndex != -1)
+                            color: (controller.selectedHour != -1 ||
+                                    controller.selectedMinute != -1)
                                 ? Theme.of(context)
                                     .colorScheme
                                     .onError // Change color if hour or minute is selected
@@ -203,22 +279,30 @@ class AddPlansState extends State<AddPlans> {
                         width: 100,
                         height: 200,
                         child: ListWheelScrollView.useDelegate(
+                          controller: controller.minuteController,
                           itemExtent: 80,
                           physics: const FixedExtentScrollPhysics(),
                           onSelectedItemChanged: (index) {
+                            // setState(() {
+                            //   selectedMinuteIndex =
+                            //       index; // Update selected minute index
+                            //   selectedStartMinute =
+                            //       index % 60; // Update selected minute value
+                            // });
                             setState(() {
-                              selectedMinuteIndex =
-                                  index; // Update selected minute index
-                              selectedStartMinute =
-                                  index % 60; // Update selected minute value
+                              controller.selectedMinute = controller
+                                  .minutes[index % controller.minutes.length];
                             });
                           },
                           childDelegate: ListWheelChildBuilderDelegate(
                             builder: (context, index) {
-                              int minute = index % 60;
+                              bool isSelected = (controller.minutes[
+                                      index % controller.minutes.length] ==
+                                  controller.selectedMinute);
+                              // int minute = index % 60;
                               return Container(
                                 decoration: BoxDecoration(
-                                  color: index == selectedMinuteIndex
+                                  color: isSelected
                                       ? Theme.of(context).colorScheme.onError
                                       : Colors.transparent,
                                   // Change color if selected
@@ -227,12 +311,15 @@ class AddPlansState extends State<AddPlans> {
                                 ),
                                 alignment: Alignment.center,
                                 child: Text(
-                                  minute.toString().padLeft(2, '0'),
+                                  controller.minutes[
+                                          index % controller.minutes.length]
+                                      .toString()
+                                      .padLeft(2, '0'),
                                   style: TextStyle(
                                     fontSize: 54,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'Montserrat',
-                                    color: index == selectedMinuteIndex
+                                    color: isSelected
                                         ? Colors.white
                                         : Theme.of(context)
                                             .colorScheme
@@ -241,6 +328,7 @@ class AddPlansState extends State<AddPlans> {
                                 ),
                               );
                             },
+                            childCount: controller.minutes.length * 200,
                           ),
                         ),
                       ),
@@ -249,19 +337,26 @@ class AddPlansState extends State<AddPlans> {
                         width: 110,
                         height: 200,
                         child: ListWheelScrollView.useDelegate(
+                          controller: controller.periodController,
                           itemExtent: 80,
-                          physics: const FixedExtentScrollPhysics(),
+                          physics: FixedExtentScrollPhysics(),
                           onSelectedItemChanged: (index) {
+                            // setState(() {
+                            //   isStartAM = index == 0; // Update AM/PM selection
+                            // });
                             setState(() {
-                              isStartAM = index == 0; // Update AM/PM selection
+                              controller.selectedPeriod =
+                                  controller.periods[index];
                             });
                           },
                           childDelegate: ListWheelChildBuilderDelegate(
                             builder: (context, index) {
-                              String period = index % 2 == 0 ? 'AM' : 'PM';
+                              bool isSelected = (controller.periods[index] ==
+                                  controller.selectedPeriod);
+                              // String period = index % 2 == 0 ? 'AM' : 'PM';
                               return Container(
                                 decoration: BoxDecoration(
-                                  color: isStartAM == (index == 0)
+                                  color: isSelected
                                       ? Theme.of(context).colorScheme.onError
                                       : Colors.transparent,
                                   // Change color if selected
@@ -272,12 +367,12 @@ class AddPlansState extends State<AddPlans> {
                                 ),
                                 alignment: Alignment.center,
                                 child: Text(
-                                  period,
+                                  controller.periods[index],
                                   style: TextStyle(
                                     fontSize: 54,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'Montserrat',
-                                    color: isStartAM == (index == 0)
+                                    color: isSelected
                                         ? Colors.white
                                         : Theme.of(context)
                                             .colorScheme
@@ -286,7 +381,7 @@ class AddPlansState extends State<AddPlans> {
                                 ),
                               );
                             },
-                            childCount: 2,
+                            childCount: controller.periods.length,
                           ),
                         ),
                       ),
@@ -307,16 +402,22 @@ class AddPlansState extends State<AddPlans> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             ElevatedButton(
-                              onPressed: () => _toggleButton(true),
+                              onPressed: () {
+                                setState(() {
+                                  controller.switchToStart();
+                                });
+                              },
+                              // onPressed: () => _toggleButton(true),
+                              // onPressed: resetTime,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: isStartSelected
+                                backgroundColor: controller.isStartSelected
                                     ? Color(0xFFB4A9D6)
                                     : Colors.transparent,
-                                foregroundColor: isStartSelected
+                                foregroundColor: controller.isStartSelected
                                     ? Color(0xFF1F1249)
                                     : Colors.white,
                                 side: BorderSide(
-                                  color: isStartSelected
+                                  color: controller.isStartSelected
                                       ? Color(
                                           0xFFB4A9D6) // Change border color to B4A9D6 when selected
                                       : Colors.white,
@@ -335,12 +436,18 @@ class AddPlansState extends State<AddPlans> {
                             ),
                             const SizedBox(width: 20),
                             ElevatedButton(
-                              onPressed: () => _toggleButton(false),
+                              onPressed: () {
+                                setState(() {
+                                  controller.switchToEnd();
+                                });
+                              },
+                              // onPressed: () => _toggleButton(false),
+                              // onPressed: resetTime,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: !isStartSelected
+                                backgroundColor: !controller.isStartSelected
                                     ? Color(0xFFB4A9D6)
                                     : Colors.transparent,
-                                foregroundColor: !isStartSelected
+                                foregroundColor: !controller.isStartSelected
                                     ? Color(0xFF1F1249)
                                     : Colors.white,
                                 side: BorderSide(color: Colors.white),
@@ -369,15 +476,27 @@ class AddPlansState extends State<AddPlans> {
                         const SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: const [
-                            DayCircle(letter: 'S'),
-                            DayCircle(letter: 'M'),
-                            DayCircle(letter: 'T'),
-                            DayCircle(letter: 'W'),
-                            DayCircle(letter: 'T'),
-                            DayCircle(letter: 'F'),
-                            DayCircle(letter: 'S'),
-                          ],
+                          // children: const [
+                          //   DayCircle(letter: 'S'),
+                          //   DayCircle(letter: 'M'),
+                          //   DayCircle(letter: 'T'),
+                          //   DayCircle(letter: 'W'),
+                          //   DayCircle(letter: 'T'),
+                          //   DayCircle(letter: 'F'),
+                          //   DayCircle(letter: 'S'),
+                          // ],
+                          children: List.generate(7, (index) {
+                            String dayLetter = ['S', 'M', 'T', 'W', 'T', 'F', 'S'][index];
+                            return DayCircle(
+                              letter: dayLetter,
+                              isSelected: controller.selectedDays[index],
+                              onSelected: (isSelected) {
+                                setState(() {
+                                  controller.selectedDays[index] = isSelected; // Update the selected day
+                                });
+                              },
+                            );
+                          }),
                         ),
                       ],
                     ),
@@ -400,6 +519,8 @@ class AddPlansState extends State<AddPlans> {
                   ),
                   const SizedBox(height: 10),
                   TextField(
+                    controller: titleController,
+                    style: TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       // Set the bottom border to be visible
                       enabledBorder: UnderlineInputBorder(
@@ -432,7 +553,18 @@ class AddPlansState extends State<AddPlans> {
 
                   // Add Button
                   ElevatedButton(
-                    onPressed: () {},
+                    // onPressed: () {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const TimePickerPage()),
+                    //   );
+                    // },
+                    onPressed: () {
+                      setState(() {
+                        controller.validateTimes(context, titleController.text);
+                      });
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.error,
                       foregroundColor: Colors.white,
@@ -451,6 +583,14 @@ class AddPlansState extends State<AddPlans> {
                       ),
                     ),
                   ),
+                  Text(
+                    'Selected Time: ${controller.selectedHour.toString().padLeft(2, '0')}:${controller.selectedMinute.toString().padLeft(2, '0')} ${controller.selectedPeriod}',
+                    style: TextStyle(fontSize: 12, color: Colors.white),
+                  ),
+                  Text('Start Time: ${controller.startTime}',
+                      style: TextStyle(fontSize: 12, color: Colors.white)),
+                  Text('End Time: ${controller.endTime}',
+                      style: TextStyle(fontSize: 12, color: Colors.white)),
                 ],
               ),
             ),
@@ -474,22 +614,29 @@ class AddPlansState extends State<AddPlans> {
 
 class DayCircle extends StatefulWidget {
   final String letter;
+  final bool isSelected;
+  final ValueChanged<bool> onSelected;
 
-  const DayCircle({super.key, required this.letter});
+  const DayCircle({
+    super.key,
+    required this.letter,
+    required this.isSelected,
+    required this.onSelected,
+  });
 
   @override
   DayCircleState createState() => DayCircleState();
 }
 
 class DayCircleState extends State<DayCircle> {
-  bool isSelected = false;
-
+  // bool isSelected = false;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         setState(() {
-          isSelected = !isSelected;
+          // isSelected = !isSelected;
+          widget.onSelected(!widget.isSelected);
         });
       },
       child: Container(
@@ -497,9 +644,9 @@ class DayCircleState extends State<DayCircle> {
         height: 35,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: isSelected ? Color(0xFFB4A9D6) : Colors.transparent,
+          color: widget.isSelected ? Color(0xFFB4A9D6) : Colors.transparent,
           border: Border.all(
-            color: isSelected ? Color(0xFFB4A9D6) : Colors.white,
+            color: widget.isSelected ? Color(0xFFB4A9D6) : Colors.white,
             width: 2.0,
           ),
         ),
@@ -507,7 +654,7 @@ class DayCircleState extends State<DayCircle> {
         child: Text(
           widget.letter,
           style: TextStyle(
-            color: isSelected ? Colors.black : Colors.white,
+            color: widget.isSelected ? Colors.black : Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 18,
           ),
