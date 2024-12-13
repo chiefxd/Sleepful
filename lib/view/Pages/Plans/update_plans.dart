@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../Components/plus_button.dart';
 import '../../../controller/Plans/update_plan_controller.dart';
+import '../../Components/plus_button.dart';
 import '../../Navbar/bottom_navbar.dart';
 
 class UpdatePlans extends StatefulWidget {
@@ -11,7 +11,8 @@ class UpdatePlans extends StatefulWidget {
   final String endTime;
   final List<String> selectedDays;
 
-  const UpdatePlans({super.key,
+  const UpdatePlans({
+    super.key,
     required this.title,
     required this.planId,
     required this.startTime,
@@ -34,7 +35,7 @@ class UpdatePlansState extends State<UpdatePlans> {
     // Initialize the controller with the values passed from UpdatePlans
     controller = TimePickerController(
       startTime: widget.startTime, // Pass startTime
-      endTime: widget.endTime,     // Pass endTime
+      endTime: widget.endTime, // Pass endTime
       selectedDays: _getSelectedDays(widget.selectedDays), // Pass selected days
     );
 
@@ -43,7 +44,15 @@ class UpdatePlansState extends State<UpdatePlans> {
 
   List<bool> _getSelectedDays(List<String> days) {
     List<bool> selectedDays = List.generate(7, (index) => false);
-    List<String> fullDayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    List<String> fullDayNames = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday'
+    ];
 
     for (String day in days) {
       int index = fullDayNames.indexOf(day);
@@ -96,7 +105,7 @@ class UpdatePlansState extends State<UpdatePlans> {
                   ),
                   title: Padding(
                     padding: const EdgeInsets.only(left: 0),
-                    child: const Text(
+                    child: Text(
                       'Update Plan',
                       style: TextStyle(
                         fontSize: 24,
@@ -141,7 +150,7 @@ class UpdatePlansState extends State<UpdatePlans> {
                           childDelegate: ListWheelChildBuilderDelegate(
                             builder: (context, index) {
                               bool isSelected = (controller
-                                  .hours[index % controller.hours.length] ==
+                                      .hours[index % controller.hours.length] ==
                                   controller.selectedHour);
                               return Container(
                                 decoration: BoxDecoration(
@@ -161,14 +170,15 @@ class UpdatePlansState extends State<UpdatePlans> {
                                       .toString()
                                       .padLeft(2, '0'),
                                   style: TextStyle(
-                                    fontSize: 54,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Montserrat',
-                                    color: isSelected
-                                        ? Colors.white
-                                        : Colors.white.withOpacity(
-                                            0.5), // Change text color if selected
-                                  ),
+                                      fontSize: 54,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Montserrat',
+                                      color: isSelected
+                                          ? Colors.white
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onErrorContainer // Change text color if selected
+                                      ),
                                 ),
                               );
                             },
@@ -183,7 +193,7 @@ class UpdatePlansState extends State<UpdatePlans> {
                         child: Container(
                           decoration: BoxDecoration(
                             color: (controller.selectedHour != -1 ||
-                                controller.selectedMinute != -1)
+                                    controller.selectedMinute != -1)
                                 ? Theme.of(context)
                                     .colorScheme
                                     .onError // Change color if hour or minute is selected
@@ -243,7 +253,7 @@ class UpdatePlansState extends State<UpdatePlans> {
                           childDelegate: ListWheelChildBuilderDelegate(
                             builder: (context, index) {
                               bool isSelected = (controller.minutes[
-                              index % controller.minutes.length] ==
+                                      index % controller.minutes.length] ==
                                   controller.selectedMinute);
                               // int minute = index % 60;
                               return Container(
@@ -258,18 +268,19 @@ class UpdatePlansState extends State<UpdatePlans> {
                                 alignment: Alignment.center,
                                 child: Text(
                                   controller.minutes[
-                                  index % controller.minutes.length]
+                                          index % controller.minutes.length]
                                       .toString()
                                       .padLeft(2, '0'),
                                   style: TextStyle(
-                                    fontSize: 54,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Montserrat',
-                                    color: isSelected
-                                        ? Colors.white
-                                        : Colors.white.withOpacity(
-                                            0.5), // Change text color if selected
-                                  ),
+                                      fontSize: 54,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Montserrat',
+                                      color: isSelected
+                                          ? Colors.white
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onErrorContainer // Change text color if selected
+                                      ),
                                 ),
                               );
                             },
@@ -288,7 +299,7 @@ class UpdatePlansState extends State<UpdatePlans> {
                           onSelectedItemChanged: (index) {
                             setState(() {
                               controller.selectedPeriod =
-                              controller.periods[index];
+                                  controller.periods[index];
                             });
                           },
                           childDelegate: ListWheelChildBuilderDelegate(
@@ -310,14 +321,15 @@ class UpdatePlansState extends State<UpdatePlans> {
                                 child: Text(
                                   controller.periods[index],
                                   style: TextStyle(
-                                    fontSize: 54,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Montserrat',
-                                    color: isSelected
-                                        ? Colors.white
-                                        : Colors.white.withOpacity(
-                                            0.5), // Change text color if selected
-                                  ),
+                                      fontSize: 54,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Montserrat',
+                                      color: isSelected
+                                          ? Colors.white
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onErrorContainer // Change text color if selected
+                                      ),
                                 ),
                               );
                             },
@@ -415,13 +427,15 @@ class UpdatePlansState extends State<UpdatePlans> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: List.generate(7, (index) {
-                            String dayLetter = ['S', 'M', 'T', 'W', 'T', 'F', 'S'][index];
+                            String dayLetter =
+                                ['S', 'M', 'T', 'W', 'T', 'F', 'S'][index];
                             return DayCircle(
                               letter: dayLetter,
                               isSelected: controller.selectedDays[index],
                               onSelected: (isSelected) {
                                 setState(() {
-                                  controller.selectedDays[index] = isSelected; // Update the selected day
+                                  controller.selectedDays[index] =
+                                      isSelected; // Update the selected day
                                 });
                               },
                             );
@@ -484,7 +498,8 @@ class UpdatePlansState extends State<UpdatePlans> {
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        controller.validateTimes(context, titleController.text, widget.planId);
+                        controller.validateTimes(
+                            context, titleController.text, widget.planId);
                       });
                     },
                     style: ElevatedButton.styleFrom(
