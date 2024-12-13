@@ -289,7 +289,9 @@ class _HomePageState extends State<HomePage> {
                                       child: ButtonWithText(
                                         icon: Icons.bar_chart,
                                         text: 'Sleeping\nStats',
-                                        nextPage: SleepingStats(),
+                                        nextPage: SleepingStats(
+                                          selectedIndex: 3,
+                                        ),
                                         textColor: Theme.of(context)
                                             .textTheme
                                             .bodyMedium

@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:sleepful/view/Pages/Plans/update_plans.dart';
 
 import '../../Components/plus_button.dart';
@@ -84,10 +84,12 @@ class ViewPlans extends StatelessWidget {
                         return const Center(child: CircularProgressIndicator());
                       }
                       if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                        return const Center(
+                        return Center(
                           child: Text(
-                            'No Plans Found.',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                            'No Plans Found',
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontSize: 16),
                           ),
                         );
                       }
@@ -164,6 +166,7 @@ class ViewPlans extends StatelessWidget {
             const SizedBox(height: 8.0),
             // Days of the Week Section
             Container(
+              height: 50,
               decoration: BoxDecoration(
                 color: const Color(0xFF6149A7),
                 borderRadius: BorderRadius.circular(20.0),
@@ -202,7 +205,8 @@ class ViewPlans extends StatelessWidget {
             ),
             const SizedBox(height: 8.0),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment:
+                  MainAxisAlignment.center, // Centers the entire row
               children: [
                 InkWell(
                   onTap: () {
@@ -210,16 +214,17 @@ class ViewPlans extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => UpdatePlans(
-                            title: title,
-                            planId: planId,
-                            startTime: startTime,
-                            endTime: endTime,
-                            selectedDays: selectedDays,
-                          )),
+                                title: title,
+                                planId: planId,
+                                startTime: startTime,
+                                endTime: endTime,
+                                selectedDays: selectedDays,
+                              )),
                     );
                   },
-                  child: Container(
-                    padding: const EdgeInsets.only(left: 16),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0), // Equal padding
                     child: const Text(
                       'Update Plan',
                       style: TextStyle(
@@ -231,21 +236,25 @@ class ViewPlans extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                  width: 1,
-                  height: 24,
-                  color: Colors.white,
+                SizedBox(
+                  height: 24, // Set height equal to the text
+                  child: const VerticalDivider(
+                    color: Colors.white,
+                    thickness: 2, // Set the thickness of the divider
+                    width: 20, // Space between the texts
+                  ),
                 ),
                 InkWell(
                   onTap: () {
                     _deletePlan(context, planId, title);
                   },
-                  child: Container(
-                    padding: const EdgeInsets.only(right: 16),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0), // Equal padding
                     child: const Text(
                       'Delete Plan',
                       style: TextStyle(
-                        color: Color(0xFFE4DCFF),
+                        color: Color(0xFFFF474C),
                         fontSize: 20,
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.bold,
@@ -255,6 +264,9 @@ class ViewPlans extends StatelessWidget {
                 ),
               ],
             ),
+            SizedBox(
+              height: 16,
+            )
           ],
         ),
       ),
@@ -266,16 +278,16 @@ class ViewPlans extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: const Color(0xFF1F1249),
+          backgroundColor: Theme.of(context).colorScheme.onSecondary,
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Icon(
                     Icons.delete,
-                    color: Color(0xFFB4A9D6),
+                    color: Theme.of(context).colorScheme.primary,
                     size: 30,
                   ),
                 ],
@@ -283,8 +295,8 @@ class ViewPlans extends StatelessWidget {
               const SizedBox(height: 16),
               Text(
                 'Are you sure you want to delete "$title"?',
-                style: const TextStyle(
-                  color: Colors.white,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.tertiary,
                   fontFamily: 'Montserrat',
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -316,10 +328,10 @@ class ViewPlans extends StatelessWidget {
                           borderRadius: BorderRadius.circular(30.0),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Cancel',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.tertiary,
                           fontFamily: 'Montserrat',
                           fontWeight: FontWeight.bold,
                         ),
