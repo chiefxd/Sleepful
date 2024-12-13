@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sleepful/controller/Authentication/change_password_controller.dart';
+import 'package:sleepful/view/Pages/Profile/profile.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});
@@ -86,7 +87,8 @@ class _EditPasswordState extends State<ChangePassword> {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const Profile()));
           },
           child: Padding(
             padding: const EdgeInsets.all(10.0),
@@ -219,7 +221,10 @@ class _EditPasswordState extends State<ChangePassword> {
                               // 3. Show success message and navigate back using Fluttertoast
                               showToast(
                                   'Password changed successfully!'); // Call your showToast function
-                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const Profile()));
                             }
                           } on FirebaseAuthException catch (e) {
                             // Handle errors using Fluttertoast

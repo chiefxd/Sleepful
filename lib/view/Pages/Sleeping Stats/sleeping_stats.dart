@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../Components/plus_button.dart';
 import '../../Navbar/bottom_navbar.dart';
+import '../home_page.dart';
 
 class SleepingStats extends StatefulWidget {
   final int selectedIndex; // Add selectedIndex parameter
@@ -43,7 +44,8 @@ class _SleepingStatsState extends State<SleepingStats> {
           elevation: 0,
           leading: GestureDetector(
             onTap: () {
-              Navigator.pop(context);
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (context) => HomePage()));
             },
             child: Padding(
               padding: const EdgeInsets.all(10.0),

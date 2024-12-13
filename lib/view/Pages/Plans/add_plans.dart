@@ -4,6 +4,7 @@ import '../../../controller/Plans/time_picker_controller.dart';
 import '../../Components/plus_button.dart';
 // import 'package:sleepful/view/Pages/Plans/time_picker_page.dart';
 import '../../Navbar/bottom_navbar.dart';
+import '../home_page.dart';
 
 class AddPlans extends StatefulWidget {
   const AddPlans({super.key});
@@ -111,7 +112,8 @@ class AddPlansState extends State<AddPlans> {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const HomePage()));
           },
           child: Padding(
             padding: const EdgeInsets.all(10.0),

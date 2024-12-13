@@ -7,6 +7,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sleepful/providers/user_data_provider.dart';
 import 'package:sleepful/view/Pages/Profile/edit_profile.dart';
 
+import '../home_page.dart';
+
 class Profile extends StatefulWidget {
   const Profile({super.key});
 
@@ -112,7 +114,11 @@ class _ProfileState extends State<Profile> {
                           ),
                           child: TextButton(
                             onPressed: () {
-                              Navigator.of(context).pop(); // Close the dialog
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const Profile())); // Close the dialog
                             },
                             style: TextButton.styleFrom(
                               padding:
@@ -217,7 +223,8 @@ class _ProfileState extends State<Profile> {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const HomePage()));
           },
           child: Padding(
             padding: const EdgeInsets.all(10.0),

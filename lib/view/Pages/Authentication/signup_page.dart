@@ -219,11 +219,10 @@ class _SignUpState extends State<SignUp> {
                       padding: const EdgeInsets.only(top: 5),
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SignIn()),
-                          );
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SignIn()));
                         },
                         child: Text(
                           'Already have an account? Sign In Here',
@@ -326,9 +325,9 @@ class _SignUpState extends State<SignUp> {
           child: TextFormField(
             controller: controller,
             obscureText: !_signupController.isPasswordVisible,
-             style: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          ),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
             decoration: InputDecoration(
               hintText: hintText,
               hintStyle: TextStyle(

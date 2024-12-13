@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sleepful/controller/Profile/edit_profile_controller.dart';
 import 'package:sleepful/providers/user_data_provider.dart';
+import 'package:sleepful/view/Pages/Profile/profile.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile(
@@ -120,7 +121,8 @@ class _EditProfileState extends State<EditProfile> {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const Profile()));
           },
           child: Padding(
             padding: const EdgeInsets.all(10.0),

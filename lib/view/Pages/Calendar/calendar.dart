@@ -4,6 +4,7 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../../Components/plus_button.dart';
 import '../../Navbar/bottom_navbar.dart';
+import '../home_page.dart';
 
 class Calendar extends StatefulWidget {
   final int selectedIndex;
@@ -50,7 +51,8 @@ class _CalendarState extends State<Calendar> {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Navigator.pop(context);
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => HomePage()));
           },
           child: Padding(
             padding: const EdgeInsets.all(10.0),

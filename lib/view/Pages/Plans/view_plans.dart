@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sleepful/view/Pages/Plans/update_plans.dart';
+import 'package:sleepful/view/Pages/home_page.dart';
 
 import '../../Components/plus_button.dart';
 import '../../Navbar/bottom_navbar.dart';
@@ -34,7 +35,10 @@ class ViewPlans extends StatelessWidget {
                   elevation: 0,
                   leading: GestureDetector(
                     onTap: () {
-                      Navigator.of(context).pop();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomePage()));
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sleepful/view/Pages/Plans/view_plans.dart';
 
 import '../../../controller/Plans/update_plan_controller.dart';
 import '../../Components/plus_button.dart';
@@ -87,7 +88,8 @@ class UpdatePlansState extends State<UpdatePlans> {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const ViewPlans()));
           },
           child: Padding(
             padding: const EdgeInsets.all(10.0),

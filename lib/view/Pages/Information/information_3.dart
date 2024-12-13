@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'information.dart';
+
 class InformationThree extends StatelessWidget {
   const InformationThree({super.key});
 
@@ -37,8 +39,11 @@ class InformationThree extends StatelessWidget {
                 elevation: 0,
                 leading: GestureDetector(
                   onTap: () {
-                    Navigator.of(context)
-                        .pop(); // Go back to the previous screen
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const Information())); // Go back to the previous screen
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
@@ -127,7 +132,8 @@ class InformationThree extends StatelessWidget {
                                       fontSize: textFontSize,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Montserrat',
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
                                   ),
                                 ),
@@ -167,7 +173,8 @@ class InformationThree extends StatelessWidget {
                                       fontSize: textFontSize,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Montserrat',
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
                                   ),
                                 ),
@@ -207,7 +214,8 @@ class InformationThree extends StatelessWidget {
                                       fontSize: textFontSize,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Montserrat',
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
                                   ),
                                 ),
@@ -247,7 +255,8 @@ class InformationThree extends StatelessWidget {
                                       fontSize: textFontSize,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Montserrat',
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
                                   ),
                                 ),
@@ -287,7 +296,8 @@ class InformationThree extends StatelessWidget {
                                       fontSize: textFontSize,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Montserrat',
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
                                   ),
                                 ),
@@ -327,7 +337,8 @@ class InformationThree extends StatelessWidget {
                                       fontSize: textFontSize,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Montserrat',
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
                                   ),
                                 ),
@@ -367,7 +378,8 @@ class InformationThree extends StatelessWidget {
                                       fontSize: textFontSize,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Montserrat',
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
                                   ),
                                 ),
@@ -407,7 +419,8 @@ class InformationThree extends StatelessWidget {
                                       fontSize: textFontSize,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Montserrat',
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
                                   ),
                                 ),
@@ -447,7 +460,8 @@ class InformationThree extends StatelessWidget {
                                       fontSize: textFontSize,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Montserrat',
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
                                   ),
                                 ),
