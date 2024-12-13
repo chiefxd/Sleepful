@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sleepful/providers/theme_provider.dart';
+import 'package:sleepful/view/Pages/Profile/profile.dart';
 
 import '../splash_screen.dart';
 
@@ -136,7 +137,8 @@ class _ChangeThemeState extends State<ChangeTheme> {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const Profile()));
           },
           child: Padding(
             padding: const EdgeInsets.all(10.0),

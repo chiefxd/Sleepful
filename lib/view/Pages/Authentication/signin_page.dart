@@ -223,11 +223,10 @@ class _SignInState extends State<SignIn> {
                       padding: const EdgeInsets.only(right: 30, top: 5),
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ForgotPassword()),
-                          );
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ForgotPassword()));
                         },
                         child: Text(
                           'Forgot Password?',
@@ -281,11 +280,10 @@ class _SignInState extends State<SignIn> {
                       padding: const EdgeInsets.only(top: 5),
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SignUp()),
-                          );
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SignUp()));
                         },
                         child: Text(
                           'Don’t have an account? Sign Up Here',

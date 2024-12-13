@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../Pages/Information/info_squares.dart';
+import '../home_page.dart';
 
 class Information extends StatelessWidget {
   const Information({super.key});
@@ -18,7 +19,10 @@ class Information extends StatelessWidget {
                   elevation: 0,
                   leading: GestureDetector(
                     onTap: () {
-                      Navigator.of(context).pop();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomePage()));
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),

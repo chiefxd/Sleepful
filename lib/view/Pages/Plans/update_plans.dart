@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sleepful/view/Pages/Plans/view_plans.dart';
 
 import '../../../controller/Plans/update_plan_controller.dart';
 import '../../Components/plus_button.dart';
@@ -74,6 +75,7 @@ class UpdatePlansState extends State<UpdatePlans> {
 
   @override
   Widget build(BuildContext context) {
+    final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
     // print('Update Plans Page');
     // print('Title: ${widget.title}');
     // print('Plan ID: ${widget.planId}');
@@ -81,49 +83,40 @@ class UpdatePlansState extends State<UpdatePlans> {
     // print('End Time: ${widget.endTime}');
     // print('Selected Days: ${widget.selectedDays}');
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const ViewPlans()));
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Image.asset(
+              'assets/images/buttonBack.png',
+              width: 48,
+              height: 48,
+            ),
+          ),
+        ),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 0),
+          child: Text(
+            'Update Plan',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Montserrat',
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ),
+      ),
       body: Stack(
         children: [
-          NestedScrollView(
-            headerSliverBuilder: (context, innerIsScrolled) {
-              return [
-                SliverAppBar(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  leading: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Image.asset(
-                        'assets/images/buttonBack.png',
-                        width: 48,
-                        height: 48,
-                      ),
-                    ),
-                  ),
-                  title: Padding(
-                    padding: const EdgeInsets.only(left: 0),
-                    child: Text(
-                      'Update Plan',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Montserrat',
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                  centerTitle: false,
-                  floating: false,
-                  snap: false,
-                  pinned: false,
-                  forceElevated: innerIsScrolled,
-                ),
-              ];
-            },
-            body: Padding(
+          SingleChildScrollView(
+            child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
@@ -463,7 +456,10 @@ class UpdatePlansState extends State<UpdatePlans> {
                   const SizedBox(height: 10),
                   TextField(
                     controller: titleController,
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontFamily: 'Montserrat',
+                    ),
                     decoration: InputDecoration(
                       // Set the bottom border to be visible
                       enabledBorder: UnderlineInputBorder(
@@ -520,29 +516,22 @@ class UpdatePlansState extends State<UpdatePlans> {
                       ),
                     ),
                   ),
-                  Text(
-                    'Selected Time: ${controller.selectedHour.toString().padLeft(2, '0')}:${controller.selectedMinute.toString().padLeft(2, '0')} ${controller.selectedPeriod}',
-                    style: TextStyle(fontSize: 12, color: Colors.white),
-                  ),
-                  Text('Start Time: ${controller.startTime}',
-                      style: TextStyle(fontSize: 12, color: Colors.white)),
-                  Text('End Time: ${controller.endTime}',
-                      style: TextStyle(fontSize: 12, color: Colors.white)),
                 ],
               ),
             ),
           ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: BottomNavbar(selectedIndex: -1),
-          ),
-          Positioned(
-            bottom: 56,
-            left: MediaQuery.of(context).size.width / 2 - 27,
-            child: const PlusButton(),
-          ),
+          // Fixed Bottom Navbar
+          if (!isKeyboardVisible) ...[
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: BottomNavbar(selectedIndex: -1),
+            ),
+            Positioned(
+              bottom: 56,
+              left: MediaQuery.of(context).size.width / 2 - 27,
+              child: const PlusButton(),
+            ),
+          ],
         ],
       ),
     );

@@ -90,55 +90,70 @@ class InfoSquares extends StatelessWidget {
           }
         },
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Container(
-            // Wrapwith Container
-            decoration: BoxDecoration(
-              color: Theme.of(context)
-                  .colorScheme
-                  .onSecondary, // Set background color
-              borderRadius: BorderRadius.circular(10), // Add rounded corners
-            ),
-            padding: const EdgeInsets.all(16.0), // Add padding
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: Image.asset(
-                    item.infoPictures,
-                    width: 150,
-                    height: 117,
-                    fit: BoxFit.cover,
-                  ),
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSecondary, // Background color
+                borderRadius: BorderRadius.circular(10), // Rounded corners
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.primary, // Border color
+                  width: 0.01, // Border thickness
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment
-                        .center, // Center align text vertically
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(item.infoTitle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black
+                        .withOpacity(0.1), // Shadow color with opacity
+                    blurRadius: 5, // Amount of blur
+                    offset: Offset(0, 0), // X and Y offset of the shadow
+                  ),
+                ],
+              ),
+              padding:
+                  const EdgeInsets.all(16.0), // Padding inside the container
+              child: Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image.asset(
+                      item.infoPictures,
+                      width: 150,
+                      height: 117,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment
+                          .center, // Center align text vertically
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.infoTitle,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: titleFontSize,
                             fontFamily: 'Montserrat',
                             color: Theme.of(context).colorScheme.primary,
-                          )),
-                      const SizedBox(height: 10.0),
-                      Text(item.infoArticle,
+                          ),
+                        ),
+                        const SizedBox(height: 10.0),
+                        Text(
+                          item.infoArticle,
                           style: TextStyle(
                             fontSize: subtitleFontSize,
                             fontFamily: 'Montserrat',
                             color:
                                 Theme.of(context).colorScheme.onSurfaceVariant,
-                          )),
-                    ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-        ));
+                ],
+              ),
+            )));
   }
 }

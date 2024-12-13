@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sleepful/providers/user_data_provider.dart';
+import 'package:sleepful/view/Pages/home_page.dart';
 
 import '../../Components/plus_button.dart';
 import '../../Navbar/bottom_navbar.dart';
@@ -86,8 +87,11 @@ class RewardsPage extends StatelessWidget {
                   elevation: 0,
                   leading: GestureDetector(
                     onTap: () {
-                      Navigator.of(context)
-                          .pop(); // Go back to the previous screen
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  HomePage())); // Go back to the previous screen
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),

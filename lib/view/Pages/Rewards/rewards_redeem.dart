@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sleepful/providers/rewards_provider.dart';
 import 'package:sleepful/providers/user_data_provider.dart';
+import 'package:sleepful/view/Pages/Rewards/rewards_page.dart';
 
 class RewardsRedeem extends StatelessWidget {
   final String imagePath; // Add imagePath parameter
@@ -153,7 +154,11 @@ class RewardsRedeem extends StatelessWidget {
 
                                   // Deduct points and navigate back
                                   userData.deductPoints(points);
-                                  Navigator.pop(context);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const RewardsPage()));
 
                                   showToast(
                                       "Successfully Redeemed!\nGo Check your Sound Page");
@@ -200,7 +205,11 @@ class RewardsRedeem extends StatelessWidget {
               padding: const EdgeInsets.all(0.0),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.of(context).pop(); // Go back to the previous screen
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const RewardsPage())); // Go back to the previous screen
                 },
                 child: Image.asset(
                   'assets/images/buttonBack.png',

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:sleepful/view/Pages/Profile/profile.dart';
 
 class AboutUs extends StatefulWidget {
   const AboutUs({super.key});
@@ -58,7 +59,8 @@ class _AboutUsState extends State<AboutUs> {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const Profile()));
           },
           child: Padding(
             padding: const EdgeInsets.all(10.0),

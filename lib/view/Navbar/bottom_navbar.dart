@@ -96,7 +96,8 @@ class BottomNavbarState extends State<BottomNavbar> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const SleepingStats()),
+                        builder: (context) =>
+                            const SleepingStats(selectedIndex: 3)),
                   );
                 },
                 color: isOnMainPage && widget.selectedIndex == 3

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sleepful/controller/Breathing%20Exercise/breathing_exercise_controller.dart';
 
+import '../home_page.dart';
+
 class BreathingExercise extends StatefulWidget {
   const BreathingExercise({super.key});
 
@@ -30,7 +32,8 @@ class _BreathingExerciseState extends State<BreathingExercise> {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const HomePage()));
           },
           child: Padding(
             padding: const EdgeInsets.all(10.0),
