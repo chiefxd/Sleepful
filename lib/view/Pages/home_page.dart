@@ -334,7 +334,7 @@ class _HomePageState extends State<HomePage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Information',
+                                      'Informations',
                                       style: TextStyle(
                                         fontSize: screenWidth * 0.07,
                                         fontWeight: FontWeight.bold,

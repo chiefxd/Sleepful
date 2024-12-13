@@ -56,14 +56,20 @@ class _SignUpState extends State<SignUp> {
                 padding: const EdgeInsets.only(top: 20.0),
                 child: ShaderMask(
                   shaderCallback: (Rect bounds) {
-                    return const LinearGradient(
+                    final bool isDarkMode =
+                        Theme.of(context).brightness == Brightness.dark;
+                    final Color baseColor =
+                        isDarkMode ? Color(0xFFB4A9D6) : Color(0xFF37256C);
+                    return LinearGradient(
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight,
                       stops: [0, 0.28, 1],
                       colors: [
-                        Color(0xFFB4A9D6),
-                        Color(0xFFB4A9D6),
-                        Color(0xFFB4A9D6),
+                        Color.lerp(
+                            baseColor, Colors.white, 0.0)!, // Lighten the color
+                        baseColor, // Base color
+                        Color.lerp(
+                            baseColor, Colors.black, 0.0)!, // Darken the color
                       ],
                     ).createShader(bounds);
                   },
@@ -80,14 +86,20 @@ class _SignUpState extends State<SignUp> {
               ),
               ShaderMask(
                 shaderCallback: (Rect bounds) {
-                  return const LinearGradient(
+                  final bool isDarkMode =
+                      Theme.of(context).brightness == Brightness.dark;
+                  final Color baseColor =
+                      isDarkMode ? Color(0xFFB4A9D6) : Color(0xFF37256C);
+                  return LinearGradient(
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
                     stops: [0, 0.28, 1],
                     colors: [
-                      Color(0xFFB4A9D6),
-                      Color(0xFFB4A9D6),
-                      Color(0xFFB4A9D6),
+                      Color.lerp(
+                          baseColor, Colors.white, 0.0)!, // Lighten the color
+                      baseColor, // Base color
+                      Color.lerp(
+                          baseColor, Colors.black, 0.0)!, // Darken the color
                     ],
                   ).createShader(bounds);
                 },
@@ -128,11 +140,15 @@ class _SignUpState extends State<SignUp> {
                     ),
                     child: TextField(
                       controller: _nameController,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
                       decoration: InputDecoration(
                         hintText: 'Enter your name',
                         hintStyle: TextStyle(
                             fontFamily: 'Montserrat',
-                            fontSize: subtitleFontSize),
+                            fontSize: subtitleFontSize,
+                            color: Colors.grey[800]),
                         border: InputBorder.none,
                       ),
                     ),
@@ -262,10 +278,15 @@ class _SignUpState extends State<SignUp> {
           ),
           child: TextField(
             controller: controller,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
             decoration: InputDecoration(
               hintText: hintText,
               hintStyle: TextStyle(
-                  fontFamily: 'Montserrat', fontSize: subtitleFontSize),
+                  fontFamily: 'Montserrat',
+                  fontSize: subtitleFontSize,
+                  color: Colors.grey[800]),
               border: InputBorder.none,
             ),
           ),
@@ -305,11 +326,15 @@ class _SignUpState extends State<SignUp> {
           child: TextFormField(
             controller: controller,
             obscureText: !_signupController.isPasswordVisible,
+             style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          ),
             decoration: InputDecoration(
               hintText: hintText,
               hintStyle: TextStyle(
                 fontFamily: 'Montserrat',
                 fontSize: subtitleFontSize,
+                color: Colors.grey[800],
               ),
               border: InputBorder.none,
               contentPadding: const EdgeInsets.symmetric(vertical: 10),

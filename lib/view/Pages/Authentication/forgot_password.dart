@@ -98,14 +98,20 @@ class ForgotPassword extends StatelessWidget {
                   ),
                   ShaderMask(
                     shaderCallback: (Rect bounds) {
-                      return const LinearGradient(
+                      final bool isDarkMode =
+                          Theme.of(context).brightness == Brightness.dark;
+                      final Color baseColor =
+                          isDarkMode ? Color(0xFFB4A9D6) : Color(0xFF37256C);
+                      return LinearGradient(
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
                         stops: [0, 0.28, 1],
                         colors: [
-                          Color(0xFFB4A9D6),
-                          Color(0xFFB4A9D6),
-                          Color(0xFFB4A9D6),
+                          Color.lerp(baseColor, Colors.white,
+                              0.0)!, // Lighten the color
+                          baseColor, // Base color
+                          Color.lerp(baseColor, Colors.black,
+                              0.0)!, // Darken the color
                         ],
                       ).createShader(bounds);
                     },
@@ -144,9 +150,15 @@ class ForgotPassword extends StatelessWidget {
                         ),
                         child: TextField(
                           controller: _emailController,
-                          decoration: const InputDecoration(
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          ),
+                          decoration: InputDecoration(
                             hintText: 'Enter your e-mail',
-                            hintStyle: TextStyle(fontFamily: 'Montserrat'),
+                            hintStyle: TextStyle(
+                              fontFamily: 'Montserrat',
+                              color: Colors.grey[800],
+                            ),
                             border: InputBorder.none,
                           ),
                         ),
