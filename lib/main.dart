@@ -71,17 +71,17 @@ class _MyAppState extends State<MyApp> {
   final lightTheme = ThemeData(
     scaffoldBackgroundColor: const Color(0xFFECE9F6),
     colorScheme: ColorScheme.light(
-      primary: Color(0xFF37256C),
-      secondary: Color(0xFF1F1249),
-      tertiary: Color(0xFF37256C),
-      surface: Color(0xFFE4DDFA),
-      error: Color(0xFF37256C), //button
-      onError: Color(0xFF37256C),
-      onSurface: Color(0xFF37256C),
-      onSecondary: Color(0xFFE8E2FB),
-      onPrimary: Color(0xFFE6E2F4),
-      onTertiary: Color(0xFF37256C),
-    ),
+        primary: Color(0xFF37256C),
+        secondary: Color(0xFF1F1249),
+        tertiary: Color(0xFF37256C),
+        surface: Color(0xFFE4DDFA),
+        error: Color(0xFF37256C), //button
+        onError: Color(0xFF37256C),
+        onSurface: Color(0xFF37256C),
+        onSecondary: Color(0xFFE8E2FB),
+        onPrimary: Color(0xFFE6E2F4),
+        onTertiary: Color(0xFF37256C),
+        onInverseSurface: Color(0xFF1F1249)),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: Color(0xFF37256C)),
       bodyMedium: TextStyle(color: Color(0xFF37256C)),
@@ -101,7 +101,8 @@ class _MyAppState extends State<MyApp> {
         onSurface: Color(0xFF7D64CA),
         onSecondary: Color(0xFF1F1249),
         onPrimary: Color(0xFF1F1249),
-        onTertiary: Color(0xFF725FAC)),
+        onTertiary: Color(0xFF725FAC),
+        onInverseSurface: Color(0xFF979797)),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: Color(0xFFB4A9D6)),
       bodyMedium: TextStyle(color: Color(0xFFB4A9D6)),

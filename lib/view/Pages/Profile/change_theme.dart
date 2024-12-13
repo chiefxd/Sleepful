@@ -43,7 +43,7 @@ class _ChangeThemeState extends State<ChangeTheme> {
       msg: message,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
       textColor: Colors.white,
       fontSize: 16.0,
     );

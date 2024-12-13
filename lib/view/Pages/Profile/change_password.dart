@@ -67,12 +67,13 @@ class _EditPasswordState extends State<ChangePassword> {
     double buttonFontSize = screenWidth * 0.05;
     double buttonSize = screenWidth * 0.3;
 
+    // Show Toast
     void showToast(String message) {
       Fluttertoast.showToast(
         msg: message,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.black,
+        backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
         textColor: Colors.white,
         fontSize: 16.0,
       );

@@ -7,20 +7,20 @@ class ForgotPassword extends StatelessWidget {
 
   final TextEditingController _emailController = TextEditingController();
 
-  // Show Toast
-  void showToast(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.black,
-      textColor: Colors.white,
-      fontSize: 16.0,
-    );
-  }
-
   // Handle Password Reset
   Future<void> sendPasswordResetEmail(BuildContext context) async {
+    // Show Toast
+    void showToast(String message) {
+      Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
+
     String email = _emailController.text.trim();
     if (email.isEmpty) {
       showToast("Please enter your email.");
