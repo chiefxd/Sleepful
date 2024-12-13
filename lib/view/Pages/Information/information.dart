@@ -9,7 +9,6 @@ class Information extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
-        // Use Stack to position the PlusButton
         children: [
           NestedScrollView(
             headerSliverBuilder: (context, innerIsScrolled) {
@@ -19,43 +18,38 @@ class Information extends StatelessWidget {
                   elevation: 0,
                   leading: GestureDetector(
                     onTap: () {
-                      Navigator.of(context)
-                          .pop(); // Go back to the previous screen
+                      Navigator.of(context).pop();
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Image.asset(
-                        'assets/images/buttonBack.png', // Use the same back button image
+                        'assets/images/buttonBack.png',
                         width: 48,
                         height: 48,
                       ),
                     ),
                   ),
-                  title: Padding(
-                    padding: const EdgeInsets.only(left: 0),
-                    child: Text(
-                      'Informations',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        fontFamily:
-                            'Montserrat', // Ensure the same font family is used
-                        color: Theme.of(context)
-                            .colorScheme
-                            .primary, // Use the same color as in profile.dart
-                      ),
+                  title: Text(
+                    'Informations',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Montserrat',
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                   centerTitle: false,
                   floating: false,
                   snap: false,
-                  pinned: false,
+                  pinned:
+                      false, // This will keep the SliverAppBar visible and avoid space
                   forceElevated: innerIsScrolled,
                 ),
               ];
             },
             body: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 20.0), // Remove top padding
               child: Column(
                 children: [
                   Expanded(
@@ -66,11 +60,6 @@ class Information extends StatelessWidget {
               ),
             ),
           ),
-          // Positioned(
-          //   bottom: 56,
-          //   left: MediaQuery.of(context).size.width / 2 - 27,
-          //   child: const PlusButton(),
-          // ),
         ],
       ),
     );

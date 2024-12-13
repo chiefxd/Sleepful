@@ -54,7 +54,7 @@ class InfoSquares extends StatelessWidget {
               aspectRatio: 2.274 / 1, // Set desired aspect ratio
               child: _buildCardItem(context, index, item),
             ),
-            if (index < infoAvailable.length - 1) const SizedBox(height: 46.0),
+            if (index < infoAvailable.length - 1) const SizedBox(height: 15.0),
           ],
         );
       },
@@ -64,7 +64,7 @@ class InfoSquares extends StatelessWidget {
   Widget _buildCardItem(BuildContext context, int index, InfoPart item) {
     double screenWidth = MediaQuery.of(context).size.width;
     double titleFontSize = screenWidth * 0.028;
-    double subtitleFontSize = screenWidth * 0.025;
+    double subtitleFontSize = screenWidth * 0.02;
 
     return GestureDetector(
         onTap: () {
@@ -94,7 +94,9 @@ class InfoSquares extends StatelessWidget {
           child: Container(
             // Wrapwith Container
             decoration: BoxDecoration(
-              color: Color(0xFF1F1249), // Set background color
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSecondary, // Set background color
               borderRadius: BorderRadius.circular(10), // Add rounded corners
             ),
             padding: const EdgeInsets.all(16.0), // Add padding
@@ -112,6 +114,8 @@ class InfoSquares extends StatelessWidget {
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment
+                        .center, // Center align text vertically
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(item.infoTitle,
@@ -119,15 +123,15 @@ class InfoSquares extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             fontSize: titleFontSize,
                             fontFamily: 'Montserrat',
-                            color: Color(0xFFFFFFFF),
+                            color: Theme.of(context).colorScheme.primary,
                           )),
                       const SizedBox(height: 10.0),
                       Text(item.infoArticle,
                           style: TextStyle(
-                            fontWeight: FontWeight.normal,
                             fontSize: subtitleFontSize,
                             fontFamily: 'Montserrat',
-                            color: Color(0xFFE4DCFF),
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
                           )),
                     ],
                   ),

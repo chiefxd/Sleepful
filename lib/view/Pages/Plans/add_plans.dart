@@ -138,8 +138,9 @@ class AddPlansState extends State<AddPlans> {
                                     fontFamily: 'Montserrat',
                                     color: index == selectedHourIndex
                                         ? Colors.white
-                                        : Colors.white.withOpacity(
-                                            0.5), // Change text color if selected
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onErrorContainer, // Change text color if selected
                                   ),
                                 ),
                               );
@@ -233,8 +234,9 @@ class AddPlansState extends State<AddPlans> {
                                     fontFamily: 'Montserrat',
                                     color: index == selectedMinuteIndex
                                         ? Colors.white
-                                        : Colors.white.withOpacity(
-                                            0.5), // Change text color if selected
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onErrorContainer, // Change text color if selected
                                   ),
                                 ),
                               );
@@ -277,8 +279,9 @@ class AddPlansState extends State<AddPlans> {
                                     fontFamily: 'Montserrat',
                                     color: isStartAM == (index == 0)
                                         ? Colors.white
-                                        : Colors.white.withOpacity(
-                                            0.5), // Change text color if selected
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onErrorContainer, // Change text color if selected
                                   ),
                                 ),
                               );

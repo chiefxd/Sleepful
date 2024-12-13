@@ -81,7 +81,9 @@ class _MyAppState extends State<MyApp> {
         onSecondary: Color(0xFFE8E2FB),
         onPrimary: Color(0xFFE6E2F4),
         onTertiary: Color(0xFF37256C),
-        onInverseSurface: Color(0xFF222222)),
+        onErrorContainer: Color(0xFF37256C),
+        onInverseSurface: Color(0xFF222222),
+        onSurfaceVariant: Color(0xFF7D64CA)),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: Color(0xFF37256C)),
       bodyMedium: TextStyle(color: Color(0xFF37256C)),
@@ -102,7 +104,9 @@ class _MyAppState extends State<MyApp> {
         onSecondary: Color(0xFF1F1249),
         onPrimary: Color(0xFF1F1249),
         onTertiary: Color(0xFF725FAC),
-        onInverseSurface: Color(0xFF979797)),
+        onErrorContainer: Colors.white.withOpacity(0.5),
+        onInverseSurface: Color(0xFF979797),
+        onSurfaceVariant: Color(0xFFE4DCFF)),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: Color(0xFFB4A9D6)),
       bodyMedium: TextStyle(color: Color(0xFFB4A9D6)),

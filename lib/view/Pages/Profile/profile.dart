@@ -80,15 +80,15 @@ class _ProfileState extends State<Profile> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                backgroundColor: const Color(0xFF1F1249),
+                backgroundColor: Theme.of(context).colorScheme.onSecondary,
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const SizedBox(height: 16),
-                    const Text(
+                    Text(
                       'Are you sure you want to log out?',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.tertiary,
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -121,10 +121,10 @@ class _ProfileState extends State<Profile> {
                                 borderRadius: BorderRadius.circular(30.0),
                               ),
                             ),
-                            child: const Text(
+                            child: Text(
                               'Cancel',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Theme.of(context).colorScheme.tertiary,
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.bold,
                               ),
