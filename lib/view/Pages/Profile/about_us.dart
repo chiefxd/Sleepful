@@ -138,7 +138,8 @@ class _AboutUsState extends State<AboutUs> {
                           style: TextStyle(
                             fontSize: miniFontSize,
                             fontFamily: 'Montserrat',
-                            color: Theme.of(context).textTheme.bodyMedium?.color,
+                            color:
+                                Theme.of(context).textTheme.bodyMedium?.color,
                           ),
                         ),
                       ),
@@ -154,7 +155,8 @@ class _AboutUsState extends State<AboutUs> {
                           style: TextStyle(
                             fontSize: miniFontSize,
                             fontFamily: 'Montserrat',
-                            color: Theme.of(context).textTheme.bodyMedium?.color,
+                            color:
+                                Theme.of(context).textTheme.bodyMedium?.color,
                           ),
                         ),
                       ),
@@ -174,7 +176,7 @@ class _AboutUsState extends State<AboutUs> {
               style: TextStyle(
                 fontSize: miniFontSize,
                 fontFamily: 'Montserrat',
-                color: Theme.of(context).textTheme.bodySmall?.color,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
               ),
             ),
           ),

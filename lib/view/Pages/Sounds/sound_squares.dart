@@ -111,7 +111,7 @@ class SoundSquares extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             fontSize: titleFontSize,
                             fontFamily: 'Montserrat',
-                            color: Color(0xFFAB9FD1),
+                            color: Theme.of(context).colorScheme.primary,
                           )),
                     ),
                     Center(
@@ -120,7 +120,7 @@ class SoundSquares extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             fontSize: subtitleFontSize,
                             fontFamily: 'Montserrat',
-                            color: Color(0xFF6A5B9A),
+                            color: Theme.of(context).colorScheme.secondary,
                           )),
                     ),
                     const SizedBox(
@@ -133,7 +133,7 @@ class SoundSquares extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           fontSize: subtitleFontSize,
                           fontFamily: 'Montserrat',
-                          color: Color(0xFF6A5B9A),
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
                     ),
@@ -145,22 +145,3 @@ class SoundSquares extends StatelessWidget {
         ));
   }
 }
-
-// @override
-// Widget build(BuildContext context) {
-//   return GridView.builder(
-//       itemCount: SoundAvailable.length,
-//       padding: EdgeInsets.all(10),
-//       gridDelegate:
-//       SliverGridDelegateWithFixedCrossAxisCount
-//         (crossAxisCount: 2),
-//       itemBuilder: (context, index) {
-//         return SoundPart(
-//             pictures: SoundAvailable[index].pictures,
-//             soundTitle: SoundAvailable[index].soundTitle,
-//             soundGenre: SoundAvailable[index].soundGenre,
-//             soundDuration: SoundAvailable[index].soundDuration
-//         );
-//       },
-//   );
-// }

@@ -211,7 +211,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
               fontSize: menuFontSize,
               fontWeight: FontWeight.bold,
               fontFamily: 'Montserrat',
-              color: Color(0xFFAB9FD1),
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
         ),
@@ -250,7 +250,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
                         fontWeight: FontWeight.bold,
                         fontSize: titleFontSize,
                         fontFamily: 'Montserrat',
-                        color: Color(0xFFAB9FD1),
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ),
@@ -264,7 +264,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
                             fontWeight: FontWeight.bold,
                             fontSize: subtitleFontSize,
                             fontFamily: 'Montserrat',
-                            color: Color(0xFF6A5B9A),
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                         ),
                         const SizedBox(height: 5.0),
@@ -274,7 +274,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
                             fontWeight: FontWeight.bold,
                             fontSize: miniFontSize,
                             fontFamily: 'Montserrat',
-                            color: Color(0xFF6A5B9A),
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                         ),
                       ],
@@ -293,7 +293,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
                     style: TextStyle(
                       fontSize: miniFontSize,
                       fontFamily: 'Montserrat',
-                      color: Color(0xFF6A5B9A),
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                   Text(
@@ -301,7 +301,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
                     style: TextStyle(
                       fontSize: miniFontSize,
                       fontFamily: 'Montserrat',
-                      color: Color(0xFF6A5B9A),
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ],
@@ -309,9 +309,9 @@ class _SoundPlayerState extends State<SoundPlayer> {
             ),
             SliderTheme(
               data: SliderThemeData(
-                activeTrackColor: Color(0xFF6A5B9A),
-                inactiveTrackColor: Color(0xFFB4A9D6),
-                thumbColor: Color(0xFF6A5B9A),
+                activeTrackColor: Theme.of(context).colorScheme.primary,
+                inactiveTrackColor: Theme.of(context).colorScheme.secondary,
+                thumbColor: Theme.of(context).colorScheme.primary,
                 thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6.0),
                 trackHeight: 3.0,
               ),
@@ -331,7 +331,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
               children: [
                 IconButton(
                   iconSize: 30.0,
-                  color: Color(0xFF6A5B9A),
+                  color: Theme.of(context).colorScheme.secondary,
                   icon: const Icon(Icons.fast_rewind),
                   onPressed: () {
                     player.seek(Duration(
@@ -343,7 +343,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
                 const SizedBox(width: 15.0),
                 IconButton(
                   iconSize: 30.0,
-                  color: Color(0xFF6A5B9A),
+                  color: Theme.of(context).colorScheme.secondary,
                   icon: Icon(audioPlay ? Icons.pause : Icons.play_arrow),
                   onPressed: () {
                     setState(() {
@@ -359,7 +359,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
                 const SizedBox(width: 15.0),
                 IconButton(
                   iconSize: 30.0,
-                  color: Color(0xFF6A5B9A),
+                  color: Theme.of(context).colorScheme.secondary,
                   icon: const Icon(Icons.fast_forward),
                   onPressed: () {
                     player.seek(Duration(

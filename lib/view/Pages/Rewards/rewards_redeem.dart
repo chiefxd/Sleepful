@@ -42,7 +42,7 @@ class RewardsRedeem extends StatelessWidget {
         msg: message,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.black,
+        backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
         textColor: Colors.white,
         fontSize: 16.0,
       );
@@ -81,7 +81,7 @@ class RewardsRedeem extends StatelessWidget {
                               fontSize: largeTextFontSize,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Montserrat',
-                              color: Color(0xFFE4DCFF),
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                           Text(
@@ -89,7 +89,7 @@ class RewardsRedeem extends StatelessWidget {
                             style: TextStyle(
                               fontSize: smallTextFontSize,
                               fontFamily: 'Montserrat',
-                              color: Color(0xFFE4DCFF),
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ],
@@ -102,7 +102,7 @@ class RewardsRedeem extends StatelessWidget {
                         style: TextStyle(
                           fontSize: subtitleFontSize,
                           fontFamily: 'Montserrat',
-                          color: Color(0xFFE4DCFF),
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                       SizedBox(height: 16.0),
@@ -112,7 +112,7 @@ class RewardsRedeem extends StatelessWidget {
                         style: TextStyle(
                           fontSize: smallTextFontSize,
                           fontFamily: 'Montserrat',
-                          color: Color(0xFFE4DCFF),
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                     ],
@@ -125,7 +125,7 @@ class RewardsRedeem extends StatelessWidget {
                   padding: EdgeInsets.all(16.0),
                   margin: EdgeInsets.all(0.0),
                   decoration: BoxDecoration(
-                    color: Color(0xFF1F1249),
+                    color: Theme.of(context).colorScheme.onSecondary,
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: Row(
@@ -134,7 +134,7 @@ class RewardsRedeem extends StatelessWidget {
                       Text(
                         '$points PTS',
                         style: TextStyle(
-                          color: Color(0xFFE4DCFF),
+                          color: Theme.of(context).colorScheme.primary,
                           fontSize: bottomText,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Montserrat',
@@ -161,7 +161,7 @@ class RewardsRedeem extends StatelessWidget {
                               : null, // Disable button if not enough points
                           style: ElevatedButton.styleFrom(
                             backgroundColor: hasEnoughPoints
-                                ? Color(0xFFE4DCFF)
+                                ? Theme.of(context).colorScheme.primary
                                 : Color(
                                     0xFF5A5A5A), // Use a gray color for disabled state
                             disabledBackgroundColor: const Color(
@@ -177,7 +177,7 @@ class RewardsRedeem extends StatelessWidget {
                             hasEnoughPoints ? 'Redeem' : 'Insufficient Points',
                             style: TextStyle(
                               color: hasEnoughPoints
-                                  ? Color(0xFF120C23)
+                                  ? Theme.of(context).colorScheme.onSecondary
                                   : Colors.white,
                               fontSize: bottomText,
                               fontWeight: FontWeight.bold,

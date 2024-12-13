@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../Navbar/bottom_navbar.dart';
-import '../../Components/plus_button.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:sleepful/controller/Calendar/today_plan_controller.dart'; // Import the SleepPlanController
+import 'package:table_calendar/table_calendar.dart';
+
+import '../../Components/plus_button.dart';
+import '../../Navbar/bottom_navbar.dart';
 
 class Calendar extends StatefulWidget {
   final int selectedIndex;
@@ -68,7 +69,7 @@ class _CalendarState extends State<Calendar> {
               fontSize: titleFontSize,
               fontWeight: FontWeight.bold,
               fontFamily: 'Montserrat',
-              color: Color(0xFFB4A9D6),
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
         ),
@@ -76,31 +77,31 @@ class _CalendarState extends State<Calendar> {
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
                 SingleChildScrollView(
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Color(0xFF1F1249),
+                      color: Theme.of(context).colorScheme.onSecondary,
                     ),
                     child: TableCalendar(
                       locale: "en_US",
-                      rowHeight: 60,
+                      rowHeight: 50,
                       headerStyle: HeaderStyle(
                         titleCentered: true,
                         formatButtonVisible: false,
                         leftChevronIcon: Icon(
                           Icons.arrow_back_ios,
-                          color: Color(0xFFB4A9D6),
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                         rightChevronIcon: Icon(
                           Icons.arrow_forward_ios,
-                          color: Color(0xFFB4A9D6),
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                         titleTextStyle: TextStyle(
-                          color: Color(0xFFB4A9D6),
+                          color: Theme.of(context).colorScheme.primary,
                           fontSize: titleFontSize,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Montserrat',
@@ -115,13 +116,13 @@ class _CalendarState extends State<Calendar> {
                       onDaySelected: onDaySelected,
                       daysOfWeekStyle: DaysOfWeekStyle(
                         weekdayStyle: TextStyle(
-                          color: Color(0xFFAB9FD1),
+                          color: Theme.of(context).colorScheme.primary,
                           fontSize: subtitleFontSize,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Montserrat',
                         ),
                         weekendStyle: TextStyle(
-                          color: Color(0xFFAB9FD1),
+                          color: Theme.of(context).colorScheme.primary,
                           fontSize: subtitleFontSize,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Montserrat',
@@ -129,17 +130,17 @@ class _CalendarState extends State<Calendar> {
                       ),
                       calendarStyle: CalendarStyle(
                         defaultTextStyle: TextStyle(
-                          color: Color(0xFFB4A9D6),
+                          color: Theme.of(context).colorScheme.primary,
                           fontSize: subtitleFontSize,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Montserrat',
                         ),
                         selectedDecoration: BoxDecoration(
-                          color: Color(0xFFB4A9D6),
+                          color: Theme.of(context).colorScheme.primary,
                           shape: BoxShape.circle,
                         ),
                         selectedTextStyle: TextStyle(
-                          color: Color(0xFF412E80),
+                          color: Theme.of(context).colorScheme.surface,
                           fontSize: subtitleFontSize,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Montserrat',
@@ -171,17 +172,17 @@ class _CalendarState extends State<Calendar> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 10), // Add margin for spacing
+                  margin: EdgeInsets.only(top: 20), // Add margin for spacing
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Color(0xFF1F1249),
+                    color: Theme.of(context).colorScheme.onSecondary,
                     border: Border.all(color: Color(0xFFB4A9D6), width: 1),
                   ),
                   child: Text(
                     sleepPlan ?? "No sleep plan for this date.",
                     style: TextStyle(
-                      color: Color(0xFFB4A9D6),
+                      color: Theme.of(context).colorScheme.primary,
                       fontSize: subtitleFontSize,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Montserrat',

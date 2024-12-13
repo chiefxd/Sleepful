@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../Navbar/bottom_navbar.dart';
+
 import '../../Components/plus_button.dart';
+import '../../Navbar/bottom_navbar.dart';
 
 class UpdatePlans extends StatefulWidget {
   final String title;
@@ -80,15 +81,15 @@ class UpdatePlansState extends State<UpdatePlans> {
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Montserrat',
-                        color: Color(0xFFB4A9D6),
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ),
-                centerTitle: false,
-                floating: false,
-                snap: false,
-                pinned: false,
-                forceElevated: innerIsScrolled,
+                  centerTitle: false,
+                  floating: false,
+                  snap: false,
+                  pinned: false,
+                  forceElevated: innerIsScrolled,
                 ),
               ];
             },
@@ -122,7 +123,7 @@ class UpdatePlansState extends State<UpdatePlans> {
                               return Container(
                                 decoration: BoxDecoration(
                                   color: index == selectedHourIndex
-                                      ? Color(0xFF6A5ACD)
+                                      ? Theme.of(context).colorScheme.onError
                                       : Colors.transparent,
                                   // Change color if selected
                                   borderRadius: BorderRadius.only(
@@ -140,7 +141,7 @@ class UpdatePlansState extends State<UpdatePlans> {
                                     color: index == selectedHourIndex
                                         ? Colors.white
                                         : Colors.white.withOpacity(
-                                        0.5), // Change text color if selected
+                                            0.5), // Change text color if selected
                                   ),
                                 ),
                               );
@@ -155,12 +156,13 @@ class UpdatePlansState extends State<UpdatePlans> {
                         child: Container(
                           decoration: BoxDecoration(
                             color: (selectedHourIndex != -1 ||
-                                selectedMinuteIndex != -1)
-                                ? Color(
-                                0xFF6A5ACD) // Change color if hour or minute is selected
+                                    selectedMinuteIndex != -1)
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .onError // Change color if hour or minute is selected
                                 : Colors.transparent, // Default color
                             borderRadius:
-                            BorderRadius.circular(0), // No rounding
+                                BorderRadius.circular(0), // No rounding
                           ),
                           alignment: Alignment.center,
                           child: Stack(
@@ -218,7 +220,7 @@ class UpdatePlansState extends State<UpdatePlans> {
                               return Container(
                                 decoration: BoxDecoration(
                                   color: index == selectedMinuteIndex
-                                      ? Color(0xFF6A5ACD)
+                                      ? Theme.of(context).colorScheme.onError
                                       : Colors.transparent,
                                   // Change color if selected
                                   borderRadius: BorderRadius.circular(
@@ -234,7 +236,7 @@ class UpdatePlansState extends State<UpdatePlans> {
                                     color: index == selectedMinuteIndex
                                         ? Colors.white
                                         : Colors.white.withOpacity(
-                                        0.5), // Change text color if selected
+                                            0.5), // Change text color if selected
                                   ),
                                 ),
                               );
@@ -260,7 +262,7 @@ class UpdatePlansState extends State<UpdatePlans> {
                               return Container(
                                 decoration: BoxDecoration(
                                   color: isStartAM == (index == 0)
-                                      ? Color(0xFF6A5ACD)
+                                      ? Theme.of(context).colorScheme.onError
                                       : Colors.transparent,
                                   // Change color if selected
                                   borderRadius: BorderRadius.only(
@@ -278,7 +280,7 @@ class UpdatePlansState extends State<UpdatePlans> {
                                     color: isStartAM == (index == 0)
                                         ? Colors.white
                                         : Colors.white.withOpacity(
-                                        0.5), // Change text color if selected
+                                            0.5), // Change text color if selected
                                   ),
                                 ),
                               );
@@ -314,7 +316,8 @@ class UpdatePlansState extends State<UpdatePlans> {
                                     : Colors.white,
                                 side: BorderSide(
                                   color: isStartSelected
-                                      ? Color(0xFFB4A9D6) // Change border color to B4A9D6 when selected
+                                      ? Color(
+                                          0xFFB4A9D6) // Change border color to B4A9D6 when selected
                                       : Colors.white,
                                 ),
                                 padding: const EdgeInsets.symmetric(
@@ -383,10 +386,10 @@ class UpdatePlansState extends State<UpdatePlans> {
                   // Name Your Plan Section
                   Align(
                     alignment: Alignment.centerLeft, // Align to the left
-                    child: const Text(
+                    child: Text(
                       'Name Your Plan',
                       style: TextStyle(
-                        color: Color(0xFFE4DCFF),
+                        color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Montserrat',
                         fontStyle: FontStyle.italic,
@@ -400,26 +403,28 @@ class UpdatePlansState extends State<UpdatePlans> {
                       // Set the bottom border to be visible
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
-                            color: Color(0xFFB4A9D6),
+                            color: Theme.of(context).colorScheme.primary,
                             width:
-                            2.0), // Set the bottom border color and width
+                                2.0), // Set the bottom border color and width
                       ),
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
-                            color: Color(0xFFB4A9D6),
+                            color: Theme.of(context).colorScheme.primary,
                             width:
-                            2.0), // Set the focused bottom border color and width
+                                2.0), // Set the focused bottom border color and width
                       ),
                       errorBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.red,
                             width:
-                            2.0), // Set the error bottom border color and width
+                                2.0), // Set the error bottom border color and width
                       ),
                       hintText: 'Enter plan name',
                       hintStyle: TextStyle(
-                          color: Colors.white.withOpacity(
-                              0.5)), // Optional: Change hint text color
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.color), // Optional: Change hint text color
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -428,9 +433,8 @@ class UpdatePlansState extends State<UpdatePlans> {
                   ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF6149A7),
-                      // Same background color as Start button
-                      foregroundColor: Color(0xFF1F1249),
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                      foregroundColor: Colors.white,
                       // Same foreground color as Start button
                       padding: const EdgeInsets.symmetric(
                           horizontal: 35.0,

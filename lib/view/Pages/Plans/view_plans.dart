@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sleepful/view/Pages/Plans/update_plans.dart';
 
-import '../../Navbar/bottom_navbar.dart';
 import '../../Components/plus_button.dart';
+import '../../Navbar/bottom_navbar.dart';
 
 class ViewPlans extends StatelessWidget {
   const ViewPlans({super.key});
@@ -36,23 +36,24 @@ class ViewPlans extends StatelessWidget {
                   ),
                   title: Padding(
                     padding: const EdgeInsets.only(left: 0),
-                    child: const Text(
+                    child: Text(
                       'Your Plans',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Montserrat',
                         // Ensure the same font family is used
-                        color: Color(
-                            0xFFB4A9D6), // Use the same color as in profile.dart
+                        color: Theme.of(context)
+                            .colorScheme
+                            .primary, // Use the same color as in profile.dart
                       ),
                     ),
                   ),
-                centerTitle: false,
-                floating: false,
-                snap: false,
-                pinned: false,
-                forceElevated: innerIsScrolled,
+                  centerTitle: false,
+                  floating: false,
+                  snap: false,
+                  pinned: false,
+                  forceElevated: innerIsScrolled,
                 ),
               ];
             },

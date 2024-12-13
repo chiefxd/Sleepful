@@ -15,20 +15,20 @@ class SignInController {
     this.isPasswordVisible = false,
   });
 
-  // Function to show toast
-  void showToast(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.black,
-      textColor: Colors.white,
-      fontSize: 16.0,
-    );
-  }
-
   // Sign-in function
-   Future<void> signInWithEmailAndPassword(BuildContext context) async {
+  Future<void> signInWithEmailAndPassword(BuildContext context) async {
+    // Function to show toast
+    void showToast(String message) {
+      Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
+
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text.trim(),
@@ -52,9 +52,21 @@ class SignInController {
       showToast('An error occurred. Please try again.');
     }
   }
-  
+
   // Validate inputs and call the sign-in function
   void validateAndSignIn(BuildContext context) {
+    // Function to show toast
+    void showToast(String message) {
+      Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
+
     if (emailController.text.trim().isEmpty) {
       showToast('Please enter your email');
       return;
@@ -85,11 +97,12 @@ class SignInController {
       showToast('Password must contain at least one number');
       return;
     }
-    if (!passwordController.text.trim().contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]'))) {
+    if (!passwordController.text
+        .trim()
+        .contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]'))) {
       showToast('Password must contain at least one special character');
       return;
     }
-
 
     signInWithEmailAndPassword(context);
   }

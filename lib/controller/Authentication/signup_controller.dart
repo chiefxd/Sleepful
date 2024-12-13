@@ -21,20 +21,20 @@ class SignupController {
 
   bool _isPasswordVisible = false;
 
-  // Show Toast
-  void showToast(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.black,
-      textColor: Colors.white,
-      fontSize: 16.0,
-    );
-  }
-
   // Sign up with Firebase
   Future<void> signUpWithEmailAndPassword() async {
+    // Function to show toast
+    void showToast(String message) {
+      Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
+
     try {
       if (passwordController.text.trim() !=
           confirmPasswordController.text.trim()) {
@@ -53,7 +53,6 @@ class SignupController {
       await FirebaseFirestore.instance
           .collection('Users')
           .doc(userCredential.user!.uid)
-
           .set({
         'name': nameController.text.trim(),
         'email': emailController.text.trim(),
@@ -80,6 +79,18 @@ class SignupController {
 
   // Validate inputs and call the sign-up function
   void validateAndSignUp() {
+    // Function to show toast
+    void showToast(String message) {
+      Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
+
     if (nameController.text.trim().isEmpty) {
       showToast('Please enter your name');
       return;
@@ -104,7 +115,7 @@ class SignupController {
       showToast('Please confirm your password');
       return;
     }
-    
+
     // Additional password validations:
     if (!passwordController.text.trim().contains(RegExp(r'[A-Z]'))) {
       showToast('Password must contain at least one uppercase letter');
@@ -122,7 +133,9 @@ class SignupController {
       showToast('Password must contain at least one number');
       return;
     }
-    if (!passwordController.text.trim().contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]'))) {
+    if (!passwordController.text
+        .trim()
+        .contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]'))) {
       showToast('Password must contain at least one special character');
       return;
     }
