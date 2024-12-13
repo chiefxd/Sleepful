@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../Pages/Plans/add_plans.dart';  // import the SleepingStats page
+
+import '../Pages/Plans/add_plans.dart'; // import the SleepingStats page
 
 class PlusButton extends StatelessWidget {
   const PlusButton({super.key});
@@ -11,7 +12,9 @@ class PlusButton extends StatelessWidget {
       height: 54, // Set the height of the button
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: const Color(0xFF725FAC), // Set the background color of the button
+        color: Theme.of(context)
+            .colorScheme
+            .onTertiary, // Set the background color of the button
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),

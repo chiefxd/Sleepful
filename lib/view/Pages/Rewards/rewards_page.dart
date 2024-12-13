@@ -2,8 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sleepful/providers/user_data_provider.dart';
-import '../../Navbar/bottom_navbar.dart';
+
 import '../../Components/plus_button.dart';
+import '../../Navbar/bottom_navbar.dart';
 import 'rewards_card.dart';
 
 class RewardsPage extends StatelessWidget {
@@ -99,13 +100,13 @@ class RewardsPage extends StatelessWidget {
                   ),
                   title: Padding(
                     padding: const EdgeInsets.only(left: 0),
-                    child: const Text(
+                    child: Text(
                       'Rewards',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Montserrat',
-                        color: Color(0xFFB4A9D6),
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ),
@@ -135,20 +136,28 @@ class RewardsPage extends StatelessWidget {
                                 'You have',
                                 style: TextStyle(
                                   fontSize: smallTextFontSize,
-                                  color: Color(0xFFB4A9D6),
+                                  color: Theme.of(context).colorScheme.primary,
                                   fontFamily: 'Montserrat',
                                 ),
                               ),
                               ShaderMask(
                                 shaderCallback: (Rect bounds) {
-                                  return const LinearGradient(
+                                  final bool isDarkMode =
+                                      Theme.of(context).brightness ==
+                                          Brightness.dark;
+                                  final Color baseColor = isDarkMode
+                                      ? Color(0xFFB4A9D6)
+                                      : Color(0xFF37256C);
+                                  return LinearGradient(
                                     begin: Alignment.centerLeft,
                                     end: Alignment.centerRight,
                                     stops: [0, 0.28, 1],
                                     colors: [
-                                      Color(0xFF6048A6),
-                                      Color(0xFF8F7FC2),
-                                      Color(0xFFB4A9D6),
+                                      Color.lerp(baseColor, Colors.white,
+                                          0.0)!, // Lighten the color
+                                      baseColor, // Base color
+                                      Color.lerp(baseColor, Colors.black,
+                                          0.0)!, // Darken the color
                                     ],
                                   ).createShader(bounds);
                                 },
@@ -169,7 +178,9 @@ class RewardsPage extends StatelessWidget {
                                       text: 'Collect more points by',
                                       style: TextStyle(
                                         fontSize: subtitleFontSize,
-                                        color: Color(0xFFB4A9D6),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                         fontFamily: 'Montserrat',
                                       ),
                                     ),
@@ -177,7 +188,9 @@ class RewardsPage extends StatelessWidget {
                                       text: ' completing your plans',
                                       style: TextStyle(
                                         fontSize: subtitleFontSize,
-                                        color: Color(0xFFB4A9D6),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                         fontFamily: 'Montserrat',
                                       ),
                                     ),
@@ -188,7 +201,7 @@ class RewardsPage extends StatelessWidget {
                                 '1 point will be awarded every 24 hours',
                                 style: TextStyle(
                                   fontSize: subtitleFontSize,
-                                  color: Color(0xFFB4A9D6),
+                                  color: Theme.of(context).colorScheme.primary,
                                   fontFamily: 'Montserrat',
                                 ),
                               ),
@@ -210,8 +223,9 @@ class RewardsPage extends StatelessWidget {
                                       fontWeight: FontWeight
                                           .bold, // Set the font weight to bold
                                       fontFamily: 'Montserrat',
-                                      color: Color(
-                                          0xFFE4DCFF), // Set the text color to 0xFFA594F9
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary, // Set the text color to 0xFFA594F9
                                     ),
                                   ),
                                 ),

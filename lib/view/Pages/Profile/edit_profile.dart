@@ -63,12 +63,13 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
+  // Show Toast
   void showToast(String message) {
     Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
       textColor: Colors.white,
       fontSize: 16.0,
     );
@@ -136,7 +137,7 @@ class _EditProfileState extends State<EditProfile> {
             fontSize: screenWidth * 0.06,
             fontWeight: FontWeight.bold,
             fontFamily: 'Montserrat',
-            color: Color(0xFFB4A9D6),
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
       ),
@@ -205,7 +206,7 @@ class _EditProfileState extends State<EditProfile> {
                       fontSize: screenWidth * 0.04,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Montserrat',
-                      color: Color(0xFFB4A9D6),
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ],
@@ -225,7 +226,7 @@ class _EditProfileState extends State<EditProfile> {
                       fontSize: screenWidth * 0.04,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Montserrat',
-                      color: Color(0xFFB4A9D6),
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                   SizedBox(width: 10),
@@ -238,7 +239,7 @@ class _EditProfileState extends State<EditProfile> {
                               // Style applied to the TextField's text
                               fontSize: screenWidth * 0.04,
                               fontFamily: 'Montserrat',
-                              color: Color(0xFFB4A9D6),
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                             decoration: InputDecoration(
                               hintText: 'Enter your name',
@@ -247,7 +248,7 @@ class _EditProfileState extends State<EditProfile> {
                                 fontFamily: 'Montserrat',
                                 color: isEditingName
                                     ? Color(0xFFD9CAB3)
-                                    : Color(0xFFB4A9D6),
+                                    : Theme.of(context).colorScheme.primary,
                               ),
                             ),
                           )
@@ -256,14 +257,15 @@ class _EditProfileState extends State<EditProfile> {
                             style: TextStyle(
                               fontSize: screenWidth * 0.04,
                               fontFamily: 'Montserrat',
-                              color: Color(0xFFB4A9D6),
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                   ),
                   // Edit button (removed check icon)
                   if (!isEditingName) // Show only when not editing
                     IconButton(
-                      icon: Icon(Icons.edit, color: Color(0xFFB4A9D6)),
+                      icon: Icon(Icons.edit,
+                          color: Theme.of(context).colorScheme.primary),
                       onPressed: () {
                         setState(() {
                           isEditingName = !isEditingName;
@@ -286,7 +288,7 @@ class _EditProfileState extends State<EditProfile> {
                       fontSize: screenWidth * 0.04,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Montserrat',
-                      color: Color(0xFFB4A9D6),
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                   SizedBox(width: 10),
@@ -295,7 +297,7 @@ class _EditProfileState extends State<EditProfile> {
                     style: TextStyle(
                       fontSize: screenWidth * 0.04,
                       fontFamily: 'Montserrat',
-                      color: Color(0xFFB4A9D6),
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ],
@@ -311,7 +313,7 @@ class _EditProfileState extends State<EditProfile> {
                   child: ElevatedButton(
                     onPressed: _saveToFirestore,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF725FAC),
+                      backgroundColor: Theme.of(context).colorScheme.error,
                       foregroundColor: Colors.white,
                       textStyle: TextStyle(
                         fontFamily: 'Montserrat',

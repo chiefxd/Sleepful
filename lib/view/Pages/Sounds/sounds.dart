@@ -31,15 +31,16 @@ class SoundPage extends StatelessWidget {
                 ),
                 title: Padding(
                   padding: const EdgeInsets.only(left: 0),
-                  child: const Text(
+                  child: Text(
                     'Sounds',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       fontFamily:
                           'Montserrat', // Ensure the same font family is used
-                      color: Color(
-                          0xFFB4A9D6), // Use the same color as in profile.dart
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary, // Use the same color as in profile.dart
                     ),
                   ),
                 ),

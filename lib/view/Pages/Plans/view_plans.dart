@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sleepful/view/Pages/Plans/update_plans.dart';
 
-import '../../Navbar/bottom_navbar.dart';
 import '../../Components/plus_button.dart';
+import '../../Navbar/bottom_navbar.dart';
 
 const dayMapping = {
   'Sunday': 'S',
@@ -45,15 +45,18 @@ class ViewPlans extends StatelessWidget {
                       ),
                     ),
                   ),
-                  title: const Padding(
-                    padding: EdgeInsets.only(left: 0),
+                  title: Padding(
+                    padding: const EdgeInsets.only(left: 0),
                     child: Text(
                       'Your Plans',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Montserrat',
-                        color: Color(0xFFB4A9D6),
+                        // Ensure the same font family is used
+                        color: Theme.of(context)
+                            .colorScheme
+                            .primary, // Use the same color as in profile.dart
                       ),
                     ),
                   ),

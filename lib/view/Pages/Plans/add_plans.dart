@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../Navbar/bottom_navbar.dart';
 import '../../Components/plus_button.dart';
 import '../../../controller/Plans/time_picker_controller.dart';
+import '../../Components/plus_button.dart';
+import '../../Navbar/bottom_navbar.dart';
 
 class AddPlans extends StatefulWidget {
   const AddPlans({super.key});
@@ -128,13 +130,13 @@ class AddPlansState extends State<AddPlans> {
                   ),
                   title: Padding(
                     padding: const EdgeInsets.only(left: 0),
-                    child: const Text(
+                    child: Text(
                       'Add Plans',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Montserrat',
-                        color: Color(0xFFB4A9D6),
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ),
@@ -187,11 +189,8 @@ class AddPlansState extends State<AddPlans> {
                                   controller.selectedHour);
                               return Container(
                                 decoration: BoxDecoration(
-                                  // color: index == selectedHourIndex
-                                  //     ? Color(0xFF6A5ACD)
-                                  //     : Colors.transparent,
                                   color: isSelected
-                                      ? Color(0xFF6A5ACD)
+                                      ? Theme.of(context).colorScheme.onError
                                       : Colors.transparent,
                                   // Change color if selected
                                   borderRadius: BorderRadius.only(
@@ -213,7 +212,9 @@ class AddPlansState extends State<AddPlans> {
                                     fontFamily: 'Montserrat',
                                     color: isSelected
                                         ? Colors.white
-                                        : Colors.white.withOpacity(0.5),
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onErrorContainer, // Change text color if selected
                                   ),
                                 ),
                               );
@@ -229,12 +230,11 @@ class AddPlansState extends State<AddPlans> {
                         height: 80, // Set a height for the colon
                         child: Container(
                           decoration: BoxDecoration(
-                            // color: (selectedHourIndex != -1 ||
-                            //         selectedMinuteIndex != -1)
                             color: (controller.selectedHour != -1 ||
                                     controller.selectedMinute != -1)
-                                ? Color(
-                                    0xFF6A5ACD) // Change color if hour or minute is selected
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .onError // Change color if hour or minute is selected
                                 : Colors.transparent, // Default color
                             borderRadius:
                                 BorderRadius.circular(0), // No rounding
@@ -302,11 +302,8 @@ class AddPlansState extends State<AddPlans> {
                               // int minute = index % 60;
                               return Container(
                                 decoration: BoxDecoration(
-                                  // color: index == selectedMinuteIndex
-                                  //     ? Color(0xFF6A5ACD)
-                                  //     : Colors.transparent,
                                   color: isSelected
-                                      ? Color(0xFF6A5ACD)
+                                      ? Theme.of(context).colorScheme.onError
                                       : Colors.transparent,
                                   // Change color if selected
                                   borderRadius: BorderRadius.circular(
@@ -324,7 +321,9 @@ class AddPlansState extends State<AddPlans> {
                                     fontFamily: 'Montserrat',
                                     color: isSelected
                                         ? Colors.white
-                                        : Colors.white.withOpacity(0.5),
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onErrorContainer, // Change text color if selected
                                   ),
                                 ),
                               );
@@ -357,11 +356,8 @@ class AddPlansState extends State<AddPlans> {
                               // String period = index % 2 == 0 ? 'AM' : 'PM';
                               return Container(
                                 decoration: BoxDecoration(
-                                  // color: isStartAM == (index == 0)
-                                  //     ? Color(0xFF6A5ACD)
-                                  //     : Colors.transparent,
                                   color: isSelected
-                                      ? Color(0xFF6A5ACD)
+                                      ? Theme.of(context).colorScheme.onError
                                       : Colors.transparent,
                                   // Change color if selected
                                   borderRadius: BorderRadius.only(
@@ -378,7 +374,9 @@ class AddPlansState extends State<AddPlans> {
                                     fontFamily: 'Montserrat',
                                     color: isSelected
                                         ? Colors.white
-                                        : Colors.white.withOpacity(0.5),
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onErrorContainer, // Change text color if selected
                                   ),
                                 ),
                               );
@@ -508,10 +506,10 @@ class AddPlansState extends State<AddPlans> {
                   // Name Your Plan Section
                   Align(
                     alignment: Alignment.centerLeft, // Align to the left
-                    child: const Text(
+                    child: Text(
                       'Name Your Plan',
                       style: TextStyle(
-                        color: Color(0xFFE4DCFF),
+                        color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Montserrat',
                         fontStyle: FontStyle.italic,
@@ -527,13 +525,13 @@ class AddPlansState extends State<AddPlans> {
                       // Set the bottom border to be visible
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
-                            color: Color(0xFFB4A9D6),
+                            color: Theme.of(context).colorScheme.primary,
                             width:
                                 2.0), // Set the bottom border color and width
                       ),
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
-                            color: Color(0xFFB4A9D6),
+                            color: Theme.of(context).colorScheme.primary,
                             width:
                                 2.0), // Set the focused bottom border color and width
                       ),
@@ -545,8 +543,10 @@ class AddPlansState extends State<AddPlans> {
                       ),
                       hintText: 'Enter plan name',
                       hintStyle: TextStyle(
-                          color: Colors.white.withOpacity(
-                              0.5)), // Optional: Change hint text color
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.color), // Optional: Change hint text color
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -566,9 +566,8 @@ class AddPlansState extends State<AddPlans> {
                       });
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF6149A7),
-                      // Same background color as Start button
-                      foregroundColor: Color(0xFF1F1249),
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                      foregroundColor: Colors.white,
                       // Same foreground color as Start button
                       padding: const EdgeInsets.symmetric(
                           horizontal: 35.0,
