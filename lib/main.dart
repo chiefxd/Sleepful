@@ -12,10 +12,14 @@ import 'package:sleepful/view/Pages/Profile/change_theme.dart';
 import 'package:sleepful/view/Pages/Profile/edit_profile.dart';
 import 'package:sleepful/view/Pages/home_page.dart';
 import 'package:sleepful/view/Pages/splash_screen.dart';
+import 'package:sleepful/services/notification_service.dart';
+
+final NotificationService notificationService = NotificationService();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await notificationService.initialize();
 
   // Initialize UserDataProvider and fetch user data
   final userDataProvider = UserDataProvider();

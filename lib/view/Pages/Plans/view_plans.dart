@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sleepful/view/Pages/Plans/update_plans.dart';
 import 'package:sleepful/view/Pages/home_page.dart';
-
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:sleepful/services/notification_service.dart';
+import 'package:intl/intl.dart';
 import '../../Components/plus_button.dart';
 import '../../Navbar/bottom_navbar.dart';
 
@@ -100,6 +102,17 @@ class ViewPlans extends StatelessWidget {
 
                       final plans = snapshot.data!.docs;
 
+                      final notificationService = NotificationService();
+
+                      for (var plan in plans) {
+                        final title = plan['title'];
+                        final startTime = plan['startTime']; // Ensure this is a DateTime object
+                        final parsedStartTime = _parseTime(startTime); // Implement this method to parse the time string
+
+                        // Schedule the notification using the notification service
+                        notificationService.scheduleNotification(title, parsedStartTime);
+                      }
+
                       return ListView.builder(
                         padding: const EdgeInsets.all(16.0),
                         itemCount: plans.length,
@@ -136,6 +149,26 @@ class ViewPlans extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  DateTime _parseTime(String timeString) {
+    // Trim whitespace from the time string
+    timeString = timeString.trim();
+
+    try {
+      // Assuming the timeString is in the format "hh:mm a" (e.g., "11:00 PM")
+      final DateFormat format = DateFormat.jm(); // This will parse "11:00 PM"
+      DateTime parsedTime = format.parse(timeString);
+
+      // If you need to set a specific date, you can do so here
+      DateTime now = DateTime.now();
+      return DateTime(now.year, now.month, now.day, parsedTime.hour, parsedTime.minute);
+    } catch (e) {
+      // Log the error for debugging
+      print('Error parsing time: $timeString. Error: $e');
+      // Return a default value or throw an error
+      return DateTime.now(); // Or handle it as needed
+    }
   }
 
   Widget _buildPlanCard(BuildContext context, String planId, String title,
