@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sleepful/services/notification_service.dart';
@@ -26,6 +27,24 @@ class ViewPlans extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
+
+    final NotificationService notificationService = NotificationService();
+
+    // Test notification when the widget is built (ngetes ini stef jdi tiap kli buka view plans muncul notif)
+    Future.delayed(Duration(seconds: 1), () async {
+      await notificationService.flutterLocalNotificationsPlugin.show(
+        0,
+        'Test Notification',
+        'This is a test notification',
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            'your_channel_id',
+            'Your Channel Name',
+            importance: Importance.max,
+          ),
+        ),
+      );
+    });
 
     return Scaffold(
       body: Stack(

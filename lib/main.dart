@@ -19,8 +19,8 @@ final NotificationService notificationService = NotificationService();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await notificationService.initialize();
   await notificationService.requestNotificationPermission();
+  await notificationService.initialize();
 
   // Initialize UserDataProvider and fetch user data
   final userDataProvider = UserDataProvider();

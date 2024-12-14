@@ -16,7 +16,7 @@ class NotificationService {
   NotificationService._internal();
 
   Future<void> initialize() async {
-    tz.initializeTimeZones(); // Initialize time zones
+    tz.initializeTimeZones();
 
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -51,7 +51,7 @@ class NotificationService {
 
   Future<void> scheduleNotification(
       int id, String title, DateTime startTime) async {
-    var scheduledTime =
+    final scheduledTime =
         tz.TZDateTime.from(startTime.subtract(Duration(minutes: 5)), tz.local);
 
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
