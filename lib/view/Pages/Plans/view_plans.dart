@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sleepful/view/Pages/Plans/update_plans.dart';
-import 'package:sleepful/view/Pages/home_page.dart';
+import 'package:intl/intl.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sleepful/services/notification_service.dart';
-import 'package:intl/intl.dart';
+import 'package:sleepful/view/Pages/Plans/update_plans.dart';
+import 'package:sleepful/view/Pages/home_page.dart';
+
 import '../../Components/plus_button.dart';
 import '../../Navbar/bottom_navbar.dart';
 
@@ -104,13 +105,25 @@ class ViewPlans extends StatelessWidget {
 
                       final notificationService = NotificationService();
 
-                      for (var plan in plans) {
-                        final title = plan['title'];
-                        final startTime = plan['startTime']; // Ensure this is a DateTime object
-                        final parsedStartTime = _parseTime(startTime); // Implement this method to parse the time string
+                      final Set<int> scheduledNotifications = {};
 
-                        // Schedule the notification using the notification service
-                        notificationService.scheduleNotification(title, parsedStartTime);
+                      for (var i = 0; i < plans.length; i++) {
+                        final plan = plans[i];
+                        final title = plan['title'];
+                        final startTime = plan['startTime'];
+                        final parsedStartTime = _parseTime(startTime);
+
+                        if (parsedStartTime.isAfter(DateTime.now()) &&
+                            !scheduledNotifications.contains(i)) {
+                          try {
+                            notificationService.scheduleNotification(
+                                i, title, parsedStartTime);
+                            scheduledNotifications.add(i);
+                          } catch (e) {
+                            print(
+                                'Error scheduling notification for $title: $e');
+                          }
+                        }
                       }
 
                       return ListView.builder(
@@ -151,23 +164,22 @@ class ViewPlans extends StatelessWidget {
     );
   }
 
-  DateTime _parseTime(String timeString) {
-    // Trim whitespace from the time string
-    timeString = timeString.trim();
-
+  DateTime _parseTime(dynamic time) {
     try {
-      // Assuming the timeString is in the format "hh:mm a" (e.g., "11:00 PM")
-      final DateFormat format = DateFormat.jm(); // This will parse "11:00 PM"
-      DateTime parsedTime = format.parse(timeString);
-
-      // If you need to set a specific date, you can do so here
-      DateTime now = DateTime.now();
-      return DateTime(now.year, now.month, now.day, parsedTime.hour, parsedTime.minute);
+      if (time is Timestamp) {
+        return time.toDate().toLocal(); // Handle Firestore Timestamp
+      } else if (time is String) {
+        final DateFormat format = DateFormat.jm();
+        DateTime parsedTime = format.parse(time);
+        DateTime now = DateTime.now();
+        return DateTime(
+            now.year, now.month, now.day, parsedTime.hour, parsedTime.minute);
+      } else {
+        throw FormatException('Invalid time format');
+      }
     } catch (e) {
-      // Log the error for debugging
-      print('Error parsing time: $timeString. Error: $e');
-      // Return a default value or throw an error
-      return DateTime.now(); // Or handle it as needed
+      print('Error parsing time: $time. Error: $e');
+      return DateTime.now();
     }
   }
 
