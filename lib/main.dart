@@ -13,14 +13,19 @@ import 'package:sleepful/view/Pages/Profile/change_theme.dart';
 import 'package:sleepful/view/Pages/Profile/edit_profile.dart';
 import 'package:sleepful/view/Pages/home_page.dart';
 import 'package:sleepful/view/Pages/splash_screen.dart';
-
-final NotificationService notificationService = NotificationService();
+import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await notificationService.requestNotificationPermission();
+
+  // Initialize Time Zones
+  tz.initializeTimeZones();
+
+  // Initialize Notification Service
+  final notificationService = NotificationService();
   await notificationService.initialize();
+  await notificationService.requestNotificationPermission();
 
   // Initialize UserDataProvider and fetch user data
   final userDataProvider = UserDataProvider();

@@ -18,6 +18,9 @@ class NotificationService {
   Future<void> initialize() async {
     // Initialize time zones
     tz.initializeTimeZones();
+    final String timeZoneName = tz.local.name;
+    tz.setLocalLocation(tz.getLocation(timeZoneName));
+    print('Timezone set to: $timeZoneName');
 
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -28,53 +31,64 @@ class NotificationService {
     );
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    print('NotificationService initialized.');
   }
 
   // Request permission to show notifications (Android 13+)
   Future<void> requestNotificationPermission() async {
     var status = await Permission.notification.status;
     if (!status.isGranted) {
-      await Permission.notification.request();
+      status = await Permission.notification.request();
+      if (status.isGranted) {
+        print('Notification permissions granted.');
+      } else {
+        print('Notification permissions denied.');
+      }
+    } else {
+      print('Notification permissions already granted.');
     }
   }
 
   // Schedule a notification for a specific time
   Future<void> scheduleNotification(
-      int id, String title, DateTime startTime) async {
-    final scheduledTime =
-        tz.TZDateTime.from(startTime.subtract(Duration(minutes: 5)), tz.local);
-
-    print(
-        "Scheduled notification for '$title' at $scheduledTime"); // Check the calculated time
-
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'your_channel_id', // Channel ID
+      int id, String title, DateTime scheduleTime) async {
+    final androidDetails = AndroidNotificationDetails(
+      'your_channel_id',
       'Your Channel Name',
-      channelDescription: 'Your Channel Description',
       importance: Importance.max,
       priority: Priority.high,
-      playSound: true,
-      enableVibration: true,
+      playSound: true, // Ensure the sound is set for the notification
+      enableVibration: true, // Enable vibration if needed
+      timeoutAfter: 60000, // Optional timeout in milliseconds
     );
 
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
+    final notificationDetails = NotificationDetails(android: androidDetails);
 
+    print('Scheduling notification at: $scheduleTime'); // Debugging line
+
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      id,
+      title,
+      'Your scheduled plan is about to start!',
+      tz.TZDateTime.from(
+          scheduleTime, tz.local), // Ensuring time is converted to TZDateTime
+      notificationDetails,
+      androidScheduleMode: AndroidScheduleMode.exact,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.time,
+    );
+
+    print('Notification scheduled successfully');
+  }
+
+  // Cancel a notification
+  Future<void> cancelNotification(int id) async {
     try {
-      await flutterLocalNotificationsPlugin.zonedSchedule(
-        id, // Unique ID
-        'Plan Reminder',
-        "Your '$title' plan is about to start!",
-        scheduledTime,
-        platformChannelSpecifics,
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-      );
-      print("Notification scheduled successfully for '$title'");
+      await flutterLocalNotificationsPlugin.cancel(id);
+      print('Notification with id=$id canceled.');
     } catch (e) {
-      print('Error scheduling notification: $e');
+      print('Error canceling notification with id=$id: $e');
     }
   }
 }

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sleepful/services/notification_service.dart';
@@ -27,24 +26,6 @@ class ViewPlans extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
-
-    final NotificationService notificationService = NotificationService();
-
-    // Test notification when the widget is built (ngetes ini stef jdi tiap kli buka view plans muncul notif)
-    Future.delayed(Duration(seconds: 1), () async {
-      await notificationService.flutterLocalNotificationsPlugin.show(
-        0,
-        'Test Notification',
-        'This is a test notification',
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-            'your_channel_id',
-            'Your Channel Name',
-            importance: Importance.max,
-          ),
-        ),
-      );
-    });
 
     return Scaffold(
       body: Stack(
@@ -131,14 +112,22 @@ class ViewPlans extends StatelessWidget {
                         final title = plan['title'];
                         final startTime = plan['startTime'];
                         final parsedStartTime = _parseTime(startTime);
+                        final notificationTime =
+                            parsedStartTime.subtract(Duration(minutes: 5));
 
-                        // Only schedule notifications for future plans
-                        if (parsedStartTime.isAfter(DateTime.now()) &&
+                        print('Parsed Start Time: $parsedStartTime');
+                        print(
+                            'Notification Time (5 minutes before): $notificationTime');
+                        print('Current Time: ${DateTime.now()}');
+
+                        if (notificationTime.isAfter(DateTime.now()) &&
                             !scheduledNotifications.contains(i)) {
                           try {
                             notificationService.scheduleNotification(
-                                i, title, parsedStartTime);
+                                i, title, notificationTime);
                             scheduledNotifications.add(i);
+                            print(
+                                'Scheduled notification for $title at $notificationTime');
                           } catch (e) {
                             print(
                                 'Error scheduling notification for $title: $e');
@@ -189,18 +178,17 @@ class ViewPlans extends StatelessWidget {
       if (time is Timestamp) {
         return time.toDate().toLocal(); // Handle Firestore Timestamp
       } else if (time is String) {
-        final DateFormat format =
-            DateFormat.jm(); // Assuming the time is in 'hh:mm a' format
+        final DateFormat format = DateFormat.jm(); // Example: "08:42 PM"
         DateTime parsedTime = format.parse(time);
         DateTime now = DateTime.now();
         return DateTime(
             now.year, now.month, now.day, parsedTime.hour, parsedTime.minute);
       } else {
-        throw FormatException('Invalid time format');
+        throw FormatException('Invalid time format: $time');
       }
     } catch (e) {
       print('Error parsing time: $time. Error: $e');
-      return DateTime.now();
+      return DateTime.now(); // Default to current time on failure
     }
   }
 
