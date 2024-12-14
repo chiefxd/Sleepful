@@ -132,6 +132,7 @@ class ViewPlans extends StatelessWidget {
                         final startTime = plan['startTime'];
                         final parsedStartTime = _parseTime(startTime);
 
+                        // Only schedule notifications for future plans
                         if (parsedStartTime.isAfter(DateTime.now()) &&
                             !scheduledNotifications.contains(i)) {
                           try {
@@ -188,7 +189,8 @@ class ViewPlans extends StatelessWidget {
       if (time is Timestamp) {
         return time.toDate().toLocal(); // Handle Firestore Timestamp
       } else if (time is String) {
-        final DateFormat format = DateFormat.jm();
+        final DateFormat format =
+            DateFormat.jm(); // Assuming the time is in 'hh:mm a' format
         DateTime parsedTime = format.parse(time);
         DateTime now = DateTime.now();
         return DateTime(

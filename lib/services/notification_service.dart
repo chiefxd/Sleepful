@@ -1,7 +1,6 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:timezone/data/latest.dart'
-    as tz; // Import the latest timezone data
+import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 class NotificationService {
@@ -15,7 +14,9 @@ class NotificationService {
 
   NotificationService._internal();
 
+  // Initialize the notification plugin and create a notification channel
   Future<void> initialize() async {
+    // Initialize time zones
     tz.initializeTimeZones();
 
     const AndroidInitializationSettings initializationSettingsAndroid =
@@ -27,21 +28,9 @@ class NotificationService {
     );
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
-    // Create a notification channel
-    const AndroidNotificationChannel channel = AndroidNotificationChannel(
-      'your_channel_id', // Must match the one used in AndroidNotificationDetails
-      'Your Channel Name', // Visible name to the user
-      description: 'Your Channel Description',
-      importance: Importance.max,
-    );
-
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(channel);
   }
 
+  // Request permission to show notifications (Android 13+)
   Future<void> requestNotificationPermission() async {
     var status = await Permission.notification.status;
     if (!status.isGranted) {
@@ -49,14 +38,18 @@ class NotificationService {
     }
   }
 
+  // Schedule a notification for a specific time
   Future<void> scheduleNotification(
       int id, String title, DateTime startTime) async {
     final scheduledTime =
         tz.TZDateTime.from(startTime.subtract(Duration(minutes: 5)), tz.local);
 
+    print(
+        "Scheduled notification for '$title' at $scheduledTime"); // Check the calculated time
+
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
-      'your_channel_id', // Match Manifest
+      'your_channel_id', // Channel ID
       'Your Channel Name',
       channelDescription: 'Your Channel Description',
       importance: Importance.max,
@@ -75,29 +68,13 @@ class NotificationService {
         "Your '$title' plan is about to start!",
         scheduledTime,
         platformChannelSpecifics,
-        androidScheduleMode: AndroidScheduleMode.exact,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
       );
+      print("Notification scheduled successfully for '$title'");
     } catch (e) {
       print('Error scheduling notification: $e');
-    }
-  }
-
-  Future<void> createNotificationChannelIfNeeded() async {
-    final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
-        flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>();
-
-    if (androidImplementation != null) {
-      const AndroidNotificationChannel channel = AndroidNotificationChannel(
-        'your_channel_id',
-        'Your Channel Name',
-        description: 'Your Channel Description',
-        importance: Importance.max,
-      );
-
-      await androidImplementation.createNotificationChannel(channel);
     }
   }
 }
