@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:sleepful/services/notification_service.dart';
 import 'package:sleepful/view/Pages/Plans/update_plans.dart';
 import 'package:sleepful/view/Pages/home_page.dart';
 
@@ -100,6 +103,38 @@ class ViewPlans extends StatelessWidget {
 
                       final plans = snapshot.data!.docs;
 
+                      final notificationService = NotificationService();
+
+                      final Set<int> scheduledNotifications = {};
+
+                      for (var i = 0; i < plans.length; i++) {
+                        final plan = plans[i];
+                        final title = plan['title'];
+                        final startTime = plan['startTime'];
+                        final parsedStartTime = _parseTime(startTime);
+                        final notificationTime =
+                            parsedStartTime.subtract(Duration(minutes: 5));
+
+                        print('Parsed Start Time: $parsedStartTime');
+                        print(
+                            'Notification Time (5 minutes before): $notificationTime');
+                        print('Current Time: ${DateTime.now()}');
+
+                        if (notificationTime.isAfter(DateTime.now()) &&
+                            !scheduledNotifications.contains(i)) {
+                          try {
+                            notificationService.scheduleNotification(
+                                i, title, notificationTime);
+                            scheduledNotifications.add(i);
+                            print(
+                                'Scheduled notification for $title at $notificationTime');
+                          } catch (e) {
+                            print(
+                                'Error scheduling notification for $title: $e');
+                          }
+                        }
+                      }
+
                       return ListView.builder(
                         padding: const EdgeInsets.all(16.0),
                         itemCount: plans.length,
@@ -136,6 +171,25 @@ class ViewPlans extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  DateTime _parseTime(dynamic time) {
+    try {
+      if (time is Timestamp) {
+        return time.toDate().toLocal(); // Handle Firestore Timestamp
+      } else if (time is String) {
+        final DateFormat format = DateFormat.jm(); // Example: "08:42 PM"
+        DateTime parsedTime = format.parse(time);
+        DateTime now = DateTime.now();
+        return DateTime(
+            now.year, now.month, now.day, parsedTime.hour, parsedTime.minute);
+      } else {
+        throw FormatException('Invalid time format: $time');
+      }
+    } catch (e) {
+      print('Error parsing time: $time. Error: $e');
+      return DateTime.now(); // Default to current time on failure
+    }
   }
 
   Widget _buildPlanCard(BuildContext context, String planId, String title,
