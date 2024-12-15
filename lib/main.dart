@@ -125,40 +125,31 @@ class _MyAppState extends State<MyApp> {
   );
 
   void _listenForAuthChanges() {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      // This will now rebuild the UI with the new user.
-      setState(() {});
+    FirebaseAuth.instance.authStateChanges().listen((User? user) async {
+      if (user != null) {
+        await context.read<UserDataProvider>().fetchAndSetUserData(user.uid);
+      }
+      setState(() {}); // Rebuild the UI to reflect the auth change
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // If the app is still initializing, show the SplashScreen
-    if (_isInitializing) {
-      return MaterialApp(
-        theme: lightTheme,
-        darkTheme: darkTheme,
-        themeMode: ThemeMode.dark, // Default theme for loading state
-        home: const SplashScreen(),
-      );
-    }
-
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, userSnapshot) {
-        if (userSnapshot.connectionState != ConnectionState.active) {
-          // Return SplashScreen if the authentication state is not yet determined
+        if (userSnapshot.connectionState != ConnectionState.active ||
+            _isInitializing) {
           return MaterialApp(
             theme: lightTheme,
             darkTheme: darkTheme,
-            themeMode: ThemeMode.dark, // Default theme for loading state
+            themeMode: ThemeMode.dark,
             home: const SplashScreen(),
           );
         }
 
-        final User? currentUser = userSnapshot.data;
+        final currentUser = userSnapshot.data;
 
-        // If the user is logged in, update ThemeProvider with user UID
         return MultiProvider(
           providers: [
             ChangeNotifierProvider<UserDataProvider>.value(
@@ -168,15 +159,13 @@ class _MyAppState extends State<MyApp> {
                 ..initializeTheme(),
             ),
           ],
-          // MaterialApp with ThemeProvider
           child: Consumer<ThemeProvider>(
             builder: (context, themeProvider, child) {
               return MaterialApp(
                 title: 'Sleepful',
                 theme: lightTheme,
                 darkTheme: darkTheme,
-                themeMode: themeProvider
-                    .currentTheme, // Get the current theme from ThemeProvider
+                themeMode: themeProvider.currentTheme,
                 routes: {
                   '/signIn': (context) => const SignIn(),
                   '/home': (context) => const HomePage(),

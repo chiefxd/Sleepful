@@ -31,7 +31,10 @@ class ForgotPassword extends StatelessWidget {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       showToast("Password reset email sent. Check your inbox.");
-      Navigator.pop(context); // Go back to the Sign In page
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SignIn()),
+      );
     } on FirebaseAuthException catch (e) {
       showToast(e.message ?? "Failed to send password reset email.");
     }
@@ -45,8 +48,7 @@ class ForgotPassword extends StatelessWidget {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => SignIn()));
+            Navigator.pop(context); // Just pop the ForgotPassword page
           },
           child: Padding(
             padding: const EdgeInsets.all(10.0),
