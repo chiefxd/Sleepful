@@ -114,11 +114,9 @@ class _ProfileState extends State<Profile> {
                           ),
                           child: TextButton(
                             onPressed: () {
-                              Navigator.push(
+                              Navigator.pop(
                                   context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const Profile())); // Close the dialog
+                                 ); // Close the dialog
                             },
                             style: TextButton.styleFrom(
                               padding:
