@@ -155,7 +155,7 @@ class _EditPasswordState extends State<ChangePassword> {
                       width: buttonSize,
                       child: ElevatedButton(
                         onPressed: () async {
-                          if (_controller.oldPassController.textc
+                          if (_controller.oldPassController.text
                               .trim()
                               .isEmpty) {
                             showToast('Please enter your old password');
