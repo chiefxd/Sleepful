@@ -57,7 +57,7 @@ class InformationFive extends StatelessWidget {
                 title: Padding(
                   padding: const EdgeInsets.only(left: 0),
                   child: Text(
-                    'Informations',
+                    'Information',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,

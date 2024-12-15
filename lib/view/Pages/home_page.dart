@@ -282,7 +282,7 @@ class _HomePageState extends State<HomePage> {
                                         width: buttonSize,
                                         child: ButtonWithText(
                                             icon: Icons.calendar_month,
-                                            text: 'View\nPlans',
+                                            text: 'My\nPlans',
                                             nextPage: ViewPlans(),
                                             textColor: Theme.of(context)
                                                 .textTheme
@@ -294,7 +294,7 @@ class _HomePageState extends State<HomePage> {
                                         width: buttonSize,
                                         child: ButtonWithText(
                                           icon: Icons.bar_chart,
-                                          text: 'Sleeping\nStats',
+                                          text: 'My\nStats',
                                           nextPage: SleepingStats(
                                             selectedIndex: 3,
                                           ),
@@ -342,7 +342,7 @@ class _HomePageState extends State<HomePage> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        'Informations',
+                                        'Information',
                                         style: TextStyle(
                                           fontSize: screenWidth * 0.07,
                                           fontWeight: FontWeight.bold,
