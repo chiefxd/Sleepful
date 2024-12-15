@@ -34,7 +34,7 @@ class Information extends StatelessWidget {
                     ),
                   ),
                   title: Text(
-                    'Informations',
+                    'Information',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
