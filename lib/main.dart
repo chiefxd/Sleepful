@@ -14,9 +14,11 @@ import 'package:sleepful/view/Pages/Profile/edit_profile.dart';
 import 'package:sleepful/view/Pages/home_page.dart';
 import 'package:sleepful/view/Pages/splash_screen.dart';
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await AndroidAlarmManager.initialize();
   await Firebase.initializeApp();
 
   // Initialize Time Zones

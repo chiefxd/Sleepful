@@ -20,7 +20,7 @@ class NotificationService {
     tz.initializeTimeZones();
     final String timeZoneName = tz.local.name;
     tz.setLocalLocation(tz.getLocation(timeZoneName));
-    print('Timezone set to: $timeZoneName');
+    print('✅ Timezone set to: $timeZoneName');
 
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -31,22 +31,62 @@ class NotificationService {
     );
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-    print('NotificationService initialized.');
+    print('✅ NotificationService initialized.');
   }
 
   // Request permission to show notifications (Android 13+)
   Future<void> requestNotificationPermission() async {
-    var status = await Permission.notification.status;
-    if (!status.isGranted) {
-      status = await Permission.notification.request();
-      if (status.isGranted) {
-        print('Notification permissions granted.');
-      } else {
-        print('Notification permissions denied.');
-      }
+  //   var status = await Permission.notification.status;
+  //   if (!status.isGranted) {
+  //     status = await Permission.notification.request();
+  //     if (status.isGranted) {
+  //       print('Notification permissions granted.');
+  //     } else {
+  //       print('Notification permissions denied.');
+  //     }
+  //   } else {
+  //     print('Notification permissions already granted.');
+  //   }
+  // }
+    final status = await Permission.notification.status;
+
+    if (status.isGranted) {
+      print('✅ Notification permissions already granted.');
     } else {
-      print('Notification permissions already granted.');
+      print('⚠️ Requesting notification permissions...');
+      final result = await Permission.notification.request();
+
+      if (result.isGranted) {
+        print('✅ Notification permissions granted.');
+      } else if (result.isDenied) {
+        print('⚠️ Notification permissions denied.');
+      } else if (result.isPermanentlyDenied) {
+        print('🚫 Notification permissions permanently denied. Open settings to enable.');
+        openAppSettings();
+      }
     }
+  }
+
+  Future<void> showNotification(String title, String body) async {
+    const androidDetails = AndroidNotificationDetails(
+      'immediate_channel_id',
+      'Immediate Notifications',
+      channelDescription: 'Channel for immediate notifications.',
+      importance: Importance.max,
+      priority: Priority.high,
+      playSound: true,
+    );
+
+    const notificationDetails = NotificationDetails(android: androidDetails);
+
+    await flutterLocalNotificationsPlugin.show(
+      0, // Notification ID (0 for a generic notification)
+      title, // Notification title
+      body, // Notification body
+      notificationDetails,
+    );
+
+    print('🔔 Immediate notification shown: $title');
   }
 
   // Schedule a notification for a specific time

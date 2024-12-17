@@ -4,7 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../services/notification_service.dart';
+import '../../services/alarm_service.dart';
 import '../../view/Pages/Plans/view_plans.dart';
+
+void alarmCallback() {
+  print("🚨 Alarm Triggered: End Time Reached! 🚨");
+  NotificationService().showNotification(
+    "End Time Alert",
+    "Your specified end time has been reached.",
+  );
+}
 
 class TimePickerController {
   int selectedHour = 12; // Default hour
@@ -180,6 +189,8 @@ class TimePickerController {
       'Saturday'
     ];
 
+    final alarmService = AlarmService();
+
     for (int i = 0; i < selectedDays.length; i++) {
       if (selectedDays[i]) {
         selectedDayLetters.add(fullDayNames[i]);
@@ -222,6 +233,21 @@ class TimePickerController {
           //     endNotificationTime,
           //   );
           // }
+          DateTime alarmTime = DateTime(
+            currentDate.year,
+            currentDate.month,
+            currentDate.day,
+            endDateTime.hour,
+            endDateTime.minute,
+          );
+
+          if (alarmTime.isAfter(currentDate)) {
+            await alarmService.scheduleAlarm(
+              id: i + 1000, // Unique ID for alarm
+              triggerTime: alarmTime,
+              callback: alarmCallback,
+            );
+          }
         }
       }
     }
