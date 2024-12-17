@@ -53,7 +53,7 @@ class TimePickerController {
     isStartSelected = false;
   }
 
-  Future<void> _addPlanToFirestore(String title, String startTime,
+  Future<String> _addPlanToFirestore(String title, String startTime,
       String endTime, List<String> selectedDays) async {
     // Get the current user
     User? user = FirebaseAuth.instance.currentUser;
@@ -66,14 +66,23 @@ class TimePickerController {
           .collection('Plans');
 
       // Add a new document with a generated ID
-      await plansCollection.add({
+      // await plansCollection.add({
+      //   'title': title,
+      //   'startTime': startTime,
+      //   'endTime': endTime,
+      //   'selectedDays': selectedDays,
+      //   'createdAt': FieldValue.serverTimestamp(), // Optional: Add a timestamp
+      // });
+      DocumentReference docRef = await plansCollection.add({
         'title': title,
         'startTime': startTime,
         'endTime': endTime,
         'selectedDays': selectedDays,
-        'createdAt': FieldValue.serverTimestamp(), // Optional: Add a timestamp
+        'createdAt': FieldValue.serverTimestamp(),
       });
+      return docRef.id;
     }
+    throw Exception("User not authenticated.");
   }
 
   Future<bool> _checkForDuplicateTitle(String title) async {
@@ -157,28 +166,8 @@ class TimePickerController {
       return;
     }
 
-    // Trigger notification 5 minutes before the start time
-    DateTime currentTime = DateTime.now();
-    print('Current Time: $currentTime');
-    print('Start Time: $startDateTime');
-
-    // Subtract 5 minutes from the start time to set the notification time
-    DateTime notificationTime = startDateTime.subtract(Duration(minutes: 5));
-    print('Notification Time: $notificationTime');
-
-    Duration difference = notificationTime.difference(currentTime);
-    print('Difference in minutes: ${difference.inMinutes}');
-
-    if (difference.inMinutes <= 0) {
-      final notificationService = NotificationService();
-      print(
-          'Scheduling notification for time: $notificationTime'); // Debugging line
-      await notificationService.scheduleNotification(
-        9999, // Unique test ID
-        'Test Plan',
-        notificationTime,
-      );
-    }
+    DateTime currentDate = DateTime.now();
+    int todayIndex = currentDate.weekday % 7;
 
     List<String> selectedDayLetters = [];
     List<String> fullDayNames = [
@@ -190,9 +179,50 @@ class TimePickerController {
       'Friday',
       'Saturday'
     ];
+
     for (int i = 0; i < selectedDays.length; i++) {
       if (selectedDays[i]) {
         selectedDayLetters.add(fullDayNames[i]);
+
+        // Check if today matches the selected day
+        if (i == todayIndex) {
+          // Schedule notification for today
+          DateTime startNotificationTime = DateTime(
+            currentDate.year,
+            currentDate.month,
+            currentDate.day,
+            startDateTime.hour,
+            startDateTime.minute,
+          ).subtract(Duration(minutes: 5)); // 5 minutes before start time
+
+          if (startNotificationTime.isAfter(currentDate)) {
+            final notificationService = NotificationService();
+            print(
+                'Scheduling notification for time: $startNotificationTime'); // Debugging line
+            await notificationService.scheduleNotification(
+              title.hashCode ^ i, // Unique ID for each day
+              title,
+              startNotificationTime,
+            );
+          }
+          // DateTime endNotificationTime = DateTime(
+          //   currentDate.year,
+          //   currentDate.month,
+          //   currentDate.day,
+          //   endDateTime.hour,
+          //   endDateTime.minute,
+          // );
+          //
+          // if (endNotificationTime.isAfter(currentDate)) {
+          //   final notificationService = NotificationService();
+          //   print('Scheduling notification for end time: $endNotificationTime'); // Debugging
+          //   await notificationService.scheduleNotification(
+          //     (title.hashCode ^ i) + 1, // Unique ID for end notification
+          //     "$title - End Time",
+          //     endNotificationTime,
+          //   );
+          // }
+        }
       }
     }
 

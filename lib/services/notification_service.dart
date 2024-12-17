@@ -59,7 +59,8 @@ class NotificationService {
       priority: Priority.high,
       playSound: true, // Ensure the sound is set for the notification
       enableVibration: true, // Enable vibration if needed
-      timeoutAfter: 60000, // Optional timeout in milliseconds
+      ongoing: true,
+      timeoutAfter: 60000,//null
     );
 
     final notificationDetails = NotificationDetails(android: androidDetails);
