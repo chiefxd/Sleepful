@@ -13,10 +13,13 @@ import 'package:sleepful/view/Pages/Profile/change_theme.dart';
 import 'package:sleepful/view/Pages/Profile/edit_profile.dart';
 import 'package:sleepful/view/Pages/home_page.dart';
 import 'package:sleepful/view/Pages/splash_screen.dart';
+import 'package:sleepful/view/Pages/Plans/view_plans.dart';
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await AndroidAlarmManager.initialize();
   await Firebase.initializeApp();
 
   // Initialize Time Zones
@@ -52,11 +55,25 @@ void main() async {
   );
 }
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+
   @override
   State<MyApp> createState() => _MyAppState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Alarm App',
+      navigatorKey: navigatorKey, // Global key for navigation
+      initialRoute: '/',
+      routes: {
+        '/': (context) => HomePage(),
+        '/viewPlans': (context) => ViewPlans(),
+      },
+    );
+  }
 }
 
 class _MyAppState extends State<MyApp> {
@@ -163,6 +180,7 @@ class _MyAppState extends State<MyApp> {
             builder: (context, themeProvider, child) {
               return MaterialApp(
                 title: 'Sleepful',
+                navigatorKey: navigatorKey,
                 theme: lightTheme,
                 darkTheme: darkTheme,
                 themeMode: themeProvider.currentTheme,
@@ -173,6 +191,7 @@ class _MyAppState extends State<MyApp> {
                   '/change_password': (context) => ChangePassword(),
                   '/change_theme': (context) => ChangeTheme(),
                   '/about_us': (context) => AboutUs(),
+                  '/viewPlans': (context) => ViewPlans(),
                 },
                 home: currentUser != null ? const HomePage() : const SignIn(),
               );

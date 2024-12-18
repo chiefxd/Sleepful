@@ -159,25 +159,21 @@ class TimePickerController {
 
     bool isDuplicate = await _checkForDuplicateTitle(title, planId);
     if (isDuplicate) {
-      // successMessage = 'Plan title already exists. Please choose a different title.';
       showToast("Plan title already exists. Please choose a different title.");
       return;
     }
 
-    // Save the latest selected time based on which button was last pressed
     if (isStartSelected) {
       startTime =
-          '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
+      '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
     } else {
       endTime =
-          '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
+      '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
     }
 
-    // Parse start and end times
     DateTime startDateTime = _parseTime(startTime);
     DateTime endDateTime = _parseTime(endTime);
 
-    // Adjust endDateTime if it is before startDateTime
     if (endDateTime.isBefore(startDateTime)) {
       endDateTime = endDateTime.add(Duration(days: 1));
     }
@@ -200,28 +196,9 @@ class TimePickerController {
       return;
     }
 
-    // Trigger notification 5 minutes before the start time
-    DateTime currentTime = DateTime.now();
-    print('Current Time: $currentTime');
-    print('Start Time: $startDateTime');
-
-    // Subtract 5 minutes from the start time to set the notification time
-    DateTime notificationTime = startDateTime.subtract(Duration(minutes: 5));
-    print('Notification Time: $notificationTime');
-
-    Duration difference = notificationTime.difference(currentTime);
-    print('Difference in minutes: ${difference.inMinutes}');
-
-    if (difference.inMinutes <= 0) {
-      final notificationService = NotificationService();
-      print(
-          'Scheduling notification for time: $notificationTime'); // Debugging line
-      await notificationService.scheduleNotification(
-        9999, // Unique test ID
-        'Test Plan',
-        notificationTime,
-      );
-    }
+    // Get today's day of the week
+    DateTime currentDate = DateTime.now();
+    int todayIndex = currentDate.weekday % 7; // Convert 1-7 to 0-6 (Sunday-Saturday)
 
     List<String> selectedDayLetters = [];
     List<String> fullDayNames = [
@@ -233,13 +210,36 @@ class TimePickerController {
       'Friday',
       'Saturday'
     ];
+
     for (int i = 0; i < selectedDays.length; i++) {
       if (selectedDays[i]) {
         selectedDayLetters.add(fullDayNames[i]);
+
+        // Check if today matches the selected day
+        if (i == todayIndex) {
+          // Schedule notification for today
+          DateTime notificationTime = DateTime(
+            currentDate.year,
+            currentDate.month,
+            currentDate.day,
+            startDateTime.hour,
+            startDateTime.minute,
+          ).subtract(Duration(minutes: 5)); // 5 minutes before start time
+
+          if (notificationTime.isAfter(currentDate)) {
+            final notificationService = NotificationService();
+            print(
+                'Scheduling notification for time: $notificationTime'); // Debugging line
+            await notificationService.scheduleNotification(
+              planId.hashCode ^ i, // Unique ID for each day
+              'Plan Reminder: $title',
+              notificationTime,
+            );
+          }
+        }
       }
     }
 
-    // Create the success message
     if (selectedDayLetters.isNotEmpty) {
       showToast(
           'Success! "$title", Your sleep duration is valid. Selected days: ${selectedDayLetters.join(', ')}.');
@@ -256,6 +256,7 @@ class TimePickerController {
       MaterialPageRoute(builder: (context) => ViewPlans()),
     );
   }
+
 
   void resetTime(bool isStart) {
     if (isStart) {

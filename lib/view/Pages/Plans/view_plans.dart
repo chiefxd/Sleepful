@@ -10,6 +10,16 @@ import 'package:sleepful/view/Pages/home_page.dart';
 import '../../Components/plus_button.dart';
 import '../../Navbar/bottom_navbar.dart';
 
+const List<String> daysOfWeek = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday'
+];
+
 const dayMapping = {
   'Sunday': 'S',
   'Monday': 'M',
@@ -111,17 +121,22 @@ class ViewPlans extends StatelessWidget {
                         final plan = plans[i];
                         final title = plan['title'];
                         final startTime = plan['startTime'];
+                        final selectedDays = List<String>.from(plan['selectedDays'] ?? []);
                         final parsedStartTime = _parseTime(startTime);
                         final notificationTime =
                             parsedStartTime.subtract(Duration(minutes: 5));
 
+                        final todayName = daysOfWeek[DateTime.now().weekday - 1];
+
                         print('Parsed Start Time: $parsedStartTime');
                         print(
                             'Notification Time (5 minutes before): $notificationTime');
+                        print('Current Day: $todayName');
                         print('Current Time: ${DateTime.now()}');
 
                         if (notificationTime.isAfter(DateTime.now()) &&
-                            !scheduledNotifications.contains(i)) {
+                            !scheduledNotifications.contains(i) &&
+                            selectedDays.contains(todayName)) {
                           try {
                             notificationService.scheduleNotification(
                                 i, title, notificationTime);
