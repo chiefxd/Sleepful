@@ -9,9 +9,10 @@ import '../../view/Pages/Plans/view_plans.dart';
 
 void alarmCallback() {
   print("🚨 Alarm Triggered: End Time Reached! 🚨");
-  NotificationService().showNotification(
+  NotificationService().playCustomAlarm(
     "End Time Alert",
     "Your specified end time has been reached.",
+    "custom_alarm", // Name of the MP3 file in the `android/app/src/main/res/raw` directory
   );
 }
 
@@ -74,14 +75,6 @@ class TimePickerController {
           .doc(user.uid)
           .collection('Plans');
 
-      // Add a new document with a generated ID
-      // await plansCollection.add({
-      //   'title': title,
-      //   'startTime': startTime,
-      //   'endTime': endTime,
-      //   'selectedDays': selectedDays,
-      //   'createdAt': FieldValue.serverTimestamp(), // Optional: Add a timestamp
-      // });
       DocumentReference docRef = await plansCollection.add({
         'title': title,
         'startTime': startTime,
@@ -216,23 +209,7 @@ class TimePickerController {
               startNotificationTime,
             );
           }
-          // DateTime endNotificationTime = DateTime(
-          //   currentDate.year,
-          //   currentDate.month,
-          //   currentDate.day,
-          //   endDateTime.hour,
-          //   endDateTime.minute,
-          // );
-          //
-          // if (endNotificationTime.isAfter(currentDate)) {
-          //   final notificationService = NotificationService();
-          //   print('Scheduling notification for end time: $endNotificationTime'); // Debugging
-          //   await notificationService.scheduleNotification(
-          //     (title.hashCode ^ i) + 1, // Unique ID for end notification
-          //     "$title - End Time",
-          //     endNotificationTime,
-          //   );
-          // }
+
           DateTime alarmTime = DateTime(
             currentDate.year,
             currentDate.month,

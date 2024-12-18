@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+
+import '../main.dart';
 
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
@@ -30,7 +34,18 @@ class NotificationService {
       android: initializationSettingsAndroid,
     );
 
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    // await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) {
+        if (response.payload != null) {
+          final data = jsonDecode(response.payload!);
+          if (data['action'] == 'view_plans') {
+            navigatorKey.currentState?.pushNamed('/viewPlans');
+          }
+        }
+      },
+    );
     print('✅ NotificationService initialized.');
   }
 
@@ -80,10 +95,11 @@ class NotificationService {
     const notificationDetails = NotificationDetails(android: androidDetails);
 
     await flutterLocalNotificationsPlugin.show(
-      0, // Notification ID (0 for a generic notification)
+      1, // Notification ID (0 for a generic notification)
       title, // Notification title
       body, // Notification body
       notificationDetails,
+      payload: jsonEncode({'action': 'view_plans'}),
     );
 
     print('🔔 Immediate notification shown: $title');
@@ -121,6 +137,38 @@ class NotificationService {
     );
 
     print('Notification scheduled successfully');
+  }
+
+  // Method to play an endTime alarm with a custom sound
+  Future<void> playCustomAlarm(String title, String body, String soundFile) async {
+    final androidDetails = AndroidNotificationDetails(
+      'end_time_alarm_channel', // Unique channel ID for end time alarm
+      'End Time Alarm',
+      channelDescription: 'Alarm for end time with custom sound.',
+      importance: Importance.max,
+      priority: Priority.high,
+      playSound: true,
+      sound: RawResourceAndroidNotificationSound(soundFile),
+      enableVibration: false, // Disable vibration
+      actions: <AndroidNotificationAction>[
+        AndroidNotificationAction(
+          'navigate_to_view_plans', // Action ID
+          'View Plans', // Action button text
+        ),
+      ],
+    );
+
+    final notificationDetails = NotificationDetails(android: androidDetails);
+
+    await flutterLocalNotificationsPlugin.show(
+      1, // Notification ID (unique for end time alarm)
+      title, // Notification title
+      body, // Notification body
+      notificationDetails,
+      payload: jsonEncode({'action': 'view_plans'}), // Add payload
+    );
+
+    print('🔔 Custom alarm notification shown with button: $title');
   }
 
   // Cancel a notification
