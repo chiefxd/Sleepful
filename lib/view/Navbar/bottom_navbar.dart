@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../Pages/Calendar/calendar.dart';
 import '../Pages/Rewards/rewards_page.dart';
 import '../Pages/Sleeping Stats/sleeping_stats.dart';
 import '../Pages/home_page.dart';
 import 'icon_with_text.dart';
+
+final user = FirebaseAuth.instance.currentUser ;
+final userId = user?.uid;
 
 class BottomNavbar extends StatefulWidget {
   final int selectedIndex; // Add selectedIndex parameter
@@ -55,7 +59,7 @@ class BottomNavbarState extends State<BottomNavbar> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const Calendar()),
+                    MaterialPageRoute(builder: (context) => Calendar(userId: userId ?? '')),
                   );
                 },
                 color: isOnMainPage && widget.selectedIndex == 1

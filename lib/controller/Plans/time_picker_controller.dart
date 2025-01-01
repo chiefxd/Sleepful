@@ -140,15 +140,19 @@ class TimePickerController {
       endTime =
           '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
     }
-
+    DateTime today = DateTime.now();
+    DateTime createdAt = DateTime.now();
     // Parse start and end times
-    DateTime startDateTime = _parseTime(startTime);
-    DateTime endDateTime = _parseTime(endTime);
+    DateTime startDateTime = _parseTime(startTime, date: today);
+    DateTime endDateTime = _parseTime(endTime, date: today);
 
     // Adjust endDateTime if it is before startDateTime
     if (endDateTime.isBefore(startDateTime)) {
       endDateTime = endDateTime.add(Duration(days: 1));
     }
+
+    print('Start DateTime: $startDateTime');
+    print('End DateTime: $endDateTime');
 
     Duration duration = endDateTime.difference(startDateTime);
 
@@ -157,7 +161,7 @@ class TimePickerController {
       return;
     }
 
-    if (duration.inMinutes < 30) {
+    if (duration.inMinutes < 2) {
       showToast("Minimum duration of sleep is 30 minutes.");
       return;
     }
@@ -168,8 +172,9 @@ class TimePickerController {
       return;
     }
 
-    DateTime currentDate = DateTime.now();
-    int todayIndex = currentDate.weekday % 7;
+    // DateTime currentDate = DateTime.now();
+    // int todayIndex = currentDate.weekday % 7;
+    // int todayIndex = today.weekday % 7;
 
     List<String> selectedDayLetters = [];
     List<String> fullDayNames = [
@@ -183,49 +188,153 @@ class TimePickerController {
     ];
 
     final alarmService = AlarmService();
+    List<Map<String, dynamic>> visiblePlans = [];
 
+    // for (int i = 0; i < selectedDays.length; i++) {
+    //   if (selectedDays[i]) {
+    //     selectedDayLetters.add(fullDayNames[i]);
+    //
+    //     // Check if today matches the selected day
+    //     if (i == todayIndex) {
+    //       // Schedule notification for today
+    //       DateTime startNotificationTime = DateTime(
+    //         currentDate.year,
+    //         currentDate.month,
+    //         currentDate.day,
+    //         startDateTime.hour,
+    //         startDateTime.minute,
+    //       ).subtract(Duration(minutes: 5)); // 5 minutes before start time
+    //
+    //       if (startNotificationTime.isAfter(currentDate)) {
+    //         final notificationService = NotificationService();
+    //         print(
+    //             'Scheduling notification for time: $startNotificationTime'); // Debugging line
+    //         await notificationService.scheduleNotification(
+    //           title.hashCode ^ i, // Unique ID for each day
+    //           title,
+    //           startNotificationTime,
+    //         );
+    //       }
+    //
+    //       DateTime alarmTime = DateTime(
+    //         currentDate.year,
+    //         currentDate.month,
+    //         currentDate.day,
+    //         endDateTime.hour,
+    //         endDateTime.minute,
+    //       );
+    //
+    //       if (alarmTime.isAfter(currentDate)) {
+    //         await alarmService.scheduleAlarm(
+    //           id: i + 1000, // Unique ID for alarm
+    //           triggerTime: alarmTime,
+    //           callback: alarmCallback,
+    //         );
+    //       }
+    //     }
+    //   }
+    // }
     for (int i = 0; i < selectedDays.length; i++) {
       if (selectedDays[i]) {
         selectedDayLetters.add(fullDayNames[i]);
+        DateTime startNotificationTime = DateTime(
+          today.year,
+          today.month,
+          today.day,
+          startDateTime.hour,
+          startDateTime.minute,
+        ).subtract(Duration(minutes: 2)); // 5 minutes before start time
 
-        // Check if today matches the selected day
-        if (i == todayIndex) {
-          // Schedule notification for today
-          DateTime startNotificationTime = DateTime(
-            currentDate.year,
-            currentDate.month,
-            currentDate.day,
-            startDateTime.hour,
-            startDateTime.minute,
-          ).subtract(Duration(minutes: 5)); // 5 minutes before start time
+        print('Start Notification Time: $startNotificationTime');
+        print('Current Time: $today');
 
-          if (startNotificationTime.isAfter(currentDate)) {
+        // Only schedule the alarm if the plan is visible today
+    //     if (startNotificationTime.isAfter(today) || startNotificationTime.isAtSameMomentAs(today)) {
+    //       // Plan is not yet visible today, skip scheduling
+    //       continue;
+    //     }
+    //
+    //     // Add the plan to the visible plans list
+    //     visiblePlans.add({
+    //       'title': title,
+    //       'startTime': startDateTime,
+    //       'endTime': endDateTime,
+    //       'dayIndex': i,
+    //     });
+    //   }
+    // }
+        if (i == today.weekday % 7) {
+          // If today is the selected day
+          if (createdAt.isBefore(startNotificationTime)) {
+            // Schedule alarm for today
+            // print('Scheduling alarm for today at $startNotificationTime');
+            // await alarmService.scheduleAlarm(
+            //   id: i + 1000, // Unique ID for alarm
+            //   triggerTime: startNotificationTime,
+            //   callback: alarmCallback,
+            // );
             final notificationService = NotificationService();
-            print(
-                'Scheduling notification for time: $startNotificationTime'); // Debugging line
-            await notificationService.scheduleNotification(
-              title.hashCode ^ i, // Unique ID for each day
-              title,
-              startNotificationTime,
-            );
+                    print(
+                        'Scheduling notification for time: $startNotificationTime'); // Debugging line
+                    await notificationService.scheduleNotification(
+                      title.hashCode ^ i, // Unique ID for each day
+                      title,
+                      startNotificationTime,
+                    );
+            DateTime endAlarmTime = endDateTime.subtract(Duration(seconds: 5)); // 5 seconds before end time
+            if (today.isAtSameMomentAs(endDateTime) || today.isAfter(endAlarmTime)) {
+              print('Triggering alarm callback for end time at $endAlarmTime');
+                      await alarmService.scheduleAlarm(
+                        id: i + 1000, // Unique ID for alarm
+                        triggerTime: endAlarmTime,
+                        callback: alarmCallback,
+                      );
+            }
           }
+          // DateTime endAlarmTime = endDateTime.subtract(Duration(seconds: 5));
+          // if (today.isAtSameMomentAs(endDateTime) || today.isAfter(endAlarmTime)) {
+          //   // Schedule alarm for end time
+          //   print('Scheduling alarm for end time at $endAlarmTime');
+          //   await alarmService.scheduleAlarm(
+          //     id: i + 2000, // Unique ID for end time alarm
+          //     triggerTime: endAlarmTime,
+          //     callback: alarmCallback,
+          //   );
+          // }
 
-          DateTime alarmTime = DateTime(
-            currentDate.year,
-            currentDate.month,
-            currentDate.day,
-            endDateTime.hour,
-            endDateTime.minute,
-          );
-
-          if (alarmTime.isAfter(currentDate)) {
-            await alarmService.scheduleAlarm(
-              id: i + 1000, // Unique ID for alarm
-              triggerTime: alarmTime,
-              callback: alarmCallback,
-            );
-          }
+          // else {
+          //   // Schedule for the next occurrence of the selected day
+          //   DateTime nextOccurrence = startDateTime.add(Duration(days: 7));
+          //   print('Scheduling alarm for next occurrence at $nextOccurrence');
+          //   await alarmService.scheduleAlarm(
+          //     id: i + 1000, // Unique ID for alarm
+          //     triggerTime: nextOccurrence,
+          //     callback: alarmCallback,
+          //   );
+          // }
         }
+      }
+    }
+
+    // Schedule alarms only for visible plans
+    for (var plan in visiblePlans) {
+      DateTime alarmTime = DateTime(
+        today.year,
+        today.month,
+        today.day,
+        plan['endTime'].hour,
+        plan['endTime'].minute,
+      );
+
+      if (alarmTime.isAfter(today)) {
+        print('Scheduling alarm for ${plan['title']} at $alarmTime');
+        await alarmService.scheduleAlarm(
+          id: plan['dayIndex'] + 1000, // Unique ID for alarm
+          triggerTime: alarmTime,
+          callback: alarmCallback,
+        );
+      } else {
+        print('Alarm time is not in the future, skipping scheduling.');
       }
     }
 
@@ -274,7 +383,7 @@ class TimePickerController {
     }
   }
 
-  DateTime _parseTime(String time) {
+  DateTime _parseTime(String time, {DateTime? date}) {
     List<String> parts = time.split(':');
     int hour = int.parse(parts[0]);
     int minute = int.parse(parts[1].split(' ')[0]);
@@ -286,6 +395,8 @@ class TimePickerController {
       hour = 0;
     }
 
-    return DateTime(0, 1, 1, hour, minute);
+    date ??= DateTime.now(); // Use current date if no date is provided
+    // return DateTime(0, 1, 1, hour, minute);
+    return DateTime(date.year, date.month, date.day, hour, minute);
   }
 }

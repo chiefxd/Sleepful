@@ -1,21 +1,68 @@
 import 'package:flutter/material.dart';
+import 'package:sleepful/view/Pages/Plans/view_plans.dart';
 
-import '../../../controller/Plans/time_picker_controller.dart';
+import '../../../controller/Calendar/update_calendar_controller.dart';
 import '../../Components/plus_button.dart';
-// import 'package:sleepful/view/Pages/Plans/time_picker_page.dart';
 import '../../Navbar/bottom_navbar.dart';
-import '../home_page.dart';
 
-class AddPlans extends StatefulWidget {
-  const AddPlans({super.key});
+class UpdateCalendar extends StatefulWidget {
+  final String title;
+  final String planId;
+  final String startTime;
+  final String endTime;
+  final List<String> selectedDays;
+
+  const UpdateCalendar({
+    super.key,
+    required this.title,
+    required this.planId,
+    required this.startTime,
+    required this.endTime,
+    required this.selectedDays,
+  });
 
   @override
-  AddPlansState createState() => AddPlansState(); // Change to public
+  UpdateCalendarState createState() => UpdateCalendarState(); // Change to public
 }
 
-class AddPlansState extends State<AddPlans> {
-  final TimePickerController controller = TimePickerController();
+class UpdateCalendarState extends State<UpdateCalendar> {
+  late final TimePickerController controller;
   final TextEditingController titleController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialize the controller with the values passed from UpdatePlans
+    controller = TimePickerController(
+      startTime: widget.startTime, // Pass startTime
+      endTime: widget.endTime, // Pass endTime
+      selectedDays: _getSelectedDays(widget.selectedDays), // Pass selected days
+    );
+
+    titleController.text = widget.title; // Set the title in the TextField
+  }
+
+  List<bool> _getSelectedDays(List<String> days) {
+    List<bool> selectedDays = List.generate(7, (index) => false);
+    List<String> fullDayNames = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday'
+    ];
+
+    for (String day in days) {
+      int index = fullDayNames.indexOf(day);
+      if (index != -1) {
+        selectedDays[index] = true;
+      }
+    }
+    return selectedDays;
+  }
 
   @override
   void dispose() {
@@ -29,6 +76,12 @@ class AddPlansState extends State<AddPlans> {
   @override
   Widget build(BuildContext context) {
     final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
+    // print('Update Plans Page');
+    // print('Title: ${widget.title}');
+    // print('Plan ID: ${widget.planId}');
+    // print('Start Time: ${widget.startTime}');
+    // print('End Time: ${widget.endTime}');
+    // print('Selected Days: ${widget.selectedDays}');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -36,7 +89,7 @@ class AddPlansState extends State<AddPlans> {
         leading: GestureDetector(
           onTap: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const HomePage()));
+                MaterialPageRoute(builder: (context) => const ViewPlans()));
           },
           child: Padding(
             padding: const EdgeInsets.all(10.0),
@@ -50,7 +103,7 @@ class AddPlansState extends State<AddPlans> {
         title: Padding(
           padding: const EdgeInsets.only(left: 0),
           child: Text(
-            'Add Plan',
+            'Update Calendar',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -90,7 +143,7 @@ class AddPlansState extends State<AddPlans> {
                           childDelegate: ListWheelChildBuilderDelegate(
                             builder: (context, index) {
                               bool isSelected = (controller
-                                      .hours[index % controller.hours.length] ==
+                                  .hours[index % controller.hours.length] ==
                                   controller.selectedHour);
                               return Container(
                                 decoration: BoxDecoration(
@@ -110,19 +163,18 @@ class AddPlansState extends State<AddPlans> {
                                       .toString()
                                       .padLeft(2, '0'),
                                   style: TextStyle(
-                                    fontSize: 54,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Montserrat',
-                                    color: isSelected
-                                        ? Colors.white
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onErrorContainer, // Change text color if selected
+                                      fontSize: 54,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Montserrat',
+                                      color: isSelected
+                                          ? Colors.white
+                                          : Theme.of(context)
+                                          .colorScheme
+                                          .onErrorContainer // Change text color if selected
                                   ),
                                 ),
                               );
                             },
-                            // childCount: hours.length * 1000,
                             childCount: controller.hours.length * 1000,
                           ),
                         ),
@@ -134,13 +186,13 @@ class AddPlansState extends State<AddPlans> {
                         child: Container(
                           decoration: BoxDecoration(
                             color: (controller.selectedHour != -1 ||
-                                    controller.selectedMinute != -1)
+                                controller.selectedMinute != -1)
                                 ? Theme.of(context)
-                                    .colorScheme
-                                    .onError // Change color if hour or minute is selected
+                                .colorScheme
+                                .onError // Change color if hour or minute is selected
                                 : Colors.transparent, // Default color
                             borderRadius:
-                                BorderRadius.circular(0), // No rounding
+                            BorderRadius.circular(0), // No rounding
                           ),
                           alignment: Alignment.center,
                           child: Stack(
@@ -194,8 +246,9 @@ class AddPlansState extends State<AddPlans> {
                           childDelegate: ListWheelChildBuilderDelegate(
                             builder: (context, index) {
                               bool isSelected = (controller.minutes[
-                                      index % controller.minutes.length] ==
+                              index % controller.minutes.length] ==
                                   controller.selectedMinute);
+                              // int minute = index % 60;
                               return Container(
                                 decoration: BoxDecoration(
                                   color: isSelected
@@ -208,18 +261,18 @@ class AddPlansState extends State<AddPlans> {
                                 alignment: Alignment.center,
                                 child: Text(
                                   controller.minutes[
-                                          index % controller.minutes.length]
+                                  index % controller.minutes.length]
                                       .toString()
                                       .padLeft(2, '0'),
                                   style: TextStyle(
-                                    fontSize: 54,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Montserrat',
-                                    color: isSelected
-                                        ? Colors.white
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onErrorContainer, // Change text color if selected
+                                      fontSize: 54,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Montserrat',
+                                      color: isSelected
+                                          ? Colors.white
+                                          : Theme.of(context)
+                                          .colorScheme
+                                          .onErrorContainer // Change text color if selected
                                   ),
                                 ),
                               );
@@ -239,7 +292,7 @@ class AddPlansState extends State<AddPlans> {
                           onSelectedItemChanged: (index) {
                             setState(() {
                               controller.selectedPeriod =
-                                  controller.periods[index];
+                              controller.periods[index];
                             });
                           },
                           childDelegate: ListWheelChildBuilderDelegate(
@@ -251,6 +304,7 @@ class AddPlansState extends State<AddPlans> {
                                   color: isSelected
                                       ? Theme.of(context).colorScheme.onError
                                       : Colors.transparent,
+                                  // Change color if selected
                                   borderRadius: BorderRadius.only(
                                     topRight: Radius.circular(10),
                                     bottomRight: Radius.circular(10),
@@ -260,14 +314,14 @@ class AddPlansState extends State<AddPlans> {
                                 child: Text(
                                   controller.periods[index],
                                   style: TextStyle(
-                                    fontSize: 54,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Montserrat',
-                                    color: isSelected
-                                        ? Colors.white
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onErrorContainer, // Change text color if selected
+                                      fontSize: 54,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Montserrat',
+                                      color: isSelected
+                                          ? Colors.white
+                                          : Theme.of(context)
+                                          .colorScheme
+                                          .onErrorContainer // Change text color if selected
                                   ),
                                 ),
                               );
@@ -298,8 +352,6 @@ class AddPlansState extends State<AddPlans> {
                                   controller.switchToStart();
                                 });
                               },
-                              // onPressed: () => _toggleButton(true),
-                              // onPressed: resetTime,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: controller.isStartSelected
                                     ? Color(0xFFB4A9D6)
@@ -310,7 +362,7 @@ class AddPlansState extends State<AddPlans> {
                                 side: BorderSide(
                                   color: controller.isStartSelected
                                       ? Color(
-                                          0xFFB4A9D6) // Change border color to B4A9D6 when selected
+                                      0xFFB4A9D6) // Change border color to B4A9D6 when selected
                                       : Colors.white,
                                 ),
                                 padding: const EdgeInsets.symmetric(
@@ -332,6 +384,8 @@ class AddPlansState extends State<AddPlans> {
                                   controller.switchToEnd();
                                 });
                               },
+                              // onPressed: () => _toggleButton(false),
+                              // onPressed: resetTime,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: !controller.isStartSelected
                                     ? Color(0xFFB4A9D6)
@@ -367,7 +421,7 @@ class AddPlansState extends State<AddPlans> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: List.generate(7, (index) {
                             String dayLetter =
-                                ['S', 'M', 'T', 'W', 'T', 'F', 'S'][index];
+                            ['S', 'M', 'T', 'W', 'T', 'F', 'S'][index];
                             return DayCircle(
                               letter: dayLetter,
                               isSelected: controller.selectedDays[index],
@@ -412,23 +466,22 @@ class AddPlansState extends State<AddPlans> {
                         borderSide: BorderSide(
                             color: Theme.of(context).colorScheme.primary,
                             width:
-                                2.0), // Set the bottom border color and width
+                            2.0), // Set the bottom border color and width
                       ),
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Theme.of(context).colorScheme.primary,
                             width:
-                                2.0), // Set the focused bottom border color and width
+                            2.0), // Set the focused bottom border color and width
                       ),
                       errorBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.red,
                             width:
-                                2.0), // Set the error bottom border color and width
+                            2.0), // Set the error bottom border color and width
                       ),
                       hintText: 'Enter plan name',
                       hintStyle: TextStyle(
-                          fontFamily: 'Montserrat',
                           color: Theme.of(context)
                               .textTheme
                               .bodySmall
@@ -441,7 +494,8 @@ class AddPlansState extends State<AddPlans> {
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        controller.validateTimes(context, titleController.text);
+                        controller.validateTimes(
+                            context, titleController.text, widget.planId);
                       });
                     },
                     style: ElevatedButton.styleFrom(
@@ -453,7 +507,7 @@ class AddPlansState extends State<AddPlans> {
                           vertical: 4.0), // Same padding as Start button
                     ),
                     child: const Text(
-                      'Add',
+                      'Update',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -506,6 +560,7 @@ class DayCircleState extends State<DayCircle> {
     return GestureDetector(
       onTap: () {
         setState(() {
+          // isSelected = !isSelected;
           widget.onSelected(!widget.isSelected);
         });
       },

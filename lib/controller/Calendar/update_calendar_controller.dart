@@ -48,7 +48,7 @@ class TimePickerController {
     required this.endTime, // Required end time
     List<bool>? selectedDays, // Optional selected days
   })  : selectedDays = selectedDays ??
-            List.generate(7, (index) => false), // Initialize selectedDays
+      List.generate(7, (index) => false), // Initialize selectedDays
         selectedHour = int.parse(
             startTime.split(':')[0]), // Initialize selectedHour from startTime
         selectedMinute = int.parse(startTime
@@ -80,7 +80,7 @@ class TimePickerController {
   void switchToStart() {
     if (!isStartSelected) {
       endTime =
-          '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
+      '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
       resetTime(true);
     } else {
       resetTime(true);
@@ -91,7 +91,7 @@ class TimePickerController {
   void switchToEnd() {
     if (isStartSelected) {
       startTime =
-          '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
+      '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
       resetTime(false);
     } else {
       resetTime(false);
@@ -123,6 +123,24 @@ class TimePickerController {
       });
     }
   }
+  Future<void> _addPlanToCalendar(String title, String startTime, String endTime) async {
+    User? user = FirebaseAuth.instance.currentUser ;
+
+    if (user != null) {
+      // Reference to the Firestore collection
+      DocumentReference calendarPlanDocument = FirebaseFirestore.instance
+          .collection('Calendar Plans')
+          .doc(); // Automatically generate a new document ID
+
+      // Add the document with the provided data
+      await calendarPlanDocument.set({
+        'title': title,
+        'startTime': startTime,
+        'endTime': endTime,
+        'createdAt': FieldValue.serverTimestamp(), // Optional: Add a timestamp for the creation
+      });
+    }
+  }
 
   Future<bool> _checkForDuplicateTitle(String title, String planId) async {
     // Get the current user
@@ -139,7 +157,7 @@ class TimePickerController {
       QuerySnapshot querySnapshot = await plansCollection
           .where('title', isEqualTo: title)
           .where(FieldPath.documentId,
-              isNotEqualTo: planId) // Exclude the current planId
+          isNotEqualTo: planId) // Exclude the current planId
           .get();
 
       // Check if any plans with the same title exist
@@ -275,8 +293,7 @@ class TimePickerController {
           'Success! "$title", Your sleep duration is valid. No days selected.');
     }
 
-    await _updatePlanToFirestore(
-        planId, title, startTime, endTime, selectedDayLetters);
+    await _addPlanToCalendar(title, startTime, endTime);
 
     Navigator.pushReplacement(
       context,
