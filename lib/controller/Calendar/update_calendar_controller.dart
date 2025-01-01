@@ -99,30 +99,30 @@ class TimePickerController {
     isStartSelected = false;
   }
 
-  Future<void> _updatePlanToFirestore(String planId, String title,
-      String startTime, String endTime, List<String> selectedDays) async {
-    // Get the current user
-    User? user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      // Reference to the Firestore collection
-      DocumentReference planDocument = FirebaseFirestore.instance
-          .collection('Users')
-          .doc(user.uid)
-          .collection('Plans')
-          .doc(planId);
-
-      // Update the document with the provided data
-      await planDocument.update({
-        'title': title,
-        'startTime': startTime,
-        'endTime': endTime,
-        'selectedDays': selectedDays,
-        'updatedAt': FieldValue
-            .serverTimestamp(), // Optional: Add a timestamp for the update
-      });
-    }
-  }
+  // Future<void> _updatePlanToFirestore(String planId, String title,
+  //     String startTime, String endTime, List<String> selectedDays) async {
+  //   // Get the current user
+  //   User? user = FirebaseAuth.instance.currentUser;
+  //
+  //   if (user != null) {
+  //     // Reference to the Firestore collection
+  //     DocumentReference planDocument = FirebaseFirestore.instance
+  //         .collection('Users')
+  //         .doc(user.uid)
+  //         .collection('Plans')
+  //         .doc(planId);
+  //
+  //     // Update the document with the provided data
+  //     await planDocument.update({
+  //       'title': title,
+  //       'startTime': startTime,
+  //       'endTime': endTime,
+  //       'selectedDays': selectedDays,
+  //       'updatedAt': FieldValue
+  //           .serverTimestamp(), // Optional: Add a timestamp for the update
+  //     });
+  //   }
+  // }
   Future<void> _addPlanToCalendar(String title, String startTime, String endTime) async {
     User? user = FirebaseAuth.instance.currentUser ;
 
