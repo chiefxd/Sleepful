@@ -147,7 +147,7 @@ class _CalendarState extends State<Calendar> {
         // sleepPlan = sleepPlanController.getSleepPlans(selectedDay!).join('\n');
         sleepPlanList = sleepPlans;
       });
-    });;
+    });
   }
 
   @override
@@ -382,7 +382,7 @@ class _CalendarState extends State<Calendar> {
                                   );
 
                                   final planId = planDetails?['planId']; // Now this will never be null
-                                  final selectedDays = (planDetails?['selectedDays'] as List<String>?)?.join(', ') ?? "No selected days"; // Use actual selectedDays
+                                  // final selectedDays = (planDetails?['selectedDays'] as List<String>?)?.join(', ') ?? "No selected days"; // Use actual selectedDays
                                   String formattedDate = DateFormat('d MMMM yyyy').format(selectedDay!);
                                   String dayString = DateFormat('EEEE').format(selectedDay!);
 
