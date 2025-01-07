@@ -176,6 +176,9 @@ class TimePickerController {
     // int todayIndex = currentDate.weekday % 7;
     // int todayIndex = today.weekday % 7;
 
+    // DateTime currentDate = DateTime.now();
+    // int todayIndex = currentDate.weekday % 7;
+
     List<String> selectedDayLetters = [];
     List<String> fullDayNames = [
       'Sunday',
@@ -281,12 +284,21 @@ class TimePickerController {
                       title,
                       startNotificationTime,
                     );
-            DateTime endAlarmTime = endDateTime.subtract(Duration(seconds: 5)); // 5 seconds before end time
-            if (today.isAtSameMomentAs(endDateTime) || today.isAfter(endAlarmTime)) {
-              print('Triggering alarm callback for end time at $endAlarmTime');
+            // DateTime endAlarmTime = endDateTime.subtract(Duration(seconds: 5)); // 5 seconds before end time
+            DateTime currentDate = DateTime.now();
+                  DateTime alarmTime = DateTime(
+                    currentDate.year,
+                    currentDate.month,
+                    currentDate.day,
+                    endDateTime.hour,
+                    endDateTime.minute,
+                  );
+            // if (today.isAtSameMomentAs(endDateTime) || today.isAfter(endAlarmTime)) {
+            if (alarmTime.isAfter(currentDate)) {
+              print('Triggering alarm callback for end time at $alarmTime');
                       await alarmService.scheduleAlarm(
                         id: i + 1000, // Unique ID for alarm
-                        triggerTime: endAlarmTime,
+                        triggerTime: alarmTime,
                         callback: alarmCallback,
                       );
             }

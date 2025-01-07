@@ -181,12 +181,18 @@ class TimePickerController {
       '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
     }
 
-    DateTime startDateTime = _parseTime(startTime);
-    DateTime endDateTime = _parseTime(endTime);
+    DateTime today = DateTime.now();
+    DateTime updatedAt = DateTime.now();
+
+    DateTime startDateTime = _parseTime(startTime, date: today);
+    DateTime endDateTime = _parseTime(endTime, date: today);
 
     if (endDateTime.isBefore(startDateTime)) {
       endDateTime = endDateTime.add(Duration(days: 1));
     }
+
+    print('Start DateTime: $startDateTime');
+    print('End DateTime: $endDateTime');
 
     Duration duration = endDateTime.difference(startDateTime);
 
@@ -195,7 +201,7 @@ class TimePickerController {
       return;
     }
 
-    if (duration.inMinutes < 3) {
+    if (duration.inMinutes < 2) {
       showToast("Minimum duration of sleep is 30 minutes.");
       return;
     }
@@ -205,10 +211,6 @@ class TimePickerController {
       showToast("Maximum duration of sleep is 9 hours.");
       return;
     }
-
-    // Get today's day of the week
-    DateTime currentDate = DateTime.now();
-    int todayIndex = currentDate.weekday % 7; // Convert 1-7 to 0-6 (Sunday-Saturday)
 
     List<String> selectedDayLetters = [];
     List<String> fullDayNames = [
@@ -222,48 +224,75 @@ class TimePickerController {
     ];
 
     final alarmService = AlarmService();
+    List<Map<String, dynamic>> visiblePlans = [];
 
     for (int i = 0; i < selectedDays.length; i++) {
       if (selectedDays[i]) {
         selectedDayLetters.add(fullDayNames[i]);
+        DateTime startNotificationTime = DateTime(
+          today.year,
+          today.month,
+          today.day,
+          startDateTime.hour,
+          startDateTime.minute,
+        ).subtract(Duration(minutes: 2)); // 5 minutes before start time
 
-        // Check if today matches the selected day
-        if (i == todayIndex) {
-          // Schedule notification for today
-          DateTime notificationTime = DateTime(
-            currentDate.year,
-            currentDate.month,
-            currentDate.day,
-            startDateTime.hour,
-            startDateTime.minute,
-          ).subtract(Duration(minutes: 5)); // 5 minutes before start time
+        print('Start Notification Time: $startNotificationTime');
+        print('Current Time: $today');
 
-          if (notificationTime.isAfter(currentDate)) {
+        if (i == today.weekday % 7) {
+          // If today is the selected day
+          if (updatedAt.isBefore(startNotificationTime)) {
             final notificationService = NotificationService();
             print(
-                'Scheduling notification for time: $notificationTime'); // Debugging line
+                'Scheduling notification for time: $startNotificationTime'); // Debugging line
             await notificationService.scheduleNotification(
-              planId.hashCode ^ i, // Unique ID for each day
-              'Plan Reminder: $title',
-              notificationTime,
+              title.hashCode ^ i, // Unique ID for each day
+              title,
+              startNotificationTime,
             );
-          }
-          DateTime alarmTime = DateTime(
-            currentDate.year,
-            currentDate.month,
-            currentDate.day,
-            endDateTime.hour,
-            endDateTime.minute,
-          );
 
-          if (alarmTime.isAfter(currentDate)) {
-            await alarmService.scheduleAlarm(
-              id: planId.hashCode ^ i, // Unique ID for alarm
-              triggerTime: alarmTime,
-              callback: alarmCallback,
+            DateTime currentDate = DateTime.now();
+            DateTime alarmTime = DateTime(
+              currentDate.year,
+              currentDate.month,
+              currentDate.day,
+              endDateTime.hour,
+              endDateTime.minute,
             );
+            // if (today.isAtSameMomentAs(endDateTime) || today.isAfter(endAlarmTime)) {
+            if (alarmTime.isAfter(currentDate)) {
+              print('Triggering alarm callback for end time at $alarmTime');
+              await alarmService.scheduleAlarm(
+                id: i + 1000, // Unique ID for alarm
+                triggerTime: alarmTime,
+                callback: alarmCallback,
+              );
+            }
           }
         }
+      }
+    }
+
+    // Schedule alarms only for visible plans
+    for (var plan in visiblePlans) {
+      DateTime alarmTime = DateTime(
+        today.year,
+        today.month,
+        today.day,
+        plan['endTime'].hour,
+        plan['endTime'].minute,
+      );
+
+      if (alarmTime.isAfter(today)) {
+        print('Scheduling alarm for ${plan['title']} at $alarmTime');
+        await alarmService.scheduleAlarm(
+          id: plan['dayIndex'] + 1000, // Unique ID for alarm
+          triggerTime: alarmTime,
+          callback: alarmCallback,
+        );
+      } else {
+        print('Alarm time is not in the future, skipping scheduling.');
       }
     }
 
@@ -313,7 +342,21 @@ class TimePickerController {
     }
   }
 
-  DateTime _parseTime(String time) {
+  // DateTime _parseTime(String time) {
+  //   List<String> parts = time.split(':');
+  //   int hour = int.parse(parts[0]);
+  //   int minute = int.parse(parts[1].split(' ')[0]);
+  //   String period = parts[1].split(' ')[1];
+  //
+  //   if (period == 'PM' && hour != 12) {
+  //     hour += 12;
+  //   } else if (period == 'AM' && hour == 12) {
+  //     hour = 0;
+  //   }
+  //
+  //   return DateTime(0, 1, 1, hour, minute);
+  // }
+  DateTime _parseTime(String time, {DateTime? date}) {
     List<String> parts = time.split(':');
     int hour = int.parse(parts[0]);
     int minute = int.parse(parts[1].split(' ')[0]);
@@ -325,6 +368,8 @@ class TimePickerController {
       hour = 0;
     }
 
-    return DateTime(0, 1, 1, hour, minute);
+    date ??= DateTime.now(); // Use current date if no date is provided
+    // return DateTime(0, 1, 1, hour, minute);
+    return DateTime(date.year, date.month, date.day, hour, minute);
   }
 }

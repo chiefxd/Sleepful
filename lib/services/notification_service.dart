@@ -116,7 +116,7 @@ class NotificationService {
       playSound: true, // Ensure the sound is set for the notification
       enableVibration: true, // Enable vibration if needed
       ongoing: true,
-      timeoutAfter: 60000,//null
+      timeoutAfter: 90000,//null
     );
 
     final notificationDetails = NotificationDetails(android: androidDetails);

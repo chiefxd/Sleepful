@@ -2,20 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
 class SleepPlanController {
-  // Map<DateTime, List<String>> sleepPlans = {};
   Map<DateTime, List<Map<String, dynamic>>> sleepPlans = {};
 
   Timer? periodicChecker;
 
   SleepPlanController() {
     // Start periodic checks for end times
-    periodicChecker = Timer.periodic(Duration(minutes: 1), (_) {
+    periodicChecker = Timer.periodic(Duration(minutes: 5), (_) {
       _checkAndMoveToSuccessfulPlans();
     });
   }
 
-  // Method to fetch sleep plans from Firestore
-  Stream<void> fetchSleepPlans(String userId) {
+  Stream<Map<DateTime, List<Map<String, dynamic>>>> fetchSleepPlans(String userId) {
     return FirebaseFirestore.instance
         .collection('Users')
         .doc(userId)
@@ -23,59 +21,96 @@ class SleepPlanController {
         .snapshots()
         .map((snapshot) {
       sleepPlans.clear(); // Clear previous plans
+      DateTime today = DateTime.now();
+      print('Fetching plans for today: $today');
+
       for (var doc in snapshot.docs) {
         final plan = doc.data();
+        final planId = doc.id; // Get the planId
         final selectedDays = List<String>.from(plan['selectedDays'] ?? []);
-        final startTime = plan['startTime']; // Assuming you have startTime in your plan
-        final endTime = plan['endTime']; // Assuming you have endTime in your plan
-        final title = plan['title']; // Get the title
-        final createdAt = (plan['createdAt'] as Timestamp).toDate(); // Get the creation time
+        final startTime = plan['startTime'];
+        final endTime = plan['endTime'];
+        final title = plan['title'];
+        final createdAt = (plan['createdAt'] as Timestamp).toDate();
+        print('Plan Title: $title, Created At: $createdAt');
+        DateTime startDateTime = _parseTime(today, startTime);
 
-        // Add plans for each selected day
         for (String day in selectedDays) {
-          // Get all dates (past and future) for the selected day
           for (DateTime date in _getAllDatesForDay(day)) {
-            // Check if the plan was created before the start time of that day
-            // DateTime startDateTime = DateTime(date.year, date.month, date.day, int.parse(startTime.split(':')[0]) + (startTime.contains('PM') ? 12 : 0), int.parse(startTime.split(':')[1].split(' ')[0]));
-            // DateTime endDateTime = DateTime(date.year, date.month, date.day, int.parse(endTime.split(':')[0]) + (endTime.contains('PM') ? 12 : 0), int.parse(endTime.split(':')[1].split(' ')[0]));
-            DateTime startDateTime = _parseTime(date, startTime);
-            DateTime endDateTime = _parseTime(date, endTime);
-
-            if (createdAt.isBefore(startDateTime) || date.isAfter(DateTime.now())) {
-              // If created before start time or in the future, show the plan
-              if (!sleepPlans.containsKey(date)) {
-                sleepPlans[date] = []; // Initialize the list if it doesn't exist
-              }
-              // sleepPlans[date]!.add("$title: Sleep from $startTime to $endTime"); // Add the plan to the list
-              sleepPlans[date]!.add({
-                'title': title,
-                'startTime': startDateTime,
-                'endTime': endDateTime,
-                'planData': plan,
-                'userId': userId,
-              });
+            // Allow the plan to show if createdAt is before startTime on the same day
+            if (
+                (date.isBefore(createdAt) && createdAt.isAfter(_parseTime(date, startTime)))) {
+              continue; // Skip this date
             }
 
-            // Check if the end time has already been reached for today
-            if (date.isAtSameMomentAs(DateTime.now()) && DateTime.now().isAfter(endDateTime)) {
-              // Move the plan to the "Successful Plans" collection
-              _moveToSuccessfulPlans(userId, plan, date);
+            DateTime startDateTimeRill = _parseTime(date, startTime);
+            DateTime endDateTimeRill = _parseTime(date, endTime);
+
+            // Check if the plan's createdAt is before or at the start time
+            if (createdAt.isBefore(startDateTime) || createdAt.isAtSameMomentAs(startDateTime)) {
+              // Add the plan for the current date
+              if (!sleepPlans.containsKey(date)) {
+                sleepPlans[date] = [];
+              }
+              sleepPlans[date]!.add({
+                'title': title,
+                'startTime': startDateTimeRill,
+                'endTime': endDateTimeRill,
+                'planData': plan,
+                'planId': planId, // Include the planId
+                'selectedDays': selectedDays, // Include selectedDays
+                'userId': userId,
+              });
+              print("Added Plan: $title from $startDateTimeRill to $endTime on $date and createdAt: $createdAt");
+            } else {
+              // If createdAt is after startTime, add the plan for the next occurrence of the selected day
+              DateTime nextOccurrence = date.add(Duration(days: 0)); // Move to the next week
+              if (!sleepPlans.containsKey(nextOccurrence)) {
+                sleepPlans[nextOccurrence] = [];
+              }
+              sleepPlans[nextOccurrence]!.add({
+                'title': title,
+                'startTime': startDateTimeRill,
+                'endTime': endDateTimeRill,
+                'planData': plan,
+                'planId': planId, // Include the planId
+                'selectedDays': selectedDays, // Include selectedDays
+                'userId': userId,
+              });
+              print("Added Plan for next occurrence: $title from $startDateTimeRill to $endTime on $nextOccurrence");
             }
           }
         }
       }
+      print("All Sleep Plans: $sleepPlans"); // Debugging: Print all sleep plans
+      return sleepPlans; // Return the updated sleepPlans map
     });
   }
 
+  Set<String> movedPlanTitles = {};
+
   void _checkAndMoveToSuccessfulPlans() async {
     DateTime now = DateTime.now();
-    for (var date in sleepPlans.keys) {
-      for (var plan in sleepPlans[date] ?? []) {
+    DateTime today = DateTime(now.year, now.month, now.day);
+    print('Current Time: $now');
+
+    // for (var date in sleepPlans.keys) {
+    if (sleepPlans.containsKey(today)) {
+      for (var plan in sleepPlans[today] ?? []) {
         DateTime endDateTime = plan['endTime'];
-        if (now.isAfter(endDateTime)) {
-          await _moveToSuccessfulPlans(plan['userId'], plan['planData'], date);
+        String planTitle = plan['title'];
+
+        // Check if the current time is after the end time and the plan hasn't been moved yet
+        if (now.isAfter(endDateTime) && !movedPlanTitles.contains(planTitle)) {
+          print('Moving plan to Successful Plans: ${plan['title']}');
+          await _moveToSuccessfulPlans(plan['userId'], plan['planData'], today);
+          movedPlanTitles.add(planTitle); // Mark this plan as moved
+        } else {
+          print('Plan not yet completed or already moved: ${plan['title']}');
         }
       }
+    } else {
+      print("No plans for today: $today");
     }
   }
 
@@ -92,6 +127,7 @@ class SleepPlanController {
         .get();
     // Create a new document in the "Successful Plans" collection
     if (existingPlans.docs.isEmpty) {
+      try {
       await FirebaseFirestore.instance
           .collection('Users')
           .doc(userId)
@@ -105,6 +141,11 @@ class SleepPlanController {
         'updatedAt': plan.containsKey('updatedAt') ? plan['updatedAt'] : plan['createdAt'], // Add updatedAt field
         'successfulDate': endDateTime, // Use current date
       });
+      print('Successfully moved plan to Successful Plans: ${plan['title']}');
+    } catch (e) {
+        print('Error moving to successful plans: $e');
+      }} else {
+      print('Plan already exists in Successful Plans: ${plan['title']}');
     }
   }
 
@@ -157,17 +198,15 @@ class SleepPlanController {
     }
   }
 
-  // List<String> getSleepPlans(DateTime date) {
-  //   DateTime normalizedDate = DateTime(date.year, date.month, date.day);
-  //   return sleepPlans[normalizedDate] ?? ["No sleep plan for this date"];
-  // }
   List<String> getSleepPlans(DateTime date) {
     DateTime normalizedDate = DateTime(date.year, date.month, date.day);
     if (sleepPlans.containsKey(normalizedDate)) {
+      print("Plans for $normalizedDate: ${sleepPlans[normalizedDate]}"); // Debugging
       return sleepPlans[normalizedDate]!
           .map((plan) => "${plan['title']}: Sleep from ${plan['startTime']} to ${plan['endTime']}")
           .toList();
     }
+    print("No plans for $normalizedDate");
     return ["No sleep plan for this date"];
   }
 }

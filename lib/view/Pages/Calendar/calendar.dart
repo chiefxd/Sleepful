@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sleepful/controller/Calendar/today_plan_controller.dart'; // Import the SleepPlanController
 import 'package:table_calendar/table_calendar.dart';
 
@@ -23,16 +26,128 @@ class _CalendarState extends State<Calendar> {
   final SleepPlanController sleepPlanController =
       SleepPlanController(); // Instantiate the controller
   String? sleepPlan; // Variable to hold the sleep plan for the selected day
+  Map<DateTime, List<Map<String, dynamic>>>? sleepPlanList;
+
+  void _deletePlan(BuildContext context, String planId, String title) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Theme.of(context).colorScheme.onSecondary,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.delete,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 30,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Are you sure you want to delete "$title"?',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.tertiary,
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          actions: [
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(30.0),
+                      border: Border.all(
+                        color: const Color(0xFFB4A9D6),
+                        width: 2.0,
+                      ),
+                    ),
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(); // Close the dialog
+                      },
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                      ),
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.tertiary,
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const VerticalDivider(color: Colors.white),
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    child: TextButton(
+                      onPressed: () {
+                        User? user = FirebaseAuth.instance.currentUser ;
+                        FirebaseFirestore.instance
+                            .collection('Users')
+                            .doc(user?.uid)
+                            .collection('Plans')
+                            .doc(planId)
+                            .delete(); // Perform the delete operation
+                        Navigator.of(context).pop(); // Close the dialog
+                      },
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                      ),
+                      child: const Text(
+                        'Delete',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   @override
   void initState() {
     super.initState();
     selectedDay = focusedDay; // Initialize selectedDay to today
-    sleepPlanController.fetchSleepPlans(widget.userId).listen((_) {
+    sleepPlanController.fetchSleepPlans(widget.userId).listen((sleepPlans) {
       setState(() {
-        sleepPlan = sleepPlanController.getSleepPlans(selectedDay!).join('\n');
+        // sleepPlan = sleepPlanController.getSleepPlans(selectedDay!).join('\n');
+        sleepPlanList = sleepPlans;
       });
-    });
+    });;
   }
 
   @override
@@ -121,6 +236,7 @@ class _CalendarState extends State<Calendar> {
                                     selectedDay; // Update the selected day
                                 this.focusedDay = selectedDay;
                               });
+                              print("Selected Day: $selectedDay");
                             },
                             daysOfWeekStyle: DaysOfWeekStyle(
                               weekdayStyle: TextStyle(
@@ -170,7 +286,7 @@ class _CalendarState extends State<Calendar> {
                                 fontFamily: 'Montserrat',
                               ),
                               outsideTextStyle: TextStyle(
-                                color: Color(0xFFB4A9D6),
+                                color: Color(0xFFB4A9D6).withOpacity(0.6),
                                 fontSize: subtitleFontSize,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'Montserrat',
@@ -179,248 +295,260 @@ class _CalendarState extends State<Calendar> {
                           ),
                         ),
                         SizedBox(height: 20),
-                        // Add some space below the calendar
-                        // The plans will be displayed here
-                        // Column(
-                        //   children: sleepPlanController.getSleepPlans(selectedDay!).first == "No sleep plan for this date"
-                        //       ? [
-                        //   Container(
-                        //     margin: const EdgeInsets.symmetric(vertical: 5),
-                        //     padding: const EdgeInsets.all(10),
-                        //     decoration: BoxDecoration(
-                        //       borderRadius: BorderRadius.circular(10),
-                        //       color: Theme.of(context).colorScheme.surface,
-                        //       border: Border.all(
-                        //         color: const Color(0xFFB4A9D6),
-                        //         width: 1,
-                        //       ),
-                        //     ),
-                        //     child: Text(
-                        //       "There's no plans for this date.",
-                        //       style: TextStyle(
-                        //         color: Theme.of(context).colorScheme.primary,
-                        //         fontSize: subtitleFontSize,
-                        //         fontWeight: FontWeight.bold,
-                        //         fontFamily: 'Montserrat',
-                        //       ),
-                        //     ),
-                        //   ),
-                        //     ]
-                        //       : sleepPlanController.getSleepPlans(selectedDay!).map((plan) {
-                        //     final parts = plan.split(': ');
-                        //     if (parts.length < 2) {
-                        //       return SizedBox(); // Return empty widget for invalid plan format
-                        //     }
-                        //
-                        //     final title = parts[0];
-                        //     final timeDetails = parts[1].split(' to ');
-                        //     if (timeDetails.length < 2) {
-                        //       return SizedBox(); // Return empty widget for invalid time details
-                        //     }
-                        //
-                        //     final startTime = timeDetails[0].replaceFirst('Sleep from ', '');
-                        //     final endTime = timeDetails[1];
-                        //
-                        //     return Container(
-                        //       margin: const EdgeInsets.symmetric(vertical: 5),
-                        //       padding: const EdgeInsets.all(10),
-                        //       decoration: BoxDecoration(
-                        //         borderRadius: BorderRadius.circular(10),
-                        //         color: Theme.of(context).colorScheme.surface,
-                        //         border: Border.all(color: const Color(0xFFB4A9D6), width: 1),
-                        //       ),
-                        //       child: Column(
-                        //         crossAxisAlignment: CrossAxisAlignment.start,
-                        //         children: [
-                        //           Text(
-                        //             title,
-                        //             style: TextStyle(
-                        //               color: Theme.of(context).colorScheme.primary,
-                        //               fontSize: subtitleFontSize,
-                        //               fontWeight: FontWeight.bold,
-                        //               fontFamily: 'Montserrat',
-                        //             ),
-                        //           ),
-                        //           const SizedBox(height: 5),
-                        //           Text(
-                        //             'Start Time: $startTime',
-                        //             style: TextStyle(
-                        //               color: Theme.of(context).colorScheme.primary,
-                        //               fontSize: subtitleFontSize,
-                        //               fontFamily: 'Montserrat',
-                        //             ),
-                        //           ),
-                        //           Text(
-                        //             'End Time: $endTime',
-                        //             style: TextStyle(
-                        //               color: Theme.of(context).colorScheme.primary,
-                        //               fontSize: subtitleFontSize,
-                        //               fontFamily: 'Montserrat',
-                        //             ),
-                        //           ),
-                        //           const SizedBox(height: 5),
-                        //           Row(
-                        //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //             children: [
-                        //               Text(
-                        //                 'Update',
-                        //                 style: TextStyle(
-                        //                   color: Theme.of(context).colorScheme.primary,
-                        //                   fontSize: subtitleFontSize,
-                        //                   fontFamily: 'Montserrat',
-                        //                 ),
-                        //               ),
-                        //               Text(
-                        //                 '${selectedDay!.toLocal()}'.split(' ')[0], // Display the selected date
-                        //                 style: TextStyle(
-                        //                   color: Theme.of(context).colorScheme.primary,
-                        //                   fontSize: subtitleFontSize,
-                        //                   fontFamily: 'Montserrat',
-                        //                 ),
-                        //               ),
-                        //             ],
-                        //           ),
-                        //         ],
-                        //       ),
-                        //     );
-                        //   }).toList(),
-                        // ),
                         Column(
-                          children: sleepPlanController.getSleepPlans(selectedDay!).first == "No sleep plan for this date"
+                          children: sleepPlanController
+                                      .getSleepPlans(selectedDay!)
+                                      .first ==
+                                  "No sleep plan for this date"
+                              // children: sleepPlanController.getSleepPlans(selectedDay!).isEmpty
                               ? [
-                            Container(
-                              margin: const EdgeInsets.symmetric(vertical: 5),
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Theme.of(context).colorScheme.surface,
-                                border: Border.all(
-                                  color: const Color(0xFFB4A9D6),
-                                  width: 1,
-                                ),
-                              ),
-                              child: Text(
-                                "There's no plans for this date.",
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  fontSize: subtitleFontSize,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Montserrat',
-                                ),
-                              ),
-                            ),
-                          ]
-                              : sleepPlanController.getSleepPlans(selectedDay!).map((plan) {
-                            final parts = plan.split(': ');
-                            if (parts.length < 2) {
-                              return SizedBox(); // Return empty widget for invalid plan format
-                            }
-
-                            final title = parts[0];
-                            final timeDetails = parts[1].split(' to ');
-                            if (timeDetails.length < 2) {
-                              return SizedBox(); // Return empty widget for invalid time details
-                            }
-
-                            final startTime = timeDetails[0].replaceFirst('Sleep from ', '');
-                            final endTime = timeDetails[1];
-
-                            // Assuming the plan string contains planId and selectedDays
-                            // Assuming the plan string contains planId and selectedDays
-                            final additionalInfo = parts[2].split(', '); // Assuming additional info is in the third part
-                            final planId = additionalInfo[0].split(': ')[1]; // Extract planId
-                            final selectedDaysString = additionalInfo[1].split(': ')[1]; // Extract selectedDays
-                            final selectedDays = selectedDaysString.replaceAll(RegExp(r'[\[\]]'), '').split(',').map((e) => e.trim() == 'true').toList(); // Convert to List<bool>
-
-// Convert List<bool> to List<String>
-                            final selectedDaysStringList = selectedDays.map((day) => day.toString()).toList(); // Convert to List<String>
-
-                            return Container(
-                              margin: const EdgeInsets.symmetric(vertical: 5),
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Theme.of(context).colorScheme.surface,
-                                border: Border.all(color: const Color(0xFFB4A9D6), width: 1),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    title,
-                                    style: TextStyle(
-                                      color: Theme.of(context).colorScheme.primary,
-                                      fontSize: subtitleFontSize,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Montserrat',
+                                  // children: sleepPlanController.getSleepPlans(selectedDay!).isEmpty
+                                  //     ? [
+                                  Container(
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 5),
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color:
+                                          Theme.of(context).colorScheme.surface,
+                                      border: Border.all(
+                                        color: const Color(0xFFB4A9D6),
+                                        width: 1,
+                                      ),
+                                    ),
+                                    child: Text(
+                                      "There's no plans for this date.",
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        fontSize: subtitleFontSize,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Montserrat',
+                                      ),
                                     ),
                                   ),
-                                  const SizedBox(height: 5),
-                                  Text(
-                                    'Start Time: $startTime',
-                                    style: TextStyle(
-                                      color: Theme.of(context).colorScheme.primary,
-                                      fontSize: subtitleFontSize,
-                                      fontFamily: 'Montserrat',
+                                ]
+                              : sleepPlanController
+                                  .getSleepPlans(selectedDay!)
+                                  .map((plan) {
+                                  print("Plan: $plan");
+                                  final parts = plan.split(': ');
+                                  if (parts.length < 2) {
+                                    return SizedBox(); // Return empty widget for invalid plan format
+                                  }
+
+                                  final title = parts[0];
+                                  final timeDetails = parts[1].split(' to ');
+                                  if (timeDetails.length < 2) {
+                                    return SizedBox(); // Return empty widget for invalid time details
+                                  }
+
+                                  final startTimeString = timeDetails[0].replaceFirst('Sleep from ', '');
+                                  final endTimeString = timeDetails[1];
+
+                                  // Parse the start and end time strings into DateTime objects
+                                  DateTime startTime = DateTime.parse(startTimeString);
+                                  DateTime endTime = DateTime.parse(endTimeString);
+
+                                  // Format the DateTime objects into the desired format
+                                  String formattedStartTime = DateFormat.jm().format(startTime); // e.g., 10:20 PM
+                                  String formattedEndTime = DateFormat.jm().format(endTime); // e.g., 5:00 AM
+
+                                  // final title = plan['title'];
+                                  // final startTime = plan['startTime'];
+                                  // final endTime = plan['endTime'];
+                                  // final planId = plan['planId']; // Now this is correctly extracted
+                                  // final selectedDays = plan['selectedDays']; // Now this is correctly extracted
+                                  // final planDetails = sleepPlanController
+                                  //     .sleepPlans[selectedDay!]
+                                  //     ?.firstWhere(
+                                  //         (plan) => plan['title'] == title);
+                                  // final planId = planDetails?['planId'] ??
+                                  //     "Unknown Plan ID"; // Use actual planId
+                                  // final selectedDays = (planDetails?[
+                                  //             'selectedDays'] as List<String>?)
+                                  //         ?.join(', ') ??
+                                  //     "No selected days"; // Use actual selectedDays
+                                  DateTime normalizedDate = DateTime(selectedDay!.year, selectedDay!.month, selectedDay!.day);
+                                  final planDetails = sleepPlanList?[normalizedDate]
+                                      ?.firstWhere(
+                                          (plan) => plan['title'].toLowerCase() == title.toLowerCase(),
+                                      orElse: () => {
+                                        'planId': 'Unknown Plan ID',
+                                        'selectedDays': [],
+                                      }
+                                  );
+
+                                  final planId = planDetails?['planId']; // Now this will never be null
+                                  final selectedDays = (planDetails?['selectedDays'] as List<String>?)?.join(', ') ?? "No selected days"; // Use actual selectedDays
+                                  String formattedDate = DateFormat('d MMMM yyyy').format(selectedDay!);
+                                  String dayString = DateFormat('EEEE').format(selectedDay!);
+
+                                  return Container(
+                                    margin: const EdgeInsets.symmetric(vertical: 5),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      // color: Theme.of(context).colorScheme.surface,
+                                      color: Color(0xFF26184A),
+                                      // border: Border.all(
+                                      //   color: const Color(0xFF8374B5),
+                                      //   width: 1,
+                                      // ),
                                     ),
-                                  ),
-                                  Text(
-                                    'End Time: $endTime',
-                                    style: TextStyle(
-                                      color: Theme.of(context).colorScheme.primary,
-                                      fontSize: subtitleFontSize,
-                                      fontFamily: 'Montserrat',
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () async {
-                                          // Navigate to the time picker page
-                                          await Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => UpdateCalendar(
-                                                title: title,
-                                                startTime: startTime,
-                                                endTime: endTime,
-                                                planId: planId, // Now we have planId
-                                                selectedDays: selectedDaysStringList, // Pass the converted List<String>
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(10), // Apply padding here
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                title,
+                                                style: TextStyle(
+                                                  color: Theme.of(context).colorScheme.primary,
+                                                  fontSize: subtitleFontSize,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: 'Montserrat',
+                                                ),
                                               ),
-                                            ),
-                                          );
-
-                                          // After returning, refresh the sleep plans
-                                          sleepPlanController.fetchSleepPlans(widget.userId).listen((_) {
-                                            setState(() {
-                                              sleepPlan = sleepPlanController.getSleepPlans(selectedDay!).join('\n');
-                                            });
-                                          });
-                                        },
-                                        child: Text(
-                                          'Update',
-                                          style: TextStyle(
-                                            color: Theme.of(context).colorScheme.primary,
-                                            fontSize: subtitleFontSize,
-                                            fontFamily: 'Montserrat',
+                                              const SizedBox(height: 5),
+                                              Text(
+                                                'Day: $dayString, Date: $formattedDate',
+                                                style: TextStyle(
+                                                  color: Theme.of(context).colorScheme.primary,
+                                                  fontSize: subtitleFontSize,
+                                                  fontFamily: 'Montserrat',
+                                                ),
+                                              ),
+                                              Text(
+                                                'Time: $formattedStartTime - $formattedEndTime',
+                                                style: TextStyle(
+                                                  color: Theme.of(context).colorScheme.primary,
+                                                  fontSize: subtitleFontSize,
+                                                  fontFamily: 'Montserrat',
+                                                ),
+                                              ),
+                                              // Text(
+                                              //   'Plan ID: $planId',
+                                              //   style: TextStyle(
+                                              //     color: Theme.of(context)
+                                              //         .colorScheme
+                                              //         .primary,
+                                              //     fontSize: subtitleFontSize,
+                                              //     fontFamily: 'Montserrat',
+                                              //   ),
+                                              // ),
+                                              // Text(
+                                              //   'Selected Days: $selectedDays',
+                                              //   style: TextStyle(
+                                              //     color: Theme.of(context)
+                                              //         .colorScheme
+                                              //         .primary,
+                                              //     fontSize: subtitleFontSize,
+                                              //     fontFamily: 'Montserrat',
+                                              //   ),
+                                              // ),
+                                              // Text(
+                                              //   'Start Time: $startTime',
+                                              //   style: TextStyle(
+                                              //     color: Theme.of(context)
+                                              //         .colorScheme
+                                              //         .primary,
+                                              //     fontSize: subtitleFontSize,
+                                              //     fontFamily: 'Montserrat',
+                                              //   ),
+                                              // ),
+                                              // Text(
+                                              //   'End Time: $endTime',
+                                              //   style: TextStyle(
+                                              //     color: Theme.of(context)
+                                              //         .colorScheme
+                                              //         .primary,
+                                              //     fontSize: subtitleFontSize,
+                                              //     fontFamily: 'Montserrat',
+                                              //   ),
+                                              // ),
+                                            ],
                                           ),
                                         ),
-                                      ),
-                                      Text(
-                                        '${selectedDay!.toLocal()}'.split(' ')[0], // Display the selected date
-                                        style: TextStyle(
-                                          color: Theme.of(context).colorScheme.primary,
-                                          fontSize: subtitleFontSize,
-                                          fontFamily: 'Montserrat',
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => UpdateCalendar(
+                                                  title: 'Dummy Title',
+                                                  planId: 'DummyPlanID',
+                                                  startTime: '10:00 AM',
+                                                  endTime: '11:00 AM',
+                                                  selectedDays: ['Monday', 'Wednesday'],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          child: Container(
+                                            width: double.infinity,
+                                            padding: const EdgeInsets.all(5),
+                                            decoration: const BoxDecoration(
+                                              color: Color(0xFF6149A7),
+                                              borderRadius: BorderRadius.vertical(
+                                                bottom: Radius.circular(10),
+                                              ),
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      'Update',
+                                                      style: TextStyle(
+                                                        color: Colors.white.withOpacity(0.8),
+                                                        fontSize: subtitleFontSize,
+                                                        fontWeight: FontWeight.bold,
+                                                        fontFamily: 'Montserrat',
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  height: 20,
+                                                  width: 1,
+                                                  color: Colors.white.withOpacity(0.8),
+                                                ),
+                                                Expanded(
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      _deletePlan(context, planId, title); // Call the delete function
+                                                    },
+                                                    child: Container(
+                                                      alignment: Alignment.center,
+                                                      child: Text(
+                                                        'Delete',
+                                                        style: TextStyle(
+                                                          color: Color(0xFFFF474C).withOpacity(0.8),
+                                                          fontSize: subtitleFontSize,
+                                                          fontWeight: FontWeight.bold,
+                                                          fontFamily: 'Montserrat',
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            );
+
+
+
+                                      ],
+                                    ),
+                                  );
+
                           }).toList(),
                         ),
                       ],
