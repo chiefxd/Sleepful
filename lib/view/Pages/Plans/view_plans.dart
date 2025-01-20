@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sleepful/services/notification_service.dart';
+import 'package:sleepful/view/Pages/Plans/add_plans.dart';
 import 'package:sleepful/view/Pages/Plans/update_plans.dart';
 import 'package:sleepful/view/Pages/home_page.dart';
 
@@ -181,7 +182,7 @@ class ViewPlans extends StatelessWidget {
           Positioned(
             bottom: 56,
             left: MediaQuery.of(context).size.width / 2 - 27,
-            child: const PlusButton(),
+            child: const PlusButton(targetPage: AddPlans(),),
           ),
         ],
       ),

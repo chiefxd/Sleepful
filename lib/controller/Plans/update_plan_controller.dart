@@ -118,6 +118,7 @@ class TimePickerController {
         'startTime': startTime,
         'endTime': endTime,
         'selectedDays': selectedDays,
+        'isCalendar': false,
         'updatedAt': FieldValue
             .serverTimestamp(), // Optional: Add a timestamp for the update
       });
@@ -170,6 +171,11 @@ class TimePickerController {
     bool isDuplicate = await _checkForDuplicateTitle(title, planId);
     if (isDuplicate) {
       showToast("Plan title already exists. Please choose a different title.");
+      return;
+    }
+
+    if (!selectedDays.any((day) => day)) {
+      showToast("Please select at least one day.");
       return;
     }
 

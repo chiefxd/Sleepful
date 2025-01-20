@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-import '../../../controller/Plans/time_picker_controller.dart';
+import '../../../controller/Calendar/add_calendar_controller.dart';
 import '../../Components/plus_button.dart';
 // import 'package:sleepful/view/Pages/Plans/time_picker_page.dart';
 import '../../Navbar/bottom_navbar.dart';
 import '../home_page.dart';
 
-class AddPlans extends StatefulWidget {
-  const AddPlans({super.key});
+class AddCalendar extends StatefulWidget {
+  const AddCalendar({super.key});
 
   @override
-  AddPlansState createState() => AddPlansState(); // Change to public
+  AddCalendarState createState() => AddCalendarState(); // Change to public
 }
 
-class AddPlansState extends State<AddPlans> {
-  final TimePickerController controller = TimePickerController();
+class AddCalendarState extends State<AddCalendar> {
+  final TimePickerrController controller = TimePickerrController();
   final TextEditingController titleController = TextEditingController();
 
   @override
@@ -50,7 +50,7 @@ class AddPlansState extends State<AddPlans> {
         title: Padding(
           padding: const EdgeInsets.only(left: 0),
           child: Text(
-            'Add Plan',
+            'Add Calendar',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -90,7 +90,7 @@ class AddPlansState extends State<AddPlans> {
                           childDelegate: ListWheelChildBuilderDelegate(
                             builder: (context, index) {
                               bool isSelected = (controller
-                                      .hours[index % controller.hours.length] ==
+                                  .hours[index % controller.hours.length] ==
                                   controller.selectedHour);
                               return Container(
                                 decoration: BoxDecoration(
@@ -116,8 +116,8 @@ class AddPlansState extends State<AddPlans> {
                                     color: isSelected
                                         ? Colors.white
                                         : Theme.of(context)
-                                            .colorScheme
-                                            .onErrorContainer, // Change text color if selected
+                                        .colorScheme
+                                        .onErrorContainer, // Change text color if selected
                                   ),
                                 ),
                               );
@@ -134,13 +134,13 @@ class AddPlansState extends State<AddPlans> {
                         child: Container(
                           decoration: BoxDecoration(
                             color: (controller.selectedHour != -1 ||
-                                    controller.selectedMinute != -1)
+                                controller.selectedMinute != -1)
                                 ? Theme.of(context)
-                                    .colorScheme
-                                    .onError // Change color if hour or minute is selected
+                                .colorScheme
+                                .onError // Change color if hour or minute is selected
                                 : Colors.transparent, // Default color
                             borderRadius:
-                                BorderRadius.circular(0), // No rounding
+                            BorderRadius.circular(0), // No rounding
                           ),
                           alignment: Alignment.center,
                           child: Stack(
@@ -194,7 +194,7 @@ class AddPlansState extends State<AddPlans> {
                           childDelegate: ListWheelChildBuilderDelegate(
                             builder: (context, index) {
                               bool isSelected = (controller.minutes[
-                                      index % controller.minutes.length] ==
+                              index % controller.minutes.length] ==
                                   controller.selectedMinute);
                               return Container(
                                 decoration: BoxDecoration(
@@ -208,7 +208,7 @@ class AddPlansState extends State<AddPlans> {
                                 alignment: Alignment.center,
                                 child: Text(
                                   controller.minutes[
-                                          index % controller.minutes.length]
+                                  index % controller.minutes.length]
                                       .toString()
                                       .padLeft(2, '0'),
                                   style: TextStyle(
@@ -218,8 +218,8 @@ class AddPlansState extends State<AddPlans> {
                                     color: isSelected
                                         ? Colors.white
                                         : Theme.of(context)
-                                            .colorScheme
-                                            .onErrorContainer, // Change text color if selected
+                                        .colorScheme
+                                        .onErrorContainer, // Change text color if selected
                                   ),
                                 ),
                               );
@@ -239,7 +239,7 @@ class AddPlansState extends State<AddPlans> {
                           onSelectedItemChanged: (index) {
                             setState(() {
                               controller.selectedPeriod =
-                                  controller.periods[index];
+                              controller.periods[index];
                             });
                           },
                           childDelegate: ListWheelChildBuilderDelegate(
@@ -266,8 +266,8 @@ class AddPlansState extends State<AddPlans> {
                                     color: isSelected
                                         ? Colors.white
                                         : Theme.of(context)
-                                            .colorScheme
-                                            .onErrorContainer, // Change text color if selected
+                                        .colorScheme
+                                        .onErrorContainer, // Change text color if selected
                                   ),
                                 ),
                               );
@@ -310,7 +310,7 @@ class AddPlansState extends State<AddPlans> {
                                 side: BorderSide(
                                   color: controller.isStartSelected
                                       ? Color(
-                                          0xFFB4A9D6) // Change border color to B4A9D6 when selected
+                                      0xFFB4A9D6) // Change border color to B4A9D6 when selected
                                       : Colors.white,
                                 ),
                                 padding: const EdgeInsets.symmetric(
@@ -367,7 +367,7 @@ class AddPlansState extends State<AddPlans> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: List.generate(7, (index) {
                             String dayLetter =
-                                ['S', 'M', 'T', 'W', 'T', 'F', 'S'][index];
+                            ['S', 'M', 'T', 'W', 'T', 'F', 'S'][index];
                             return DayCircle(
                               letter: dayLetter,
                               isSelected: controller.selectedDays[index],
@@ -385,11 +385,11 @@ class AddPlansState extends State<AddPlans> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Name Your Plan Section
+                  // Name Your Calendar Section
                   Align(
                     alignment: Alignment.centerLeft, // Align to the left
                     child: Text(
-                      'Name Your Plan',
+                      'Name Your Calendar Plan',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.bold,
@@ -412,21 +412,21 @@ class AddPlansState extends State<AddPlans> {
                         borderSide: BorderSide(
                             color: Theme.of(context).colorScheme.primary,
                             width:
-                                2.0), // Set the bottom border color and width
+                            2.0), // Set the bottom border color and width
                       ),
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Theme.of(context).colorScheme.primary,
                             width:
-                                2.0), // Set the focused bottom border color and width
+                            2.0), // Set the focused bottom border color and width
                       ),
                       errorBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.red,
                             width:
-                                2.0), // Set the error bottom border color and width
+                            2.0), // Set the error bottom border color and width
                       ),
-                      hintText: 'Enter plan name',
+                      hintText: 'Enter calendar plan name',
                       hintStyle: TextStyle(
                           fontFamily: 'Montserrat',
                           color: Theme.of(context)
@@ -475,7 +475,7 @@ class AddPlansState extends State<AddPlans> {
             Positioned(
               bottom: 56,
               left: MediaQuery.of(context).size.width / 2 - 27,
-              child: const PlusButton(targetPage: AddPlans(),),
+              child: const PlusButton(targetPage: AddCalendar(),),
             ),
           ],
         ],

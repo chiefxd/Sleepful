@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:sleepful/view/Pages/Plans/add_plans.dart';
 
 import '../../Components/plus_button.dart';
 import '../../Navbar/bottom_navbar.dart';
@@ -310,7 +311,7 @@ class _SleepingStatsState extends State<SleepingStats> {
           Positioned(
             bottom: 56,
             left: MediaQuery.of(context).size.width / 2 - 27,
-            child: const PlusButton(),
+            child: const PlusButton(targetPage: AddPlans(),),
           ),
         ]));
   }

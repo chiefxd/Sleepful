@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../Pages/Plans/add_plans.dart'; // import the SleepingStats page
+// import '../Pages/Plans/add_plans.dart'; // import the SleepingStats page
 
 class PlusButton extends StatelessWidget {
-  const PlusButton({super.key});
+  final Widget targetPage; // Add a targetPage parameter
+
+  const PlusButton({super.key, required this.targetPage});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class PlusButton extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const AddPlans()),
+                MaterialPageRoute(builder: (context) => targetPage),
               );
             },
             child: const Center(

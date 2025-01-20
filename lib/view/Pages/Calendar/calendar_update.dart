@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:sleepful/view/Pages/Plans/view_plans.dart';
+import 'package:sleepful/view/Pages/Calendar/calendar.dart';
+import 'package:sleepful/view/Pages/Calendar/calendar_add.dart';
+// import 'package:sleepful/view/Pages/Plans/view_plans.dart';
 
 import '../../../controller/Calendar/update_calendar_controller.dart';
+// import '../../../controller/Plans/update_plan_controller.dart';
 import '../../Components/plus_button.dart';
 import '../../Navbar/bottom_navbar.dart';
 
@@ -26,7 +29,7 @@ class UpdateCalendar extends StatefulWidget {
 }
 
 class UpdateCalendarState extends State<UpdateCalendar> {
-  late final TimePickerController controller;
+  late final TimePickerrController controller;
   final TextEditingController titleController = TextEditingController();
 
   @override
@@ -34,7 +37,7 @@ class UpdateCalendarState extends State<UpdateCalendar> {
     super.initState();
 
     // Initialize the controller with the values passed from UpdatePlans
-    controller = TimePickerController(
+    controller = TimePickerrController(
       startTime: widget.startTime, // Pass startTime
       endTime: widget.endTime, // Pass endTime
       selectedDays: _getSelectedDays(widget.selectedDays), // Pass selected days
@@ -89,7 +92,7 @@ class UpdateCalendarState extends State<UpdateCalendar> {
         leading: GestureDetector(
           onTap: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const ViewPlans()));
+                MaterialPageRoute(builder: (context) => Calendar(userId: userId ?? '')));
           },
           child: Padding(
             padding: const EdgeInsets.all(10.0),
@@ -443,7 +446,7 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                   Align(
                     alignment: Alignment.centerLeft, // Align to the left
                     child: Text(
-                      'Name Your Plan',
+                      'Name Your Calendar Plan',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.bold,
@@ -480,7 +483,7 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                             width:
                             2.0), // Set the error bottom border color and width
                       ),
-                      hintText: 'Enter plan name',
+                      hintText: 'Enter calendar plan name',
                       hintStyle: TextStyle(
                           color: Theme.of(context)
                               .textTheme
@@ -529,7 +532,7 @@ class UpdateCalendarState extends State<UpdateCalendar> {
             Positioned(
               bottom: 56,
               left: MediaQuery.of(context).size.width / 2 - 27,
-              child: const PlusButton(),
+              child: const PlusButton(targetPage: AddCalendar(),),
             ),
           ],
         ],

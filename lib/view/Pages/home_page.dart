@@ -9,6 +9,7 @@ import 'package:sleepful/view/Pages/Information/information_2.dart';
 import 'package:sleepful/view/Pages/Information/information_3.dart';
 import 'package:sleepful/view/Pages/Information/information_4.dart';
 import 'package:sleepful/view/Pages/Information/information_5.dart';
+import 'package:sleepful/view/Pages/Plans/add_plans.dart';
 
 import '../Components/Sections/home_info_card.dart';
 import '../Components/Sections/home_sounds.dart';
@@ -532,7 +533,7 @@ class _HomePageState extends State<HomePage> {
                 Positioned(
                   bottom: 56,
                   left: MediaQuery.of(context).size.width / 2 - 27,
-                  child: const PlusButton(),
+                  child: const PlusButton(targetPage: AddPlans(),),
                 ),
               ],
             ),

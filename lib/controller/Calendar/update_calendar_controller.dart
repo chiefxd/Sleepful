@@ -2,10 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sleepful/view/Pages/Calendar/calendar.dart';
 
 import '../../services/notification_service.dart';
 import '../../services/alarm_service.dart';
-import '../../view/Pages/Plans/view_plans.dart';
+import '../../view/Navbar/bottom_navbar.dart';
 
 void alarmCallback() {
   print("🚨 Alarm Triggered: End Time Reached! 🚨");
@@ -16,7 +17,7 @@ void alarmCallback() {
   );
 }
 
-class TimePickerController {
+class TimePickerrController {
   int selectedHour;
   int selectedMinute;
   String selectedPeriod;
@@ -33,17 +34,11 @@ class TimePickerController {
   final List<int> minutes = List.generate(60, (index) => index);
   final List<String> periods = ['AM', 'PM'];
 
-  // final FixedExtentScrollController hourController =
-  // FixedExtentScrollController(initialItem: 12 + 5999);
-  // final FixedExtentScrollController minuteController =
-  // FixedExtentScrollController(initialItem: 0 + 6000);
-  // final FixedExtentScrollController periodController =
-  // FixedExtentScrollController(initialItem: 0);
   final FixedExtentScrollController hourController;
   final FixedExtentScrollController minuteController;
   final FixedExtentScrollController periodController;
 
-  TimePickerController({
+  TimePickerrController({
     required this.startTime, // Required start time
     required this.endTime, // Required end time
     List<bool>? selectedDays, // Optional selected days
@@ -99,47 +94,45 @@ class TimePickerController {
     isStartSelected = false;
   }
 
-  // Future<void> _updatePlanToFirestore(String planId, String title,
-  //     String startTime, String endTime, List<String> selectedDays) async {
-  //   // Get the current user
-  //   User? user = FirebaseAuth.instance.currentUser;
-  //
-  //   if (user != null) {
-  //     // Reference to the Firestore collection
-  //     DocumentReference planDocument = FirebaseFirestore.instance
-  //         .collection('Users')
-  //         .doc(user.uid)
-  //         .collection('Plans')
-  //         .doc(planId);
-  //
-  //     // Update the document with the provided data
-  //     await planDocument.update({
-  //       'title': title,
-  //       'startTime': startTime,
-  //       'endTime': endTime,
-  //       'selectedDays': selectedDays,
-  //       'updatedAt': FieldValue
-  //           .serverTimestamp(), // Optional: Add a timestamp for the update
-  //     });
-  //   }
-  // }
-  Future<void> _addPlanToCalendar(String title, String startTime, String endTime) async {
+  // Future<String> _addPlanOrUpdateToCalendar(String title, String startTime, String endTime, List<String> selectedDays) async {
+  Future<void> _addPlanOrUpdateToCalendar(String planId, String title, String startTime, String endTime, List<String> selectedDays) async {
     User? user = FirebaseAuth.instance.currentUser ;
 
     if (user != null) {
       // Reference to the Firestore collection
+      // CollectionReference calendarPlanDocument = FirebaseFirestore.instance
+      //     .collection('Users')
+      //     .doc(user.uid)
+      //     .collection('Calendar Plans');
+
       DocumentReference calendarPlanDocument = FirebaseFirestore.instance
+          .collection('Users')
+          .doc(user.uid)
           .collection('Calendar Plans')
-          .doc(); // Automatically generate a new document ID
+          .doc(planId);
 
       // Add the document with the provided data
-      await calendarPlanDocument.set({
+      // DocumentReference docRef = await calendarPlanDocument.add({
+      //   'title': title,
+      //   'startTime': startTime,
+      //   'endTime': endTime,
+      //   'selectedDays': selectedDays,
+      //   'isCalendar': true,
+      //   'createdAt': FieldValue.serverTimestamp(),
+      //   'updatedAt': FieldValue.serverTimestamp(), // Add updatedAt field
+      // });
+      // return docRef.id;
+      await calendarPlanDocument.update({
         'title': title,
         'startTime': startTime,
         'endTime': endTime,
-        'createdAt': FieldValue.serverTimestamp(), // Optional: Add a timestamp for the creation
+        'selectedDays': selectedDays,
+        'isCalendar': false,
+        'updatedAt': FieldValue
+            .serverTimestamp(), // Optional: Add a timestamp for the update
       });
     }
+    // throw Exception("User  not authenticated.");
   }
 
   Future<bool> _checkForDuplicateTitle(String title, String planId) async {
@@ -152,6 +145,31 @@ class TimePickerController {
           .collection('Users')
           .doc(user.uid)
           .collection('Plans');
+
+      // Query for plans with the same title, excluding the current planId
+      QuerySnapshot querySnapshot = await plansCollection
+          .where('title', isEqualTo: title)
+          .where(FieldPath.documentId,
+          isNotEqualTo: planId) // Exclude the current planId
+          .get();
+
+      // Check if any plans with the same title exist
+      return querySnapshot.docs.isNotEmpty;
+    }
+
+    return false;
+  }
+
+  Future<bool> _checkForDuplicateTitleCalendar(String title, String planId) async {
+    // Get the current user
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      // Reference to the Firestore collection
+      CollectionReference plansCollection = FirebaseFirestore.instance
+          .collection('Users')
+          .doc(user.uid)
+          .collection('Calendar Plans');
 
       // Query for plans with the same title, excluding the current planId
       QuerySnapshot querySnapshot = await plansCollection
@@ -187,6 +205,12 @@ class TimePickerController {
 
     bool isDuplicate = await _checkForDuplicateTitle(title, planId);
     if (isDuplicate) {
+      showToast("Plan title already exists. Please choose a different title.");
+      return;
+    }
+
+    bool isDuplicateCalendar = await _checkForDuplicateTitleCalendar(title, planId);
+    if (isDuplicateCalendar) {
       showToast("Plan title already exists. Please choose a different title.");
       return;
     }
@@ -293,11 +317,11 @@ class TimePickerController {
           'Success! "$title", Your sleep duration is valid. No days selected.');
     }
 
-    await _addPlanToCalendar(title, startTime, endTime);
+    await _addPlanOrUpdateToCalendar(planId, title, startTime, endTime, selectedDayLetters);
 
-    Navigator.pushReplacement(
+    Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ViewPlans()),
+      MaterialPageRoute(builder: (context) => Calendar(userId: userId ?? '')),
     );
   }
 
