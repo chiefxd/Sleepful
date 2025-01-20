@@ -423,10 +423,7 @@ class _CalendarState extends State<Calendar> {
                             DateTime normalizedDate = DateTime(selectedDay!.year, selectedDay!.month, selectedDay!.day);
                             final planDetails = sleepPlanList?[normalizedDate]
                                 ?.firstWhere(
-                                    (plan) =>
-                                    // plan['title'].toLowerCase() == title.toLowerCase(),
-                                    plan['title'].toLowerCase() == title.toLowerCase() &&
-                                        plan['collection'] == 'Calendar Plans', // Add this condition
+                                    (plan) => plan['title'] == title,
                                 orElse: () => {
                                   'planId': 'Unknown Plan ID',
                                   'selectedDays': [],
@@ -531,10 +528,7 @@ class _CalendarState extends State<Calendar> {
                                       // Fetch the plan details from the sleepPlanList
                                       final planDetails = sleepPlanList?[normalizedDate]
                                           ?.firstWhere(
-                                              (plan) =>
-                                              // plan['title'].toLowerCase() == title.toLowerCase(),
-                                              plan['title'].toLowerCase() == title.toLowerCase() &&
-                                                  plan['collection'] == 'Calendar Plans', // Add this condition
+                                              (plan) => plan['title'] == title,
                                           orElse: () => {
                                             'planId': 'Unknown Plan ID',
                                             'selectedDays': [],
@@ -670,4 +664,3 @@ class _CalendarState extends State<Calendar> {
     );
   }
 }
-

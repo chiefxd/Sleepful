@@ -297,4 +297,3 @@ class SleepPlanController {
     return ["No sleep plan for this date"];
   }
 }
-
