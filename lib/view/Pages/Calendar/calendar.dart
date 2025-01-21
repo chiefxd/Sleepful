@@ -156,9 +156,15 @@ class _CalendarState extends State<Calendar> {
                         FirebaseFirestore.instance
                             .collection('Users')
                             .doc(user?.uid)
-                            .collection(collectionToDeleteFrom) // Use the determined collection
+                            .collection(collectionToDeleteFrom)
                             .doc(planId)
-                            .delete(); // Perform the delete operation
+                            .delete();
+                        sleepPlanController.fetchSleepPlans(widget.userId).listen((sleepPlans) {
+                          setState(() {
+                            sleepPlanList = sleepPlans;
+                          });
+                        });
+
                         Navigator.of(context).pop(); // Close the dialog
                       },
                       style: TextButton.styleFrom(
