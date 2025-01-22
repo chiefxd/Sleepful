@@ -151,9 +151,9 @@ class _CalendarState extends State<Calendar> {
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                     child: TextButton(
-                      onPressed: () {
+                      onPressed: () async {
                         User? user = FirebaseAuth.instance.currentUser ;
-                        FirebaseFirestore.instance
+                        await FirebaseFirestore.instance
                             .collection('Users')
                             .doc(user?.uid)
                             .collection(collectionToDeleteFrom)
