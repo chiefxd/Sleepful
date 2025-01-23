@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,52 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String userName = '';
   final UserDataProvider _userDataProvider = UserDataProvider();
+
+  // Function to fetch yesterday's sleep data
+  Future<double> _fetchYesterdaySleepData() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      return 0.0;
+    }
+
+    final yesterday = DateTime.now().subtract(Duration(days: 1));
+    final startOfYesterday =
+        DateTime(yesterday.year, yesterday.month, yesterday.day);
+    final endOfYesterday =
+        DateTime(yesterday.year, yesterday.month, yesterday.day, 23, 59, 59);
+
+    final snapshot = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userId)
+        .collection('Successful Plans')
+        .where('successfulDate', isGreaterThanOrEqualTo: startOfYesterday)
+        .where('successfulDate', isLessThanOrEqualTo: endOfYesterday)
+        .get();
+
+    double totalSleepTime = 0.0;
+    for (var doc in snapshot.docs) {
+      final data = doc.data();
+      final startTime = data['startTime'] as String;
+      final endTime = data['endTime'] as String;
+
+      final startDateTime = _parseTime(yesterday, startTime);
+      final endDateTime = _parseTime(yesterday, endTime);
+      final duration = endDateTime.difference(startDateTime).inMinutes / 60.0;
+
+      totalSleepTime += duration;
+    }
+
+    return totalSleepTime;
+  }
+
+  // Helper function to parse time
+  DateTime _parseTime(DateTime date, String time) {
+    int hour = int.parse(time.split(':')[0]);
+    int minute = int.parse(time.split(':')[1].split(' ')[0]);
+    if (time.contains('PM') && hour != 12) hour += 12;
+    if (time.contains('AM') && hour == 12) hour = 0;
+    return DateTime(date.year, date.month, date.day, hour, minute);
+  }
 
   @override
   void initState() {
@@ -183,87 +230,88 @@ class _HomePageState extends State<HomePage> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    'You\'ve slept for',
-                                    style: TextStyle(
-                                      fontSize: smallTextFontSize,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.color,
-                                      fontFamily: 'Montserrat',
-                                    ),
-                                  ),
-                                  ShaderMask(
-                                    shaderCallback: (Rect bounds) {
-                                      final bool isDarkMode =
-                                          Theme.of(context).brightness ==
-                                              Brightness.dark;
-                                      final Color baseColor = isDarkMode
-                                          ? Color(0xFFB4A9D6)
-                                          : Color(0xFF37256C);
-                                      return LinearGradient(
-                                        begin: Alignment.centerLeft,
-                                        end: Alignment.centerRight,
-                                        stops: const [0, 0.28, 1],
-                                        colors: [
-                                          Color.lerp(baseColor, Colors.white,
-                                              0.0)!, // Lighten the color
-                                          baseColor, // Base color
-                                          Color.lerp(baseColor, Colors.black,
-                                              0.0)!, // Darken the color
+                                  FutureBuilder<double>(
+                                    future: _fetchYesterdaySleepData(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return CircularProgressIndicator();
+                                      }
+                                      if (snapshot.hasError) {
+                                        return Text("Error fetching data");
+                                      }
+
+                                      final yesterdaySleepTime =
+                                          snapshot.data ?? 0.0;
+                                      final message =
+                                          (yesterdaySleepTime >= 7.0)
+                                              ? "You slept enough, Good job!"
+                                              : "You need more sleep today!";
+
+                                      return Column(
+                                        children: [
+                                          Text(
+                                            'You\'ve slept for',
+                                            style: TextStyle(
+                                              fontSize: smallTextFontSize,
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.color,
+                                              fontFamily: 'Montserrat',
+                                            ),
+                                          ),
+                                          ShaderMask(
+                                            shaderCallback: (Rect bounds) {
+                                              final bool isDarkMode =
+                                                  Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.dark;
+                                              final Color baseColor = isDarkMode
+                                                  ? Color(0xFFB4A9D6)
+                                                  : Color(0xFF37256C);
+                                              return LinearGradient(
+                                                begin: Alignment.centerLeft,
+                                                end: Alignment.centerRight,
+                                                stops: const [0, 0.28, 1],
+                                                colors: [
+                                                  Color.lerp(
+                                                      baseColor,
+                                                      Colors.white,
+                                                      0.0)!, // Lighten the color
+                                                  baseColor, // Base color
+                                                  Color.lerp(
+                                                      baseColor,
+                                                      Colors.black,
+                                                      0.0)!, // Darken the color
+                                                ],
+                                              ).createShader(bounds);
+                                            },
+                                            blendMode: BlendMode.srcIn,
+                                            child: Text(
+                                              '${yesterdaySleepTime.toStringAsFixed(1)} Hours',
+                                              style: TextStyle(
+                                                fontSize: largeTextFontSize,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: 'Montserrat',
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 8),
+                                          Text(
+                                            message,
+                                            style: TextStyle(
+                                              fontSize: subtitleFontSize,
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.color,
+                                              fontFamily: 'Montserrat',
+                                            ),
+                                          ),
                                         ],
-                                      ).createShader(bounds);
+                                      );
                                     },
-                                    blendMode: BlendMode.srcIn,
-                                    child: Text(
-                                      '7,5 Hours',
-                                      style: TextStyle(
-                                        fontSize: largeTextFontSize,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Montserrat',
-                                      ),
-                                    ),
-                                  ),
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: 'Your goal is: ',
-                                          style: TextStyle(
-                                            fontSize: subtitleFontSize,
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium
-                                                ?.color,
-                                            fontFamily: 'Montserrat',
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: '8 Hours',
-                                          style: TextStyle(
-                                            fontSize: subtitleFontSize,
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium
-                                                ?.color,
-                                            fontFamily: 'Montserrat',
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: ' per day',
-                                          style: TextStyle(
-                                            fontSize: subtitleFontSize,
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium
-                                                ?.color,
-                                            fontFamily: 'Montserrat',
-                                          ),
-                                        ),
-                                      ],
-                                    ),
                                   ),
                                 ],
                               ),
@@ -533,7 +581,9 @@ class _HomePageState extends State<HomePage> {
                 Positioned(
                   bottom: 56,
                   left: MediaQuery.of(context).size.width / 2 - 27,
-                  child: const PlusButton(targetPage: AddPlans(),),
+                  child: const PlusButton(
+                    targetPage: AddPlans(),
+                  ),
                 ),
               ],
             ),
