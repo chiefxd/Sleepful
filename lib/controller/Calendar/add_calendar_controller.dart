@@ -5,19 +5,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../services/notification_service.dart';
 import '../../services/alarm_service.dart';
-import '../../view/Pages/Plans/view_plans.dart';
+import '../../view/Navbar/bottom_navbar.dart';
+import '../../view/Pages/Calendar/calendar.dart';
+// import '../../view/Pages/Plans/view_plans.dart';
 
-// void alarmCallback(String userId, Map<String, dynamic> planData) async {
-//   print("🚨 Alarm Triggered: End Time Reached! 🚨");
-//   NotificationService().playCustomAlarm(
-//     "End Time Alert",
-//     "Your specified end time has been reached.",
-//     "custom_alarm",
-//   );
-//
-//   // Move the plan to Successful Plans
-//   await SleepPlanController().handleAlarmCallback(userId, planData);
-// }
 void alarmCallback() {
   print("🚨 Alarm Triggered: End Time Reached! 🚨");
   NotificationService().playCustomAlarm(
@@ -27,7 +18,7 @@ void alarmCallback() {
   );
 }
 
-class TimePickerController {
+class TimePickerrController {
   int selectedHour = 12; // Default hour
   int selectedMinute = 0; // Default minute
   String selectedPeriod = 'AM';
@@ -74,24 +65,24 @@ class TimePickerController {
     isStartSelected = false;
   }
 
-  Future<String> _addPlanToFirestore(String title, String startTime,
+  Future<String> _addCalendarToFirestore(String title, String startTime,
       String endTime, List<String> selectedDays) async {
     // Get the current user
     User? user = FirebaseAuth.instance.currentUser ;
 
     if (user != null) {
       // Reference to the Firestore collection
-      CollectionReference plansCollection = FirebaseFirestore.instance
+      CollectionReference calendarCollection = FirebaseFirestore.instance
           .collection('Users')
           .doc(user.uid)
-          .collection('Plans');
+          .collection('Calendar Plans');
 
-      DocumentReference docRef = await plansCollection.add({
+      DocumentReference docRef = await calendarCollection.add({
         'title': title,
         'startTime': startTime,
         'endTime': endTime,
         'selectedDays': selectedDays,
-        'isCalendar': false,
+        'isCalendar': true,
         'createdAt': FieldValue.serverTimestamp(),
       });
       return docRef.id;
@@ -109,6 +100,28 @@ class TimePickerController {
           .collection('Users')
           .doc(user.uid)
           .collection('Plans');
+
+      // Query for plans with the same title
+      QuerySnapshot querySnapshot =
+      await plansCollection.where('title', isEqualTo: title).get();
+
+      // Check if any plans with the same title exist
+      return querySnapshot.docs.isNotEmpty;
+    }
+
+    return false;
+  }
+
+  Future<bool> _checkForDuplicateTitleCalendar(String title) async {
+    // Get the current user
+    User? user = FirebaseAuth.instance.currentUser ;
+
+    if (user != null) {
+      // Reference to the Firestore collection
+      CollectionReference plansCollection = FirebaseFirestore.instance
+          .collection('Users')
+          .doc(user.uid)
+          .collection('Calendar Plans');
 
       // Query for plans with the same title
       QuerySnapshot querySnapshot =
@@ -149,6 +162,12 @@ class TimePickerController {
     bool isDuplicate = await _checkForDuplicateTitle(title);
     if (isDuplicate) {
       showToast("Plan title already exists. Please choose a different title.");
+      return;
+    }
+
+    bool isDuplicateCalendar = await _checkForDuplicateTitleCalendar(title);
+    if (isDuplicateCalendar) {
+      showToast("Calendar plan title already exists. Please choose a different title.");
       return;
     }
 
@@ -278,11 +297,11 @@ class TimePickerController {
       showToast('Success! "$title", Your sleep duration is valid. No days selected.');
     }
 
-    await _addPlanToFirestore(title, startTime, endTime, selectedDayLetters);
+    await _addCalendarToFirestore(title, startTime, endTime, selectedDayLetters);
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => ViewPlans()),
+      MaterialPageRoute(builder: (context) => Calendar(userId: userId ?? '')),
     );
   }
 

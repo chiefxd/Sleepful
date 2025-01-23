@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sleepful/view/Pages/Plans/add_plans.dart';
 import 'package:sleepful/view/Pages/Plans/view_plans.dart';
 
 import '../../../controller/Plans/update_plan_controller.dart';
@@ -529,7 +530,7 @@ class UpdatePlansState extends State<UpdatePlans> {
             Positioned(
               bottom: 56,
               left: MediaQuery.of(context).size.width / 2 - 27,
-              child: const PlusButton(),
+              child: const PlusButton(targetPage: AddPlans(),),
             ),
           ],
         ],

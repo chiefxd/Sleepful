@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sleepful/services/notification_service.dart';
+import 'package:sleepful/view/Pages/Plans/add_plans.dart';
 import 'package:sleepful/view/Pages/Plans/update_plans.dart';
 import 'package:sleepful/view/Pages/home_page.dart';
 
@@ -128,11 +129,11 @@ class ViewPlans extends StatelessWidget {
 
                         final todayName = daysOfWeek[DateTime.now().weekday - 1];
 
-                        print('Parsed Start Time: $parsedStartTime');
-                        print(
-                            'Notification Time (5 minutes before): $notificationTime');
-                        print('Current Day: $todayName');
-                        print('Current Time: ${DateTime.now()}');
+                        // print('Parsed Start Time: $parsedStartTime');
+                        // print(
+                        //     'Notification Time (5 minutes before): $notificationTime');
+                        // print('Current Day: $todayName');
+                        // print('Current Time: ${DateTime.now()}');
 
                         if (notificationTime.isAfter(DateTime.now()) &&
                             !scheduledNotifications.contains(i) &&
@@ -181,7 +182,7 @@ class ViewPlans extends StatelessWidget {
           Positioned(
             bottom: 56,
             left: MediaQuery.of(context).size.width / 2 - 27,
-            child: const PlusButton(),
+            child: const PlusButton(targetPage: AddPlans(),),
           ),
         ],
       ),
@@ -193,6 +194,7 @@ class ViewPlans extends StatelessWidget {
       if (time is Timestamp) {
         return time.toDate().toLocal(); // Handle Firestore Timestamp
       } else if (time is String) {
+        // final trimmedTime = time.trim();
         final DateFormat format = DateFormat.jm(); // Example: "08:42 PM"
         DateTime parsedTime = format.parse(time);
         DateTime now = DateTime.now();
@@ -247,30 +249,40 @@ class ViewPlans extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const ['S', 'M', 'T', 'W', 'T', 'F', 'S']
-                    .asMap()
-                    .entries
-                    .map((entry) {
-                  final dayIndex = entry.key;
-                  final letter = entry.value;
-
-                  // Map dayIndex to the corresponding day
-                  final daysOfWeek = [
-                    'Sunday',
-                    'Monday',
-                    'Tuesday',
-                    'Wednesday',
-                    'Thursday',
-                    'Friday',
-                    'Saturday'
-                  ];
-                  final correspondingDay = daysOfWeek[dayIndex];
-
-                  // Check if the corresponding day is selected
-                  bool isSelected = selectedDays.contains(correspondingDay);
-
+            //     children: const ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+            //         .asMap()
+            //         .entries
+            //         .map((entry) {
+            //       final dayIndex = entry.key;
+            //       final letter = entry.value;
+            //
+            //       // Map dayIndex to the corresponding day
+            //       final daysOfWeek = [
+            //         'Sunday',
+            //         'Monday',
+            //         'Tuesday',
+            //         'Wednesday',
+            //         'Thursday',
+            //         'Friday',
+            //         'Saturday'
+            //       ];
+            //       final correspondingDay = daysOfWeek[dayIndex];
+            //
+            //       // Check if the corresponding day is selected
+            //       bool isSelected = selectedDays.contains(correspondingDay);
+            //
+            //       return _DayCircle(
+            //         letter: letter,
+            //         isSelected: isSelected,
+            //       );
+            //     }).toList(),
+            //   ),
+            // ),
+                children: daysOfWeek.map((day) {
+                  // Check if the day is selected
+                  bool isSelected = selectedDays.contains(day);
                   return _DayCircle(
-                    letter: letter,
+                    letter: dayMapping[day]!, // Get the corresponding letter
                     isSelected: isSelected,
                   );
                 }).toList(),

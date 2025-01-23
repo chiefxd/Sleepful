@@ -219,4 +219,21 @@ class UserDataProvider extends ChangeNotifier {
       print("Error updating reward data in Firestore: $e");
     }
   }
+
+  Future<void> awardPointsForPlanCompletion(String uid) async {
+    try {
+      // Add points for completing the plan
+      _points += 2; // Award 2 points, adjust this as necessary
+      notifyListeners();
+
+      // Update Firestore
+      final userDoc = FirebaseFirestore.instance.collection('Users').doc(uid);
+      await userDoc.update({'points': _points});
+
+      // Show notification
+      showToast("You've earned 2 points for completing your sleep plan!");
+    } catch (e) {
+      print("Error awarding points: $e");
+    }
+  }
 }

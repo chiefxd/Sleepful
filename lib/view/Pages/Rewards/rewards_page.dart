@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sleepful/providers/user_data_provider.dart';
+import 'package:sleepful/view/Pages/Plans/add_plans.dart';
 import 'package:sleepful/view/Pages/home_page.dart';
 
 import '../../Components/plus_button.dart';
@@ -283,7 +284,7 @@ class RewardsPage extends StatelessWidget {
           Positioned(
             bottom: 56,
             left: MediaQuery.of(context).size.width / 2 - 27,
-            child: const PlusButton(),
+            child: const PlusButton(targetPage: AddPlans(),),
           ),
         ],
       ),
