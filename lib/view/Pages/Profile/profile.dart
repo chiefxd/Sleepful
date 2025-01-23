@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -72,6 +73,45 @@ class _ProfileState extends State<Profile> {
     }
   }
 
+  // Function to fetch total sleep time (all-time)
+  Future<double> _fetchTotalSleepTime() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      return 0.0;
+    }
+
+    final snapshot = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userId)
+        .collection('Successful Plans')
+        .get();
+
+    double totalSleepTime = 0.0;
+    for (var doc in snapshot.docs) {
+      final data = doc.data();
+      final startTime = data['startTime'] as String;
+      final endTime = data['endTime'] as String;
+      final successfulDate = (data['successfulDate'] as Timestamp).toDate();
+
+      final startDateTime = _parseTime(successfulDate, startTime);
+      final endDateTime = _parseTime(successfulDate, endTime);
+      final duration = endDateTime.difference(startDateTime).inMinutes / 60.0;
+
+      totalSleepTime += duration;
+    }
+
+    return totalSleepTime;
+  }
+
+  // Helper function to parse time (you can use the one from your HomePage)
+  DateTime _parseTime(DateTime date, String time) {
+    int hour = int.parse(time.split(':')[0]);
+    int minute = int.parse(time.split(':')[1].split(' ')[0]);
+    if (time.contains('PM') && hour != 12) hour += 12;
+    if (time.contains('AM') && hour == 12) hour = 0;
+    return DateTime(date.year, date.month, date.day, hour, minute);
+  }
+
   Widget _buildIconRow(IconData icon, String text, double fontSize,
       {required BuildContext context, required String routeName}) {
     return GestureDetector(
@@ -115,8 +155,8 @@ class _ProfileState extends State<Profile> {
                           child: TextButton(
                             onPressed: () {
                               Navigator.pop(
-                                  context,
-                                 ); // Close the dialog
+                                context,
+                              ); // Close the dialog
                             },
                             style: TextButton.styleFrom(
                               padding:
@@ -278,12 +318,26 @@ class _ProfileState extends State<Profile> {
               SizedBox(height: 0),
 
               // Sleep Time
-              Text(
-                'Your total sleep time is 32 hours!',
-                style: TextStyle(
-                    fontSize: subtitleFontSize,
-                    fontFamily: 'Montserrat',
-                    color: Theme.of(context).colorScheme.primary),
+              FutureBuilder<double>(
+                future: _fetchTotalSleepTime(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  }
+                  if (snapshot.hasError) {
+                    return Text('Error fetching sleep time');
+                  }
+
+                  final totalSleepTime = snapshot.data ?? 0.0;
+
+                  return Text(
+                    'Your total sleep time is ${totalSleepTime.toStringAsFixed(0)} hours!',
+                    style: TextStyle(
+                        fontSize: subtitleFontSize,
+                        fontFamily: 'Montserrat',
+                        color: Theme.of(context).colorScheme.primary),
+                  );
+                },
               ),
 
               SizedBox(height: 20),
