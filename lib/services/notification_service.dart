@@ -1,10 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:isolate';
 
+import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+import '../handler/foreground_handler.dart';
 import '../main.dart';
 
 class NotificationService {
@@ -17,8 +21,9 @@ class NotificationService {
   }
 
   NotificationService._internal();
+  ReceivePort? _receivePort;
 
-  // Initialize the notification plugin and create a notification channel
+// Initialize the notification plugin and create a notification channel
   Future<void> initialize() async {
     // Initialize time zones
     tz.initializeTimeZones();
@@ -47,22 +52,18 @@ class NotificationService {
       },
     );
     print('✅ NotificationService initialized.');
+
+    await _initForegroundTask();
+    await requestPermissions();
+  }
+
+  Future<void> requestPermissions() async {
+    await requestNotificationPermission();
+    await requestIgnoreBatteryOptimizations();
   }
 
   // Request permission to show notifications (Android 13+)
   Future<void> requestNotificationPermission() async {
-  //   var status = await Permission.notification.status;
-  //   if (!status.isGranted) {
-  //     status = await Permission.notification.request();
-  //     if (status.isGranted) {
-  //       print('Notification permissions granted.');
-  //     } else {
-  //       print('Notification permissions denied.');
-  //     }
-  //   } else {
-  //     print('Notification permissions already granted.');
-  //   }
-  // }
     final status = await Permission.notification.status;
 
     if (status.isGranted) {
@@ -76,8 +77,32 @@ class NotificationService {
       } else if (result.isDenied) {
         print('⚠️ Notification permissions denied.');
       } else if (result.isPermanentlyDenied) {
-        print('🚫 Notification permissions permanently denied. Open settings to enable.');
+        print(
+            '🚫 Notification permissions permanently denied. Open settings to enable.');
         openAppSettings();
+      }
+    }
+  }
+
+  Future<void> requestIgnoreBatteryOptimizations() async {
+    if (Platform.isAndroid) {
+      try {
+        final isIgnoring =
+            await Permission.ignoreBatteryOptimizations.isGranted;
+        if (!isIgnoring) {
+          final status = await Permission.ignoreBatteryOptimizations.request();
+          if (status.isGranted) {
+            print("✅ Battery optimizations ignored.");
+          } else {
+            print("⚠️ Battery optimizations NOT ignored.");
+            // Optionally, guide the user to settings
+            // await openAppSettings();
+          }
+        } else {
+          print("✅ Battery optimizations already ignored.");
+        }
+      } catch (e) {
+        print("Error requesting battery optimization permission: $e");
       }
     }
   }
@@ -116,7 +141,10 @@ class NotificationService {
       playSound: true, // Ensure the sound is set for the notification
       enableVibration: true, // Enable vibration if needed
       ongoing: true,
-      timeoutAfter: 90000,//null
+      timeoutAfter: null,
+      // Use setExactAndAllowWhileIdle for more precise scheduling (if needed)
+      // This requires the USE_FULL_SCREEN_INTENT permission
+      styleInformation: BigTextStyleInformation(''),
     );
 
     final notificationDetails = NotificationDetails(android: androidDetails);
@@ -130,17 +158,19 @@ class NotificationService {
       tz.TZDateTime.from(
           scheduleTime, tz.local), // Ensuring time is converted to TZDateTime
       notificationDetails,
-      androidScheduleMode: AndroidScheduleMode.exact,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time,
     );
 
-    print('Notification scheduled successfully');
+    print('✅ Notification scheduled successfully.');
+    _startForegroundTask();
   }
 
   // Method to play an endTime alarm with a custom sound
-  Future<void> playCustomAlarm(String title, String body, String soundFile) async {
+  Future<void> playCustomAlarm(
+      String title, String body, String soundFile) async {
     final androidDetails = AndroidNotificationDetails(
       'end_time_alarm_channel', // Unique channel ID for end time alarm
       'End Time Alarm',
@@ -179,5 +209,62 @@ class NotificationService {
     } catch (e) {
       print('Error canceling notification with id=$id: $e');
     }
+  }
+
+  // Initialize the foreground service
+  Future<void> _initForegroundTask() async {
+    FlutterForegroundTask.init(
+      androidNotificationOptions: AndroidNotificationOptions(
+        channelId: 'foreground_service',
+        channelName: 'Foreground Service',
+        channelDescription: 'Ongoing background tasks',
+        channelImportance: NotificationChannelImportance.LOW,
+        priority: NotificationPriority.LOW,
+        iconData: const NotificationIconData(
+          resType: ResourceType.mipmap,
+          resPrefix: ResourcePrefix.ic,
+          name: 'launcher', // Make sure this icon exists in your project
+        ),
+      ),
+      iosNotificationOptions: const IOSNotificationOptions(
+        showNotification: true,
+        playSound: false,
+      ),
+      foregroundTaskOptions: const ForegroundTaskOptions(
+        interval: 5000, // 5 seconds (adjust as needed)
+        autoRunOnBoot: true,
+        allowWifiLock: true,
+      ),
+    );
+
+    _receivePort = FlutterForegroundTask.receivePort;
+    _receivePort?.listen((message) {
+      if (message is DateTime) {
+        print('✅ foreground task received: ${message.toIso8601String()}');
+      } else {
+        print('✅ foreground task received: $message');
+      }
+
+      if (message == 'onNotificationButtonPressed') {
+        navigatorKey.currentState?.pushNamed('/viewPlans');
+      }
+    });
+
+    print('✅ Foreground task initialized.');
+  }
+
+  // Start the foreground service
+  Future<void> _startForegroundTask() async {
+    await FlutterForegroundTask.stopService();
+
+    await FlutterForegroundTask.startService(
+      notificationTitle: 'Sleepful is running',
+      notificationText: 'Tap to return to the app',
+      callback: startCallback,
+    );
+  }
+
+  Future<void> _stopForegroundTask() async {
+    await FlutterForegroundTask.stopService();
   }
 }
