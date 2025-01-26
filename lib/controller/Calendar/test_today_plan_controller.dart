@@ -156,27 +156,27 @@ class SleepPlanController {
       // if (selectedDate.year == today.year &&
       //     selectedDate.month == today.month &&
       //     selectedDate.day == today.day) {
-      // Check if the date is in notVisibleCalendar
-      if (notVisibleCalendar != null && normalizedDate.isAtSameMomentAs(notVisibleCalendar)) {
-        continue; // Skip this date
-      }
+        // Check if the date is in notVisibleCalendar
+        if (notVisibleCalendar != null && normalizedDate.isAtSameMomentAs(notVisibleCalendar)) {
+          continue; // Skip this date
+        }
 
-      if (!sleepPlans.containsKey(normalizedDate)) {
-        sleepPlans[normalizedDate] = [];
-      }
-      sleepPlans[normalizedDate]!.add({
+        if (!sleepPlans.containsKey(normalizedDate)) {
+          sleepPlans[normalizedDate] = [];
+        }
+        sleepPlans[normalizedDate]!.add({
 
-        'title': title,
-        'startTime': startDateTime,
-        'endTime': endDateTime,
-        'planData': plan,
-        'planId': planId, // Include the planId
-        'selectedDate': selectedDate, // Include selectedDate
-        'userId': userId,
-        'collection': 'Calendar Plans', // Indicate this is from Calendar Plans
-        'isCalendar': isCalendar,
-        'notVisibleCalendar': notVisibleCalendar, // Include notVisibleCalendar
-      });
+          'title': title,
+          'startTime': startDateTime,
+          'endTime': endDateTime,
+          'planData': plan,
+          'planId': planId, // Include the planId
+          'selectedDate': selectedDate, // Include selectedDate
+          'userId': userId,
+          'collection': 'Calendar Plans', // Indicate this is from Calendar Plans
+          'isCalendar': isCalendar,
+          'notVisibleCalendar': notVisibleCalendar, // Include notVisibleCalendar
+        });
       print('Added Calendar Plan to sleepPlans:');
       print('Title: $title');
       print('Selected Date: $normalizedDate');

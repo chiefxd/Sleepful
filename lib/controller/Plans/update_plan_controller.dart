@@ -119,6 +119,7 @@ class TimePickerController {
         'endTime': endTime,
         'selectedDays': selectedDays,
         'isCalendar': false,
+        'notVisibleCalendar': null,
         'updatedAt': FieldValue
             .serverTimestamp(), // Optional: Add a timestamp for the update
       });

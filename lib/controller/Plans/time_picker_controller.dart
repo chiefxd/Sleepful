@@ -92,6 +92,7 @@ class TimePickerController {
         'endTime': endTime,
         'selectedDays': selectedDays,
         'isCalendar': false,
+        'notVisibleCalendar': null,
         'createdAt': FieldValue.serverTimestamp(),
       });
       return docRef.id;

@@ -95,44 +95,62 @@ class TimePickerrController {
   }
 
   // Future<String> _addPlanOrUpdateToCalendar(String title, String startTime, String endTime, List<String> selectedDays) async {
-  Future<void> _addPlanOrUpdateToCalendar(String planId, String title, String startTime, String endTime, List<String> selectedDays) async {
+  Future<void> _addPlanOrUpdateToCalendar(String planId, String title, String startTime, String endTime, DateTime selectedDate, bool isCalendar) async {
     User? user = FirebaseAuth.instance.currentUser ;
 
     if (user != null) {
-      // Reference to the Firestore collection
-      // CollectionReference calendarPlanDocument = FirebaseFirestore.instance
-      //     .collection('Users')
-      //     .doc(user.uid)
-      //     .collection('Calendar Plans');
+      if (isCalendar) {
+        DocumentReference calendarPlanDocument = FirebaseFirestore.instance
+            .collection('Users')
+            .doc(user.uid)
+            .collection('Calendar Plans')
+            .doc(planId);
 
-      DocumentReference calendarPlanDocument = FirebaseFirestore.instance
-          .collection('Users')
-          .doc(user.uid)
-          .collection('Calendar Plans')
-          .doc(planId);
+        await calendarPlanDocument.update({
+          'title': title,
+          'startTime': startTime,
+          'endTime': endTime,
+          'selectedDays': null,
+          'isCalendar': true,
+          'updatedAt': FieldValue
+              .serverTimestamp(), // Optional: Add a timestamp for the update
+          'selectedDate': selectedDate,
+          'notVisibleCalendar': null,
+        });
+      }
+      // throw Exception("User  not authenticated.");
+      else {
+        // Move plan from Plans to Calendar Plans
+        DocumentReference planDocument = FirebaseFirestore.instance
+            .collection('Users')
+            .doc(user.uid)
+            .collection('Plans')
+            .doc(planId);
 
-      // Add the document with the provided data
-      // DocumentReference docRef = await calendarPlanDocument.add({
-      //   'title': title,
-      //   'startTime': startTime,
-      //   'endTime': endTime,
-      //   'selectedDays': selectedDays,
-      //   'isCalendar': true,
-      //   'createdAt': FieldValue.serverTimestamp(),
-      //   'updatedAt': FieldValue.serverTimestamp(), // Add updatedAt field
-      // });
-      // return docRef.id;
-      await calendarPlanDocument.update({
-        'title': title,
-        'startTime': startTime,
-        'endTime': endTime,
-        'selectedDays': selectedDays,
-        'isCalendar': false,
-        'updatedAt': FieldValue
-            .serverTimestamp(), // Optional: Add a timestamp for the update
-      });
+        DocumentReference newCalendarPlanDocument = FirebaseFirestore.instance
+            .collection('Users')
+            .doc(user.uid)
+            .collection('Calendar Plans')
+            .doc();
+
+        // Update original plan to mark notVisibleCalendar
+        await planDocument.update({
+          'notVisibleCalendar': selectedDate,
+        });
+
+        // Add to Calendar Plans
+        await newCalendarPlanDocument.set({
+          'title': title,
+          'startTime': startTime,
+          'endTime': endTime,
+          'selectedDays': null,
+          'isCalendar': true,
+          'updatedAt': FieldValue.serverTimestamp(),
+          'selectedDate': selectedDate,
+          'notVisibleCalendar': null,
+        });
+      }
     }
-    // throw Exception("User  not authenticated.");
   }
 
   Future<bool> _checkForDuplicateTitle(String title, String planId) async {
@@ -197,7 +215,14 @@ class TimePickerrController {
   }
 
   Future<void> validateTimes(
-      BuildContext context, String title, String planId) async {
+      BuildContext context, String title, String planId, DateTime selectedDate, bool isCalendar) async {
+    User? user = FirebaseAuth.instance.currentUser ;
+
+    if (user == null) {
+      showToast("User  not authenticated.");
+      return;
+    }
+
     if (title.isEmpty) {
       showToast("Plan title cannot be empty.");
       return;
@@ -237,7 +262,7 @@ class TimePickerrController {
       return;
     }
 
-    if (duration.inMinutes < 3) {
+    if (duration.inMinutes < 2) {
       showToast("Minimum duration of sleep is 30 minutes.");
       return;
     }
@@ -249,75 +274,34 @@ class TimePickerrController {
     }
 
     // Get today's day of the week
+    DateTime startNotificationTime = startDateTime.subtract(Duration(minutes: 2)); // 2 minutes before start time
     DateTime currentDate = DateTime.now();
-    int todayIndex = currentDate.weekday % 7; // Convert 1-7 to 0-6 (Sunday-Saturday)
 
-    List<String> selectedDayLetters = [];
-    List<String> fullDayNames = [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday'
-    ];
+    // Schedule the notification
+    if (startNotificationTime.isAfter(currentDate)) {
+      final notificationService = NotificationService();
+      print('Scheduling notification for time: $startNotificationTime');
+      await notificationService.scheduleNotification(
+        title.hashCode, // Unique ID for the notification
+        title,
+        startNotificationTime,
+      );
 
-    final alarmService = AlarmService();
-
-    for (int i = 0; i < selectedDays.length; i++) {
-      if (selectedDays[i]) {
-        selectedDayLetters.add(fullDayNames[i]);
-
-        // Check if today matches the selected day
-        if (i == todayIndex) {
-          // Schedule notification for today
-          DateTime notificationTime = DateTime(
-            currentDate.year,
-            currentDate.month,
-            currentDate.day,
-            startDateTime.hour,
-            startDateTime.minute,
-          ).subtract(Duration(minutes: 5)); // 5 minutes before start time
-
-          if (notificationTime.isAfter(currentDate)) {
-            final notificationService = NotificationService();
-            print(
-                'Scheduling notification for time: $notificationTime'); // Debugging line
-            await notificationService.scheduleNotification(
-              planId.hashCode ^ i, // Unique ID for each day
-              'Plan Reminder: $title',
-              notificationTime,
-            );
-          }
-          DateTime alarmTime = DateTime(
-            currentDate.year,
-            currentDate.month,
-            currentDate.day,
-            endDateTime.hour,
-            endDateTime.minute,
-          );
-
-          if (alarmTime.isAfter(currentDate)) {
-            await alarmService.scheduleAlarm(
-              id: planId.hashCode ^ i, // Unique ID for alarm
-              triggerTime: alarmTime,
-              callback: alarmCallback,
-            );
-          }
-        }
+      // Schedule the alarm
+      if (endDateTime.isAfter(currentDate)) {
+        print('Triggering alarm callback for end time at $endDateTime');
+        final alarmService = AlarmService();
+        await alarmService.scheduleAlarm(
+          id: 1000, // Unique ID for alarm
+          triggerTime: endDateTime,
+          callback: alarmCallback,
+        );
       }
     }
 
-    if (selectedDayLetters.isNotEmpty) {
-      showToast(
-          'Success! "$title", Your sleep duration is valid. Selected days: ${selectedDayLetters.join(', ')}.');
-    } else {
-      showToast(
-          'Success! "$title", Your sleep duration is valid. No days selected.');
-    }
+    showToast('Success! "$title", Your sleep duration is valid.');
 
-    await _addPlanOrUpdateToCalendar(planId, title, startTime, endTime, selectedDayLetters);
+    await _addPlanOrUpdateToCalendar(planId, title, startTime, endTime, selectedDate, isCalendar);
 
     Navigator.push(
       context,

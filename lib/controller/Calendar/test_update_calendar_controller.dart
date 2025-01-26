@@ -2,12 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sleepful/view/Pages/Calendar/test_calendar.dart';
 
 import '../../services/notification_service.dart';
 import '../../services/alarm_service.dart';
 import '../../view/Navbar/bottom_navbar.dart';
-import '../../view/Pages/Calendar/calendar.dart';
-// import '../../view/Pages/Plans/view_plans.dart';
 
 void alarmCallback() {
   print("🚨 Alarm Triggered: End Time Reached! 🚨");
@@ -19,13 +18,14 @@ void alarmCallback() {
 }
 
 class TimePickerrController {
-  int selectedHour = 12; // Default hour
-  int selectedMinute = 0; // Default minute
-  String selectedPeriod = 'AM';
+  int selectedHour;
+  int selectedMinute;
+  String selectedPeriod;
+  List<bool> selectedDays;
 
   // Store selected times for start and end
-  String startTime = '12:00 AM';
-  String endTime = '12:00 AM';
+  String startTime;
+  String endTime;
 
   bool isStartSelected = true; // Track which button is selected
   String successMessage = '';
@@ -33,15 +33,44 @@ class TimePickerrController {
   final List<int> hours = List.generate(12, (index) => index + 1);
   final List<int> minutes = List.generate(60, (index) => index);
   final List<String> periods = ['AM', 'PM'];
-  List<bool> selectedDays = List.generate(7, (index) => false);
 
-  // Use FixedExtentScrollController
-  final FixedExtentScrollController hourController =
-  FixedExtentScrollController(initialItem: 12 + 5999);
-  final FixedExtentScrollController minuteController =
-  FixedExtentScrollController(initialItem: 0 + 6000);
-  final FixedExtentScrollController periodController =
-  FixedExtentScrollController(initialItem: 0);
+  final FixedExtentScrollController hourController;
+  final FixedExtentScrollController minuteController;
+  final FixedExtentScrollController periodController;
+
+  TimePickerrController({
+    required this.startTime, // Required start time
+    required this.endTime, // Required end time
+    List<bool>? selectedDays, // Optional selected days
+  })  : selectedDays = selectedDays ??
+      List.generate(7, (index) => false), // Initialize selectedDays
+        selectedHour = int.parse(
+            startTime.split(':')[0]), // Initialize selectedHour from startTime
+        selectedMinute = int.parse(startTime
+            .split(':')[1]
+            .split(' ')[0]), // Initialize selectedMinute from startTime
+        selectedPeriod = startTime.split(' ')[1],
+        hourController = FixedExtentScrollController(
+            initialItem: _getHourIndex(startTime) + 6000),
+        minuteController = FixedExtentScrollController(
+            initialItem: _getMinuteIndex(startTime) + 6000),
+        periodController = FixedExtentScrollController(
+            initialItem: _getPeriodIndex(startTime));
+
+  // Helper methods to get the initial index for hour, minute, and period
+  static int _getHourIndex(String time) {
+    int hour = int.parse(time.split(':')[0]);
+    return hour == 12 ? 0 : hour - 1; // Adjust for 12-hour format
+  }
+
+  static int _getMinuteIndex(String time) {
+    return int.parse(time.split(':')[1].split(' ')[0]);
+  }
+
+  static int _getPeriodIndex(String time) {
+    String period = time.split(' ')[1];
+    return period == 'AM' ? 0 : 1; // 0 for AM, 1 for PM
+  }
 
   void switchToStart() {
     if (!isStartSelected) {
@@ -65,36 +94,68 @@ class TimePickerrController {
     isStartSelected = false;
   }
 
-  Future<String> _addCalendarToFirestore(String title, String startTime,
-      String endTime, DateTime selectedDate) async {
-    // Get the current user
+  // Future<String> _addPlanOrUpdateToCalendar(String title, String startTime, String endTime, List<String> selectedDays) async {
+  Future<void> _addPlanOrUpdateToCalendar(String planId, String title, String startTime, String endTime, DateTime selectedDate, bool isCalendar) async {
     User? user = FirebaseAuth.instance.currentUser ;
 
     if (user != null) {
-      // Reference to the Firestore collection
-      CollectionReference calendarCollection = FirebaseFirestore.instance
+      if (isCalendar) {
+      DocumentReference calendarPlanDocument = FirebaseFirestore.instance
           .collection('Users')
           .doc(user.uid)
-          .collection('Calendar Plans');
+          .collection('Calendar Plans')
+          .doc(planId);
 
-      DocumentReference docRef = await calendarCollection.add({
+      await calendarPlanDocument.update({
         'title': title,
         'startTime': startTime,
         'endTime': endTime,
         'selectedDays': null,
         'isCalendar': true,
-        'createdAt': FieldValue.serverTimestamp(),
+        'updatedAt': FieldValue
+            .serverTimestamp(), // Optional: Add a timestamp for the update
         'selectedDate': selectedDate,
         'notVisibleCalendar': null,
       });
-      return docRef.id;
     }
-    throw Exception("User  not authenticated.");
+    // throw Exception("User  not authenticated.");
+      else {
+        // Move plan from Plans to Calendar Plans
+        DocumentReference planDocument = FirebaseFirestore.instance
+            .collection('Users')
+            .doc(user.uid)
+            .collection('Plans')
+            .doc(planId);
+
+        DocumentReference newCalendarPlanDocument = FirebaseFirestore.instance
+            .collection('Users')
+            .doc(user.uid)
+            .collection('Calendar Plans')
+            .doc();
+
+        // Update original plan to mark notVisibleCalendar
+        await planDocument.update({
+          'notVisibleCalendar': selectedDate,
+        });
+
+        // Add to Calendar Plans
+        await newCalendarPlanDocument.set({
+          'title': title,
+          'startTime': startTime,
+          'endTime': endTime,
+          'selectedDays': null,
+          'isCalendar': true,
+          'updatedAt': FieldValue.serverTimestamp(),
+          'selectedDate': selectedDate,
+          'notVisibleCalendar': null,
+        });
+      }
+    }
   }
 
-  Future<bool> _checkForDuplicateTitle(String title) async {
+  Future<bool> _checkForDuplicateTitle(String title, String planId) async {
     // Get the current user
-    User? user = FirebaseAuth.instance.currentUser ;
+    User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
       // Reference to the Firestore collection
@@ -103,9 +164,12 @@ class TimePickerrController {
           .doc(user.uid)
           .collection('Plans');
 
-      // Query for plans with the same title
-      QuerySnapshot querySnapshot =
-      await plansCollection.where('title', isEqualTo: title).get();
+      // Query for plans with the same title, excluding the current planId
+      QuerySnapshot querySnapshot = await plansCollection
+          .where('title', isEqualTo: title)
+          .where(FieldPath.documentId,
+          isNotEqualTo: planId) // Exclude the current planId
+          .get();
 
       // Check if any plans with the same title exist
       return querySnapshot.docs.isNotEmpty;
@@ -114,9 +178,9 @@ class TimePickerrController {
     return false;
   }
 
-  Future<bool> _checkForDuplicateTitleCalendar(String title) async {
+  Future<bool> _checkForDuplicateTitleCalendar(String title, String planId) async {
     // Get the current user
-    User? user = FirebaseAuth.instance.currentUser ;
+    User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
       // Reference to the Firestore collection
@@ -125,9 +189,12 @@ class TimePickerrController {
           .doc(user.uid)
           .collection('Calendar Plans');
 
-      // Query for plans with the same title
-      QuerySnapshot querySnapshot =
-      await plansCollection.where('title', isEqualTo: title).get();
+      // Query for plans with the same title, excluding the current planId
+      QuerySnapshot querySnapshot = await plansCollection
+          .where('title', isEqualTo: title)
+          .where(FieldPath.documentId,
+          isNotEqualTo: planId) // Exclude the current planId
+          .get();
 
       // Check if any plans with the same title exist
       return querySnapshot.docs.isNotEmpty;
@@ -141,15 +208,14 @@ class TimePickerrController {
       msg: message,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
-      backgroundColor: Color (0xFF979797),
+      backgroundColor: Color(0xFF979797),
       textColor: Colors.white,
       fontSize: 16.0,
     );
   }
 
-  Future<void> validateTimes(BuildContext context, String title, DateTime selectedDate) async {
-    print("Selected Date in validateTimes: $selectedDate");
-    // Get the current user
+  Future<void> validateTimes(
+      BuildContext context, String title, String planId, DateTime selectedDate, bool isCalendar) async {
     User? user = FirebaseAuth.instance.currentUser ;
 
     if (user == null) {
@@ -162,19 +228,18 @@ class TimePickerrController {
       return;
     }
 
-    bool isDuplicate = await _checkForDuplicateTitle(title);
+    bool isDuplicate = await _checkForDuplicateTitle(title, planId);
     if (isDuplicate) {
       showToast("Plan title already exists. Please choose a different title.");
       return;
     }
 
-    bool isDuplicateCalendar = await _checkForDuplicateTitleCalendar(title);
+    bool isDuplicateCalendar = await _checkForDuplicateTitleCalendar(title, planId);
     if (isDuplicateCalendar) {
-      showToast("Calendar plan title already exists. Please choose a different title.");
+      showToast("Plan title already exists. Please choose a different title.");
       return;
     }
 
-    // Save the latest selected time based on which button was last pressed
     if (isStartSelected) {
       startTime =
       '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
@@ -182,17 +247,13 @@ class TimePickerrController {
       endTime =
       '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
     }
-    // Parse start and end times
-    DateTime startDateTime = _parseTime(startTime, date: selectedDate);
-    DateTime endDateTime = _parseTime(endTime, date: selectedDate);
 
-    // Adjust endDateTime if it is before startDateTime
+    DateTime startDateTime = _parseTime(startTime);
+    DateTime endDateTime = _parseTime(endTime);
+
     if (endDateTime.isBefore(startDateTime)) {
       endDateTime = endDateTime.add(Duration(days: 1));
     }
-
-    print('Start DateTime: $startDateTime');
-    print('End DateTime: $endDateTime');
 
     Duration duration = endDateTime.difference(startDateTime);
 
@@ -212,6 +273,7 @@ class TimePickerrController {
       return;
     }
 
+    // Get today's day of the week
     DateTime startNotificationTime = startDateTime.subtract(Duration(minutes: 2)); // 2 minutes before start time
     DateTime currentDate = DateTime.now();
 
@@ -237,16 +299,16 @@ class TimePickerrController {
       }
     }
 
-    // Create the success message
     showToast('Success! "$title", Your sleep duration is valid.');
 
-    await _addCalendarToFirestore(title, startTime, endTime, selectedDate);
+    await _addPlanOrUpdateToCalendar(planId, title, startTime, endTime, selectedDate, isCalendar);
 
-    Navigator.pushReplacement(
+    Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => Calendar(userId: userId ?? '')),
     );
   }
+
 
   void resetTime(bool isStart) {
     if (isStart) {
@@ -255,22 +317,28 @@ class TimePickerrController {
       selectedHour = int.parse(startParts[0]);
       selectedMinute = int.parse(startParts[1].split(' ')[0]);
       selectedPeriod = startParts[1].split(' ')[1];
-      hourController.jumpToItem((selectedHour) + 5999); // Update the hour controller
-      minuteController.jumpToItem(selectedMinute + 6000); // Update the minute controller
-      periodController.jumpToItem(periods.indexOf(selectedPeriod)); // Update the period controller
+      hourController
+          .jumpToItem((selectedHour) + 5999); // Update the hour controller
+      minuteController
+          .jumpToItem(selectedMinute + 6000); // Update the minute controller
+      periodController.jumpToItem(
+          periods.indexOf(selectedPeriod)); // Update the period controller
     } else {
       // Reset to the last selected end time
       List<String> endParts = endTime.split(':');
       selectedHour = int.parse(endParts[0]);
       selectedMinute = int.parse(endParts[1].split(' ')[0]);
       selectedPeriod = endParts[1].split(' ')[1];
-      hourController.jumpToItem((selectedHour) + 5999); // Update the hour controller
-      minuteController.jumpToItem(selectedMinute + 6000); // Update the minute controller
-      periodController.jumpToItem(periods.indexOf(selectedPeriod)); // Update the period controller
+      hourController
+          .jumpToItem((selectedHour) + 5999); // Update the hour controller
+      minuteController
+          .jumpToItem(selectedMinute + 6000); // Update the minute controller
+      periodController.jumpToItem(
+          periods.indexOf(selectedPeriod)); // Update the period controller
     }
   }
 
-  DateTime _parseTime(String time, {DateTime? date}) {
+  DateTime _parseTime(String time) {
     List<String> parts = time.split(':');
     int hour = int.parse(parts[0]);
     int minute = int.parse(parts[1].split(' ')[0]);
@@ -282,7 +350,6 @@ class TimePickerrController {
       hour = 0;
     }
 
-    date ??= DateTime.now(); // Use current date if no date is provided
-    return DateTime(date.year, date.month, date.day, hour, minute);
+    return DateTime(0, 1, 1, hour, minute);
   }
 }

@@ -1,76 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:sleepful/view/Pages/Calendar/calendar.dart';
-import 'package:sleepful/view/Pages/Calendar/calendar_add.dart';
-// import 'package:sleepful/view/Pages/Plans/view_plans.dart';
 
-import '../../../controller/Calendar/update_calendar_controller.dart';
-// import '../../../controller/Plans/update_plan_controller.dart';
+import '../../../controller/Calendar/test_add_calendar_controller.dart';
 import '../../Components/plus_button.dart';
 import '../../Navbar/bottom_navbar.dart';
+import '../home_page.dart';
 
-class UpdateCalendar extends StatefulWidget {
-  final DateTime selectedDate;
-  final String title;
-  final String planId;
-  final String startTime;
-  final String endTime;
-  final List<String> selectedDays;
-  final bool isCalendar;
-
-  const UpdateCalendar({
-    super.key,
-    required this.title,
-    required this.planId,
-    required this.startTime,
-    required this.endTime,
-    required this.selectedDays,
-    required this.selectedDate,
-    required this.isCalendar,
-  });
+class AddCalendar extends StatefulWidget {
+  final DateTime selectedDate; // Add this line
+  const AddCalendar({super.key, required this.selectedDate});
 
   @override
-  UpdateCalendarState createState() => UpdateCalendarState(); // Change to public
+  AddCalendarState createState() => AddCalendarState(); // Change to public
 }
 
-class UpdateCalendarState extends State<UpdateCalendar> {
-  late final TimePickerrController controller;
+class AddCalendarState extends State<AddCalendar> {
+  final TimePickerrController controller = TimePickerrController();
   final TextEditingController titleController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Initialize the controller with the values passed from UpdatePlans
-    controller = TimePickerrController(
-      startTime: widget.startTime, // Pass startTime
-      endTime: widget.endTime, // Pass endTime
-      // selectedDays: _getSelectedDays(widget.selectedDays), // Pass selected days
-      selectedDays: List.generate(7, (index) => false),
-    );
-
-    titleController.text = widget.title; // Set the title in the TextField
-  }
-
-  // List<bool> _getSelectedDays(List<String> days) {
-  //   List<bool> selectedDays = List.generate(7, (index) => false);
-  //   List<String> fullDayNames = [
-  //     'Sunday',
-  //     'Monday',
-  //     'Tuesday',
-  //     'Wednesday',
-  //     'Thursday',
-  //     'Friday',
-  //     'Saturday'
-  //   ];
-  //
-  //   for (String day in days) {
-  //     int index = fullDayNames.indexOf(day);
-  //     if (index != -1) {
-  //       selectedDays[index] = true;
-  //     }
-  //   }
-  //   return selectedDays;
-  // }
 
   @override
   void dispose() {
@@ -83,6 +28,7 @@ class UpdateCalendarState extends State<UpdateCalendar> {
 
   @override
   Widget build(BuildContext context) {
+    print(" UDAH DI ADD CAL TEST Selected Date: ${widget.selectedDate}");
     final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
     return Scaffold(
       appBar: AppBar(
@@ -91,7 +37,7 @@ class UpdateCalendarState extends State<UpdateCalendar> {
         leading: GestureDetector(
           onTap: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => Calendar(userId: userId ?? '')));
+                MaterialPageRoute(builder: (context) => const HomePage()));
           },
           child: Padding(
             padding: const EdgeInsets.all(10.0),
@@ -105,7 +51,7 @@ class UpdateCalendarState extends State<UpdateCalendar> {
         title: Padding(
           padding: const EdgeInsets.only(left: 0),
           child: Text(
-            'Update Calendar',
+            'Add Calendar',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -165,18 +111,19 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                                       .toString()
                                       .padLeft(2, '0'),
                                   style: TextStyle(
-                                      fontSize: 54,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Montserrat',
-                                      color: isSelected
-                                          ? Colors.white
-                                          : Theme.of(context)
-                                          .colorScheme
-                                          .onErrorContainer // Change text color if selected
+                                    fontSize: 54,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Montserrat',
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Theme.of(context)
+                                        .colorScheme
+                                        .onErrorContainer, // Change text color if selected
                                   ),
                                 ),
                               );
                             },
+                            // childCount: hours.length * 1000,
                             childCount: controller.hours.length * 1000,
                           ),
                         ),
@@ -250,7 +197,6 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                               bool isSelected = (controller.minutes[
                               index % controller.minutes.length] ==
                                   controller.selectedMinute);
-                              // int minute = index % 60;
                               return Container(
                                 decoration: BoxDecoration(
                                   color: isSelected
@@ -267,14 +213,14 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                                       .toString()
                                       .padLeft(2, '0'),
                                   style: TextStyle(
-                                      fontSize: 54,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Montserrat',
-                                      color: isSelected
-                                          ? Colors.white
-                                          : Theme.of(context)
-                                          .colorScheme
-                                          .onErrorContainer // Change text color if selected
+                                    fontSize: 54,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Montserrat',
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Theme.of(context)
+                                        .colorScheme
+                                        .onErrorContainer, // Change text color if selected
                                   ),
                                 ),
                               );
@@ -306,7 +252,6 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                                   color: isSelected
                                       ? Theme.of(context).colorScheme.onError
                                       : Colors.transparent,
-                                  // Change color if selected
                                   borderRadius: BorderRadius.only(
                                     topRight: Radius.circular(10),
                                     bottomRight: Radius.circular(10),
@@ -316,14 +261,14 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                                 child: Text(
                                   controller.periods[index],
                                   style: TextStyle(
-                                      fontSize: 54,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Montserrat',
-                                      color: isSelected
-                                          ? Colors.white
-                                          : Theme.of(context)
-                                          .colorScheme
-                                          .onErrorContainer // Change text color if selected
+                                    fontSize: 54,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Montserrat',
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Theme.of(context)
+                                        .colorScheme
+                                        .onErrorContainer, // Change text color if selected
                                   ),
                                 ),
                               );
@@ -354,6 +299,8 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                                   controller.switchToStart();
                                 });
                               },
+                              // onPressed: () => _toggleButton(true),
+                              // onPressed: resetTime,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: controller.isStartSelected
                                     ? Color(0xFFB4A9D6)
@@ -386,8 +333,6 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                                   controller.switchToEnd();
                                 });
                               },
-                              // onPressed: () => _toggleButton(false),
-                              // onPressed: resetTime,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: !controller.isStartSelected
                                     ? Color(0xFFB4A9D6)
@@ -426,15 +371,13 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                             ['S', 'M', 'T', 'W', 'T', 'F', 'S'][index];
                             return DayCircle(
                               letter: dayLetter,
-                              // isSelected: controller.selectedDays[index],
-                              // onSelected: (isSelected) {
-                              //   setState(() {
-                              //     controller.selectedDays[index] =
-                              //         isSelected; // Update the selected day
-                              //   });
-                              // },
-                              isSelected: false, // Always false
-                              onSelected: null, // Disable selection
+                              isSelected: controller.selectedDays[index],
+                              onSelected: (isSelected) {
+                                setState(() {
+                                  controller.selectedDays[index] =
+                                      isSelected; // Update the selected day
+                                });
+                              }, isClickable: false,
                             );
                           }),
                         ),
@@ -443,7 +386,7 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Name Your Plan Section
+                  // Name Your Calendar Section
                   Align(
                     alignment: Alignment.centerLeft, // Align to the left
                     child: Text(
@@ -486,6 +429,7 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                       ),
                       hintText: 'Enter calendar plan name',
                       hintStyle: TextStyle(
+                          fontFamily: 'Montserrat',
                           color: Theme.of(context)
                               .textTheme
                               .bodySmall
@@ -498,8 +442,7 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        controller.validateTimes(
-                            context, titleController.text, widget.planId, widget.selectedDate, widget.isCalendar);
+                        controller.validateTimes(context, titleController.text, widget.selectedDate);
                       });
                     },
                     style: ElevatedButton.styleFrom(
@@ -511,7 +454,7 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                           vertical: 4.0), // Same padding as Start button
                     ),
                     child: const Text(
-                      'Update',
+                      'Add',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -533,7 +476,8 @@ class UpdateCalendarState extends State<UpdateCalendar> {
             Positioned(
               bottom: 56,
               left: MediaQuery.of(context).size.width / 2 - 27,
-              child: PlusButton(targetPage: AddCalendar(selectedDate: widget.selectedDate),),
+              child: PlusButton(targetPage: AddCalendar(selectedDate: widget.selectedDate),
+              ),
             ),
           ],
         ],
@@ -545,13 +489,15 @@ class UpdateCalendarState extends State<UpdateCalendar> {
 class DayCircle extends StatefulWidget {
   final String letter;
   final bool isSelected;
-  final ValueChanged<bool>? onSelected;
+  final bool isClickable;
+  final ValueChanged<bool> onSelected;
 
   const DayCircle({
     super.key,
     required this.letter,
     required this.isSelected,
-    this.onSelected,
+    required this.isClickable,
+    required this.onSelected,
   });
 
   @override
@@ -561,24 +507,33 @@ class DayCircle extends StatefulWidget {
 class DayCircleState extends State<DayCircle> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 35,
-      height: 35,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.grey.withOpacity(0.5), // Disabled look
-        border: Border.all(
-          color: Colors.grey,
-          width: 2.0,
+    return GestureDetector(
+      onTap: () {
+        if (widget.isClickable) {
+          setState(() {
+            widget.onSelected(!widget.isSelected);
+          });
+        }
+      },
+      child: Container(
+        width: 35,
+        height: 35,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: widget.isSelected ? Color(0xFFB4A9D6) : Colors.transparent,
+          border: Border.all(
+            color: widget.isSelected ? Color(0xFFB4A9D6) : Colors.white,
+            width: 2.0,
+          ),
         ),
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        widget.letter,
-        style: TextStyle(
-          color: Colors.white.withOpacity(0.5),
-          fontWeight: FontWeight.bold,
-          fontSize: 18,
+        alignment: Alignment.center,
+        child: Text(
+          widget.letter,
+          style: TextStyle(
+            color: widget.isSelected ? Colors.black : Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
         ),
       ),
     );
