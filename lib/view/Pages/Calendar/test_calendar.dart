@@ -2,15 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sleepful/controller/Calendar/today_plan_controller.dart'; // Import the SleepPlanController
-import 'package:sleepful/view/Pages/Calendar/calendar_add.dart';
+import 'package:sleepful/controller/Calendar/test_today_plan_controller.dart'; // Import the SleepPlanController
+import 'package:sleepful/view/Pages/Calendar/test_calendar_add.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../Components/plus_button.dart';
 import '../../Navbar/bottom_navbar.dart';
 // import '../Plans/update_plans.dart';
 import '../home_page.dart';
-import 'calendar_update.dart';
+import 'test_calendar_update.dart';
 
 class Calendar extends StatefulWidget {
   final int selectedIndex;
@@ -24,17 +24,15 @@ class Calendar extends StatefulWidget {
 
 class _CalendarState extends State<Calendar> {
   DateTime focusedDay = DateTime.now();
-  DateTime? selectedDay; // State variable to keep track of the selected day
-  final SleepPlanController sleepPlanController =
-      SleepPlanController(); // Instantiate the controller
-  String? sleepPlan; // Variable to hold the sleep plan for the selected day
+  DateTime? selectedDay;
+  final SleepPlanController sleepPlanController = SleepPlanController();
+  String? sleepPlan;
   Map<DateTime, List<Map<String, dynamic>>>? sleepPlanList;
 
   Future<Map<String, dynamic>?> fetchPlanData(String planId) async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) return null;
 
-    // First, check if the plan exists in Calendar Plans
     DocumentSnapshot calendarSnapshot = await FirebaseFirestore.instance
         .collection('Users')
         .doc(user.uid)
@@ -47,7 +45,6 @@ class _CalendarState extends State<Calendar> {
       return calendarSnapshot.data() as Map<String, dynamic>;
     }
 
-    // If not found in Calendar Plans, check Plans collection
     DocumentSnapshot plansSnapshot = await FirebaseFirestore.instance
         .collection('Users')
         .doc(user.uid)
@@ -64,18 +61,15 @@ class _CalendarState extends State<Calendar> {
   }
 
   void _deletePlan(BuildContext context, String planId, String title) async {
-    // Fetch the plan data to check the isCalendar field
     final planData = await fetchPlanData(planId);
 
     if (planData == null) {
-      // Handle the case where the plan data could not be fetched
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Could not fetch plan data.')),
       );
       return;
     }
 
-    // Determine the collection to delete from based on isCalendar
     String collectionToDeleteFrom =
         planData['isCalendar'] == true ? 'Calendar Plans' : 'Plans';
 
@@ -100,12 +94,6 @@ class _CalendarState extends State<Calendar> {
               const SizedBox(height: 16),
               Text(
                 'Are you sure you want to delete "$title"?',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.tertiary,
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -125,21 +113,10 @@ class _CalendarState extends State<Calendar> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.of(context).pop(); // Close the dialog
+                        Navigator.of(context).pop();
                       },
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 12.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                      ),
                       child: Text(
                         'Cancel',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.tertiary,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.bold,
-                        ),
                       ),
                     ),
                   ),
@@ -168,21 +145,10 @@ class _CalendarState extends State<Calendar> {
                           });
                         });
 
-                        Navigator.of(context).pop(); // Close the dialog
+                        Navigator.of(context).pop();
                       },
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 12.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                      ),
                       child: const Text(
                         'Delete',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.bold,
-                        ),
                       ),
                     ),
                   ),
@@ -198,10 +164,9 @@ class _CalendarState extends State<Calendar> {
   @override
   void initState() {
     super.initState();
-    selectedDay = focusedDay; // Initialize selectedDay to today
+    selectedDay = focusedDay;
     sleepPlanController.fetchSleepPlans(widget.userId).listen((sleepPlans) {
       setState(() {
-        // sleepPlan = sleepPlanController.getSleepPlans(selectedDay!).join('\n');
         sleepPlanList = sleepPlans;
       });
     });
@@ -209,10 +174,6 @@ class _CalendarState extends State<Calendar> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double titleFontSize = screenWidth * 0.06;
-    double subtitleFontSize = screenWidth * 0.04;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -235,12 +196,6 @@ class _CalendarState extends State<Calendar> {
           padding: const EdgeInsets.only(left: 0),
           child: Text(
             'Calendar',
-            style: TextStyle(
-              fontSize: titleFontSize,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Montserrat',
-              color: Theme.of(context).colorScheme.primary,
-            ),
           ),
         ),
       ),
@@ -250,7 +205,6 @@ class _CalendarState extends State<Calendar> {
             children: [
               Expanded(
                 child: SingleChildScrollView(
-                  // Wrap the body in a SingleChildScrollView
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
@@ -263,24 +217,6 @@ class _CalendarState extends State<Calendar> {
                           child: TableCalendar(
                             locale: "en_US",
                             rowHeight: 50,
-                            headerStyle: HeaderStyle(
-                              titleCentered: true,
-                              formatButtonVisible: false,
-                              leftChevronIcon: Icon(
-                                Icons.arrow_back_ios,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              rightChevronIcon: Icon(
-                                Icons.arrow_forward_ios,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              titleTextStyle: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontSize: titleFontSize,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Montserrat',
-                              ),
-                            ),
                             availableGestures: AvailableGestures.all,
                             selectedDayPredicate: (day) =>
                                 isSameDay(selectedDay, day),
@@ -289,66 +225,11 @@ class _CalendarState extends State<Calendar> {
                             lastDay: DateTime.utc(2026, 12, 31),
                             onDaySelected: (selectedDay, focusedDay) {
                               setState(() {
-                                this.selectedDay =
-                                    selectedDay; // Update the selected day
+                                this.selectedDay = selectedDay;
                                 this.focusedDay = selectedDay;
                               });
                               print("Selected Day: $selectedDay");
                             },
-                            daysOfWeekStyle: DaysOfWeekStyle(
-                              weekdayStyle: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontSize: subtitleFontSize,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Montserrat',
-                              ),
-                              weekendStyle: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontSize: subtitleFontSize,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Montserrat',
-                              ),
-                            ),
-                            calendarStyle: CalendarStyle(
-                              defaultTextStyle: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontSize: subtitleFontSize,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Montserrat',
-                              ),
-                              selectedDecoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.primary,
-                                shape: BoxShape.circle,
-                              ),
-                              selectedTextStyle: TextStyle(
-                                color: Theme.of(context).colorScheme.surface,
-                                fontSize: subtitleFontSize,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Montserrat',
-                              ),
-                              todayDecoration: BoxDecoration(
-                                color: Color(0xFF664FAF).withOpacity(0.7),
-                                shape: BoxShape.circle,
-                              ),
-                              todayTextStyle: TextStyle(
-                                color: Color(0xFFFFFFFF).withOpacity(0.9),
-                                fontSize: subtitleFontSize,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Montserrat',
-                              ),
-                              weekendTextStyle: TextStyle(
-                                color: Color(0xFFB4A9D6),
-                                fontSize: subtitleFontSize,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Montserrat',
-                              ),
-                              outsideTextStyle: TextStyle(
-                                color: Color(0xFFB4A9D6).withOpacity(0.6),
-                                fontSize: subtitleFontSize,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Montserrat',
-                              ),
-                            ),
                           ),
                         ),
                         SizedBox(height: 20),
@@ -357,10 +238,7 @@ class _CalendarState extends State<Calendar> {
                                       .getSleepPlans(selectedDay!)
                                       .first ==
                                   "No sleep plan for this date"
-                              // children: sleepPlanController.getSleepPlans(selectedDay!).isEmpty
                               ? [
-                                  // children: sleepPlanController.getSleepPlans(selectedDay!).isEmpty
-                                  //     ? [
                                   Container(
                                     margin:
                                         const EdgeInsets.symmetric(vertical: 5),
@@ -376,65 +254,37 @@ class _CalendarState extends State<Calendar> {
                                     ),
                                     child: Text(
                                       "There's no plans for this date.",
-                                      style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        fontSize: subtitleFontSize,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Montserrat',
-                                      ),
                                     ),
                                   ),
                                 ]
                               : sleepPlanController
                                   .getSleepPlans(selectedDay!)
                                   .map((plan) {
-                                  // print("Plan: $plan");
                                   final parts = plan.split(': ');
                                   if (parts.length < 2) {
-                                    return SizedBox(); // Return empty widget for invalid plan format
+                                    return SizedBox();
                                   }
 
                                   final title = parts[0];
                                   final timeDetails = parts[1].split(' to ');
                                   if (timeDetails.length < 2) {
-                                    return SizedBox(); // Return empty widget for invalid time details
+                                    return SizedBox();
                                   }
 
                                   final startTimeString = timeDetails[0]
                                       .replaceFirst('Sleep from ', '');
                                   final endTimeString = timeDetails[1];
 
-                                  // Parse the start and end time strings into DateTime objects
                                   DateTime startTime =
                                       DateTime.parse(startTimeString);
                                   DateTime endTime =
                                       DateTime.parse(endTimeString);
 
-                                  // Format the DateTime objects into the desired format
                                   String formattedStartTime =
-                                      DateFormat.jm('en_US')
-                                          .format(startTime); // e.g., 10:20 PM
+                                      DateFormat.jm('en_US').format(startTime);
                                   String formattedEndTime =
-                                      DateFormat.jm('en_US')
-                                          .format(endTime); // e.g., 5:00 AM
+                                      DateFormat.jm('en_US').format(endTime);
 
-                                  // final title = plan['title'];
-                                  // final startTime = plan['startTime'];
-                                  // final endTime = plan['endTime'];
-                                  // final planId = plan['planId']; // Now this is correctly extracted
-                                  // final selectedDays = plan['selectedDays']; // Now this is correctly extracted
-                                  // final planDetails = sleepPlanController
-                                  //     .sleepPlans[selectedDay!]
-                                  //     ?.firstWhere(
-                                  //         (plan) => plan['title'] == title);
-                                  // final planId = planDetails?['planId'] ??
-                                  //     "Unknown Plan ID"; // Use actual planId
-                                  // final selectedDays = (planDetails?[
-                                  //             'selectedDays'] as List<String>?)
-                                  //         ?.join(', ') ??
-                                  //     "No selected days"; // Use actual selectedDays
                                   DateTime normalizedDate = DateTime(
                                       selectedDay!.year,
                                       selectedDay!.month,
@@ -453,9 +303,7 @@ class _CalendarState extends State<Calendar> {
                                               ?.join(', ') ??
                                           "No selected days";
 
-                                  final planId = planDetails?[
-                                      'planId']; // Now this will never be null
-                                  // final selectedDays = (planDetails?['selectedDays'] as List<String>?)?.join(', ') ?? "No selected days"; // Use actual selectedDays
+                                  final planId = planDetails?['planId'];
                                   String formattedDate =
                                       DateFormat('d MMMM yyyy')
                                           .format(selectedDay!);
@@ -465,11 +313,11 @@ class _CalendarState extends State<Calendar> {
                                   if (planDetails?['collection'] ==
                                       'Calendar Plans') {
                                     DateTime selectedDate =
-                                    planDetails?['selectedDate'];
+                                        planDetails?['selectedDate'];
                                     if (DateTime(
-                                        selectedDate.year,
-                                        selectedDate.month,
-                                        selectedDate.day) !=
+                                            selectedDate.year,
+                                            selectedDate.month,
+                                            selectedDate.day) !=
                                         DateTime(
                                             selectedDay!.year,
                                             selectedDay!.month,
@@ -483,7 +331,6 @@ class _CalendarState extends State<Calendar> {
                                         const EdgeInsets.symmetric(vertical: 5),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-                                      // color: Theme.of(context).colorScheme.surface,
                                       color: Color(0xFF26184A),
                                     ),
                                     child: Column(
@@ -492,92 +339,27 @@ class _CalendarState extends State<Calendar> {
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.all(10),
-                                          // Apply padding here
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 title,
-                                                style: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary,
-                                                  fontSize: subtitleFontSize,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily: 'Montserrat',
-                                                ),
                                               ),
                                               const SizedBox(height: 5),
                                               Text(
                                                 'Day: $dayString, Date: $formattedDate',
-                                                style: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary,
-                                                  fontSize: subtitleFontSize,
-                                                  fontFamily: 'Montserrat',
-                                                ),
                                               ),
                                               Text(
                                                 'Time: $formattedStartTime - $formattedEndTime',
-                                                style: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary,
-                                                  fontSize: subtitleFontSize,
-                                                  fontFamily: 'Montserrat',
-                                                ),
                                               ),
-                                              // Text(
-                                              //   'Plan ID: $planId',
-                                              //   style: TextStyle(
-                                              //     color: Theme.of(context)
-                                              //         .colorScheme
-                                              //         .primary,
-                                              //     fontSize: subtitleFontSize,
-                                              //     fontFamily: 'Montserrat',
-                                              //   ),
-                                              // ),
-                                              // Text(
-                                              //   'Selected Days: $selectedDays',
-                                              //   style: TextStyle(
-                                              //     color: Theme.of(context)
-                                              //         .colorScheme
-                                              //         .primary,
-                                              //     fontSize: subtitleFontSize,
-                                              //     fontFamily: 'Montserrat',
-                                              //   ),
-                                              // ),
-                                              // Text(
-                                              //   'Start Time: $startTime',
-                                              //   style: TextStyle(
-                                              //     color: Theme.of(context)
-                                              //         .colorScheme
-                                              //         .primary,
-                                              //     fontSize: subtitleFontSize,
-                                              //     fontFamily: 'Montserrat',
-                                              //   ),
-                                              // ),
-                                              // Text(
-                                              //   'End Time: $endTime',
-                                              //   style: TextStyle(
-                                              //     color: Theme.of(context)
-                                              //         .colorScheme
-                                              //         .primary,
-                                              //     fontSize: subtitleFontSize,
-                                              //     fontFamily: 'Montserrat',
-                                              //   ),
-                                              // ),
                                             ],
                                           ),
                                         ),
                                         GestureDetector(
                                           onTap: () async {
-                                            // Log the title of the plan being clicked
                                             print("Clicked on plan: $title");
 
-                                            // Fetch the plan details from the sleepPlanList
                                             final planDetails = sleepPlanList?[
                                                     normalizedDate]
                                                 ?.firstWhere(
@@ -589,14 +371,11 @@ class _CalendarState extends State<Calendar> {
                                                           'selectedDays': [],
                                                         });
 
-                                            // Get the planId from the fetched plan details
                                             final planId =
                                                 planDetails?['planId'] ??
                                                     'Unknown Plan ID';
-                                            print(
-                                                "Plan ID: $planId"); // Debugging line
+                                            print("Plan ID: $planId");
 
-                                            // Fetch the plan data from Firestore
                                             final planData =
                                                 await fetchPlanData(planId);
                                             if (planData != null) {
@@ -604,53 +383,65 @@ class _CalendarState extends State<Calendar> {
                                                   planData['startTime'];
                                               final endTime =
                                                   planData['endTime'];
-                                              final isCalendar = planData[
-                                                  'isCalendar']; // Check the isCalendar field
+                                              final isCalendar =
+                                                  planData['isCalendar'];
                                               print(
-                                                  "Navigating to update page. isCalendar: $isCalendar"); // Debugging line
+                                                  "Navigating to update page. isCalendar: $isCalendar");
 
-                                              // Navigate to the appropriate page based on isCalendar
                                               if (isCalendar == true) {
-                                                // If isCalendar is true, navigate to UpdateCalendar
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (context) =>
                                                         UpdateCalendar(
-                                                          title: title,
-                                                          planId: planId,
-                                                          startTime: startTime,
-                                                          endTime: endTime,
-                                                          selectedDays: selectedDays
-                                                              .split(', '),
-                                                          selectedDate:
+                                                      title: title,
+                                                      planId: planId,
+                                                      startTime: startTime,
+                                                      endTime: endTime,
+                                                      selectedDays: selectedDays
+                                                          .split(', '),
+                                                      selectedDate:
                                                           selectedDay!,
-                                                          isCalendar: isCalendar,
+                                                      isCalendar: isCalendar,
                                                     ),
                                                   ),
                                                 );
                                               } else {
-                                                // If isCalendar is false, navigate to UpdatePlans
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (context) =>
                                                         UpdateCalendar(
-                                                          title: title,
-                                                          planId: planId,
-                                                          startTime: startTime,
-                                                          endTime: endTime,
-                                                          selectedDays: selectedDays
-                                                              .split(', '),
-                                                          selectedDate:
+                                                      title: title,
+                                                      planId: planId,
+                                                      startTime: startTime,
+                                                      endTime: endTime,
+                                                      selectedDays: selectedDays
+                                                          .split(', '),
+                                                      selectedDate:
                                                           selectedDay!,
-                                                          isCalendar: isCalendar,
+                                                      isCalendar: isCalendar,
                                                     ),
                                                   ),
                                                 );
                                               }
+                                              // else {
+                                              //   Navigator.push(
+                                              //     context,
+                                              //     MaterialPageRoute(
+                                              //       builder: (context) =>
+                                              //           UpdatePlans(
+                                              //         title: title,
+                                              //         planId: planId,
+                                              //         startTime: startTime,
+                                              //         endTime: endTime,
+                                              //         selectedDays: selectedDays
+                                              //             .split(', '),
+                                              //       ),
+                                              //     ),
+                                              //   );
+                                              // }
                                             } else {
-                                              // Handle the case where the plan data could not be fetched
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
                                                 SnackBar(
@@ -676,16 +467,6 @@ class _CalendarState extends State<Calendar> {
                                                     alignment: Alignment.center,
                                                     child: Text(
                                                       'Update',
-                                                      style: TextStyle(
-                                                        color: Colors.white
-                                                            .withOpacity(0.8),
-                                                        fontSize:
-                                                            subtitleFontSize,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontFamily:
-                                                            'Montserrat',
-                                                      ),
                                                     ),
                                                   ),
                                                 ),
@@ -698,27 +479,14 @@ class _CalendarState extends State<Calendar> {
                                                 Expanded(
                                                   child: GestureDetector(
                                                     onTap: () {
-                                                      _deletePlan(
-                                                          context,
-                                                          planId,
-                                                          title); // Call the delete function
+                                                      _deletePlan(context,
+                                                          planId, title);
                                                     },
                                                     child: Container(
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
                                                         'Delete',
-                                                        style: TextStyle(
-                                                          color: Color(
-                                                                  0xFFFF474C)
-                                                              .withOpacity(0.8),
-                                                          fontSize:
-                                                              subtitleFontSize,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              'Montserrat',
-                                                        ),
                                                       ),
                                                     ),
                                                   ),
@@ -746,7 +514,7 @@ class _CalendarState extends State<Calendar> {
             child: PlusButton(
               targetPage: AddCalendar(selectedDate: selectedDay!),
             ),
-          ),
+          )
         ],
       ),
     );

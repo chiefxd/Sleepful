@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../../controller/Calendar/add_calendar_controller.dart';
 import '../../Components/plus_button.dart';
-// import 'package:sleepful/view/Pages/Plans/time_picker_page.dart';
 import '../../Navbar/bottom_navbar.dart';
-import '../home_page.dart';
+import 'calendar.dart';
 
 class AddCalendar extends StatefulWidget {
-  const AddCalendar({super.key});
+  final DateTime selectedDate; // Add this line
+  const AddCalendar({super.key, required this.selectedDate});
 
   @override
   AddCalendarState createState() => AddCalendarState(); // Change to public
@@ -28,6 +28,7 @@ class AddCalendarState extends State<AddCalendar> {
 
   @override
   Widget build(BuildContext context) {
+    print(" UDAH DI ADD CAL TEST Selected Date: ${widget.selectedDate}");
     final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
     return Scaffold(
       appBar: AppBar(
@@ -36,7 +37,7 @@ class AddCalendarState extends State<AddCalendar> {
         leading: GestureDetector(
           onTap: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const HomePage()));
+                MaterialPageRoute(builder: (context) => Calendar(userId: userId ?? '')));
           },
           child: Padding(
             padding: const EdgeInsets.all(10.0),
@@ -376,7 +377,7 @@ class AddCalendarState extends State<AddCalendar> {
                                   controller.selectedDays[index] =
                                       isSelected; // Update the selected day
                                 });
-                              },
+                              }, isClickable: false,
                             );
                           }),
                         ),
@@ -441,7 +442,7 @@ class AddCalendarState extends State<AddCalendar> {
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        controller.validateTimes(context, titleController.text);
+                        controller.validateTimes(context, titleController.text, widget.selectedDate);
                       });
                     },
                     style: ElevatedButton.styleFrom(
@@ -475,7 +476,8 @@ class AddCalendarState extends State<AddCalendar> {
             Positioned(
               bottom: 56,
               left: MediaQuery.of(context).size.width / 2 - 27,
-              child: const PlusButton(targetPage: AddCalendar(),),
+              child: PlusButton(targetPage: AddCalendar(selectedDate: widget.selectedDate),
+              ),
             ),
           ],
         ],
@@ -487,12 +489,14 @@ class AddCalendarState extends State<AddCalendar> {
 class DayCircle extends StatefulWidget {
   final String letter;
   final bool isSelected;
+  final bool isClickable;
   final ValueChanged<bool> onSelected;
 
   const DayCircle({
     super.key,
     required this.letter,
     required this.isSelected,
+    required this.isClickable,
     required this.onSelected,
   });
 
@@ -505,9 +509,11 @@ class DayCircleState extends State<DayCircle> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          widget.onSelected(!widget.isSelected);
-        });
+        if (widget.isClickable) {
+          setState(() {
+            widget.onSelected(!widget.isSelected);
+          });
+        }
       },
       child: Container(
         width: 35,

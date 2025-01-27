@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:sleepful/view/Pages/Calendar/calendar.dart';
+import 'package:sleepful/view/Pages/Calendar/test_calendar.dart';
 
 import '../../services/notification_service.dart';
 import '../../services/alarm_service.dart';
@@ -100,25 +100,25 @@ class TimePickerrController {
 
     if (user != null) {
       if (isCalendar) {
-        DocumentReference calendarPlanDocument = FirebaseFirestore.instance
-            .collection('Users')
-            .doc(user.uid)
-            .collection('Calendar Plans')
-            .doc(planId);
+      DocumentReference calendarPlanDocument = FirebaseFirestore.instance
+          .collection('Users')
+          .doc(user.uid)
+          .collection('Calendar Plans')
+          .doc(planId);
 
-        await calendarPlanDocument.update({
-          'title': title,
-          'startTime': startTime,
-          'endTime': endTime,
-          'selectedDays': null,
-          'isCalendar': true,
-          'updatedAt': FieldValue
-              .serverTimestamp(), // Optional: Add a timestamp for the update
-          'selectedDate': selectedDate,
-          'notVisibleCalendar': null,
-        });
-      }
-      // throw Exception("User  not authenticated.");
+      await calendarPlanDocument.update({
+        'title': title,
+        'startTime': startTime,
+        'endTime': endTime,
+        'selectedDays': null,
+        'isCalendar': true,
+        'updatedAt': FieldValue
+            .serverTimestamp(), // Optional: Add a timestamp for the update
+        'selectedDate': selectedDate,
+        'notVisibleCalendar': null,
+      });
+    }
+    // throw Exception("User  not authenticated.");
       else {
         // Move plan from Plans to Calendar Plans
         DocumentReference planDocument = FirebaseFirestore.instance
@@ -262,7 +262,7 @@ class TimePickerrController {
       return;
     }
 
-    if (duration.inMinutes < 30) {
+    if (duration.inMinutes < 2) {
       showToast("Minimum duration of sleep is 30 minutes.");
       return;
     }
@@ -274,7 +274,7 @@ class TimePickerrController {
     }
 
     // Get today's day of the week
-    DateTime startNotificationTime = startDateTime.subtract(Duration(minutes: 5)); // 5 minutes before start time
+    DateTime startNotificationTime = startDateTime.subtract(Duration(minutes: 2)); // 2 minutes before start time
     DateTime currentDate = DateTime.now();
 
     // Schedule the notification
