@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../controller/Calendar/add_calendar_controller.dart';
 import '../../Components/plus_button.dart';
 import '../../Navbar/bottom_navbar.dart';
-import '../home_page.dart';
+import 'calendar.dart';
 
 class AddCalendar extends StatefulWidget {
   final DateTime selectedDate; // Add this line
@@ -37,7 +37,7 @@ class AddCalendarState extends State<AddCalendar> {
         leading: GestureDetector(
           onTap: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const HomePage()));
+                MaterialPageRoute(builder: (context) => Calendar(userId: userId ?? '')));
           },
           child: Padding(
             padding: const EdgeInsets.all(10.0),
