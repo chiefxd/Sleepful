@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../../services/notification_service.dart';
 import '../../services/alarm_service.dart';
+import '../../services/notification_service.dart';
 import '../../view/Pages/Plans/view_plans.dart';
 
 void alarmCallback() {
@@ -182,10 +182,10 @@ class TimePickerController {
 
     if (isStartSelected) {
       startTime =
-      '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
+          '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
     } else {
       endTime =
-      '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
+          '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
     }
 
     DateTime today = DateTime.now();
@@ -208,8 +208,8 @@ class TimePickerController {
       return;
     }
 
-    if (duration.inMinutes < 30) {
-      showToast("Minimum duration of sleep is 30 minutes.");
+    if (duration.inMinutes < 2) {
+      showToast("Minimum duration of sleep is 2 minutes.");
       return;
     }
 
@@ -242,7 +242,7 @@ class TimePickerController {
           today.day,
           startDateTime.hour,
           startDateTime.minute,
-        ).subtract(Duration(minutes: 5)); // 5 minutes before start time
+        ).subtract(Duration(minutes: 2)); // 5 minutes before start time
 
         print('Start Notification Time: $startNotificationTime');
         print('Current Time: $today');
@@ -319,7 +319,6 @@ class TimePickerController {
       MaterialPageRoute(builder: (context) => ViewPlans()),
     );
   }
-
 
   void resetTime(bool isStart) {
     if (isStart) {

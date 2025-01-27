@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../../services/notification_service.dart';
 import '../../services/alarm_service.dart';
+import '../../services/notification_service.dart';
 import '../../view/Navbar/bottom_navbar.dart';
 import '../../view/Pages/Calendar/calendar.dart';
 // import '../../view/Pages/Plans/view_plans.dart';
@@ -37,16 +37,16 @@ class TimePickerrController {
 
   // Use FixedExtentScrollController
   final FixedExtentScrollController hourController =
-  FixedExtentScrollController(initialItem: 12 + 5999);
+      FixedExtentScrollController(initialItem: 12 + 5999);
   final FixedExtentScrollController minuteController =
-  FixedExtentScrollController(initialItem: 0 + 6000);
+      FixedExtentScrollController(initialItem: 0 + 6000);
   final FixedExtentScrollController periodController =
-  FixedExtentScrollController(initialItem: 0);
+      FixedExtentScrollController(initialItem: 0);
 
   void switchToStart() {
     if (!isStartSelected) {
       endTime =
-      '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
+          '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
       resetTime(true);
     } else {
       resetTime(true);
@@ -57,7 +57,7 @@ class TimePickerrController {
   void switchToEnd() {
     if (isStartSelected) {
       startTime =
-      '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
+          '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
       resetTime(false);
     } else {
       resetTime(false);
@@ -68,7 +68,7 @@ class TimePickerrController {
   Future<String> _addCalendarToFirestore(String title, String startTime,
       String endTime, DateTime selectedDate) async {
     // Get the current user
-    User? user = FirebaseAuth.instance.currentUser ;
+    User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
       // Reference to the Firestore collection
@@ -94,7 +94,7 @@ class TimePickerrController {
 
   Future<bool> _checkForDuplicateTitle(String title) async {
     // Get the current user
-    User? user = FirebaseAuth.instance.currentUser ;
+    User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
       // Reference to the Firestore collection
@@ -105,7 +105,7 @@ class TimePickerrController {
 
       // Query for plans with the same title
       QuerySnapshot querySnapshot =
-      await plansCollection.where('title', isEqualTo: title).get();
+          await plansCollection.where('title', isEqualTo: title).get();
 
       // Check if any plans with the same title exist
       return querySnapshot.docs.isNotEmpty;
@@ -116,7 +116,7 @@ class TimePickerrController {
 
   Future<bool> _checkForDuplicateTitleCalendar(String title) async {
     // Get the current user
-    User? user = FirebaseAuth.instance.currentUser ;
+    User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
       // Reference to the Firestore collection
@@ -127,7 +127,7 @@ class TimePickerrController {
 
       // Query for plans with the same title
       QuerySnapshot querySnapshot =
-      await plansCollection.where('title', isEqualTo: title).get();
+          await plansCollection.where('title', isEqualTo: title).get();
 
       // Check if any plans with the same title exist
       return querySnapshot.docs.isNotEmpty;
@@ -141,16 +141,17 @@ class TimePickerrController {
       msg: message,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
-      backgroundColor: Color (0xFF979797),
+      backgroundColor: Color(0xFF979797),
       textColor: Colors.white,
       fontSize: 16.0,
     );
   }
 
-  Future<void> validateTimes(BuildContext context, String title, DateTime selectedDate) async {
+  Future<void> validateTimes(
+      BuildContext context, String title, DateTime selectedDate) async {
     print("Selected Date in validateTimes: $selectedDate");
     // Get the current user
-    User? user = FirebaseAuth.instance.currentUser ;
+    User? user = FirebaseAuth.instance.currentUser;
 
     if (user == null) {
       showToast("User  not authenticated.");
@@ -170,17 +171,18 @@ class TimePickerrController {
 
     bool isDuplicateCalendar = await _checkForDuplicateTitleCalendar(title);
     if (isDuplicateCalendar) {
-      showToast("Calendar plan title already exists. Please choose a different title.");
+      showToast(
+          "Calendar plan title already exists. Please choose a different title.");
       return;
     }
 
     // Save the latest selected time based on which button was last pressed
     if (isStartSelected) {
       startTime =
-      '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
+          '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
     } else {
       endTime =
-      '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
+          '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
     }
     // Parse start and end times
     DateTime startDateTime = _parseTime(startTime, date: selectedDate);
@@ -201,8 +203,8 @@ class TimePickerrController {
       return;
     }
 
-    if (duration.inMinutes < 30) {
-      showToast("Minimum duration of sleep is 30 minutes.");
+    if (duration.inMinutes < 2) {
+      showToast("Minimum duration of sleep is 2 minutes.");
       return;
     }
 
@@ -212,7 +214,8 @@ class TimePickerrController {
       return;
     }
 
-    DateTime startNotificationTime = startDateTime.subtract(Duration(minutes: 5)); // 5 minutes before start time
+    DateTime startNotificationTime = startDateTime
+        .subtract(Duration(minutes: 2)); // 5 minutes before start time
     DateTime currentDate = DateTime.now();
 
     // Schedule the notification
@@ -255,18 +258,24 @@ class TimePickerrController {
       selectedHour = int.parse(startParts[0]);
       selectedMinute = int.parse(startParts[1].split(' ')[0]);
       selectedPeriod = startParts[1].split(' ')[1];
-      hourController.jumpToItem((selectedHour) + 5999); // Update the hour controller
-      minuteController.jumpToItem(selectedMinute + 6000); // Update the minute controller
-      periodController.jumpToItem(periods.indexOf(selectedPeriod)); // Update the period controller
+      hourController
+          .jumpToItem((selectedHour) + 5999); // Update the hour controller
+      minuteController
+          .jumpToItem(selectedMinute + 6000); // Update the minute controller
+      periodController.jumpToItem(
+          periods.indexOf(selectedPeriod)); // Update the period controller
     } else {
       // Reset to the last selected end time
       List<String> endParts = endTime.split(':');
       selectedHour = int.parse(endParts[0]);
       selectedMinute = int.parse(endParts[1].split(' ')[0]);
       selectedPeriod = endParts[1].split(' ')[1];
-      hourController.jumpToItem((selectedHour) + 5999); // Update the hour controller
-      minuteController.jumpToItem(selectedMinute + 6000); // Update the minute controller
-      periodController.jumpToItem(periods.indexOf(selectedPeriod)); // Update the period controller
+      hourController
+          .jumpToItem((selectedHour) + 5999); // Update the hour controller
+      minuteController
+          .jumpToItem(selectedMinute + 6000); // Update the minute controller
+      periodController.jumpToItem(
+          periods.indexOf(selectedPeriod)); // Update the period controller
     }
   }
 

@@ -4,6 +4,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sleepful/view/Pages/Plans/add_plans.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 import '../../Components/plus_button.dart';
 import '../../Navbar/bottom_navbar.dart';
@@ -19,82 +21,123 @@ class SleepingStats extends StatefulWidget {
 }
 
 class _SleepingStatsState extends State<SleepingStats> {
-// Function to fetch sleep data for the selected week
-  Future<List<double>> _fetchSleepDataForWeek(
-      DateTime startOfWeek, DateTime endOfWeek) async {
+  @override
+  void initState() {
+    super.initState();
+    tz.initializeTimeZones();
+  }
+
+  Future<List<double>> _fetchSleepDataForCurrentWeek() async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId == null) {
       return List.filled(7, 0.0);
     }
 
+    final today = DateTime.now();
+    final startOfWeek = _getStartOfWeek(today);
+    final endOfWeek = _getEndOfWeek(today);
+
+    // No need to convert to UTC here
+
+    print("Start of Week (UTC+7): $startOfWeek");
+    print("End of Week (UTC+7): $endOfWeek");
+
     final snapshot = await FirebaseFirestore.instance
         .collection('Users')
         .doc(userId)
         .collection('Successful Plans')
-        .where('successfulDate', isGreaterThanOrEqualTo: startOfWeek)
-        .where('successfulDate', isLessThanOrEqualTo: endOfWeek)
+        .where('successfulDate',
+            isGreaterThanOrEqualTo: Timestamp.fromDate(startOfWeek))
+        .where('successfulDate',
+            isLessThanOrEqualTo: Timestamp.fromDate(endOfWeek))
         .get();
 
     final sleepData = List.filled(7, 0.0);
+    final utcPlus7 = tz.getLocation('Asia/Singapore');
 
     for (var doc in snapshot.docs) {
       final data = doc.data();
-      final successfulDate = (data['successfulDate'] as Timestamp).toDate();
-      final startTime = data['startTime'] as String;
-      final endTime = data['endTime'] as String;
 
-      final dayIndex = (successfulDate.weekday - 1) % 7;
+      final successfulDateLocal =
+          (data['successfulDate'] as Timestamp).toDate();
 
-      final startDateTime = _parseTime(successfulDate, startTime);
-      final endDateTime = _parseTime(successfulDate, endTime);
-      final duration = endDateTime.difference(startDateTime).inMinutes / 60.0;
+      print("Successful Date (Local): $successfulDateLocal");
+
+      final dayIndex = (successfulDateLocal.weekday - 1) % 7;
+
+      print("Day Index: $dayIndex");
+
+      final startDateTimeLocal =
+          _parseTime(successfulDateLocal, data['startTime'] as String);
+      final endDateTimeLocal =
+          _parseTime(successfulDateLocal, data['endTime'] as String);
+
+      print("Start Time (Local): $startDateTimeLocal");
+      print("End Time (Local): $endDateTimeLocal");
+
+      final startDateTimeUtcPlus7 =
+          tz.TZDateTime.from(startDateTimeLocal, utcPlus7);
+      final endDateTimeUtcPlus7 =
+          tz.TZDateTime.from(endDateTimeLocal, utcPlus7);
+
+      final duration =
+          endDateTimeUtcPlus7.difference(startDateTimeUtcPlus7).inMinutes /
+              60.0;
+
+      print("Duration (Hours): $duration");
 
       sleepData[dayIndex] += duration;
     }
 
+    print("Sleep Data: $sleepData");
+
     return sleepData;
   }
 
-  // Helper function to parse time
   DateTime _parseTime(DateTime date, String time) {
     int hour = int.parse(time.split(':')[0]);
     int minute = int.parse(time.split(':')[1].split(' ')[0]);
     if (time.contains('PM') && hour != 12) hour += 12;
     if (time.contains('AM') && hour == 12) hour = 0;
+
     return DateTime(date.year, date.month, date.day, hour, minute);
   }
 
-// Function to calculate average sleep time
   Future<double> _calculateAverageSleepTime() async {
-    final today = DateTime.now();
-    final startOfWeek = _getStartOfWeek(today);
-    final endOfWeek = startOfWeek.add(Duration(days: 6));
-    final sleepData = await _fetchSleepDataForWeek(startOfWeek, endOfWeek);
+    final sleepData = await _fetchSleepDataForCurrentWeek();
     final totalSleepTime = sleepData.reduce((sum, value) => sum + value);
     final averageSleepTime = sleepData.every((value) => value == 0.0)
-        ? 0.0 // Explicitly make it a double
+        ? 0.0
         : (totalSleepTime / sleepData.where((value) => value > 0).length);
-    return averageSleepTime; // Now it's definitely a double
+    return averageSleepTime;
   }
 
-  // Function to get the start date of the current week (Monday)
+  // Get start of week in UTC+7
   DateTime _getStartOfWeek(DateTime date) {
-    return date.subtract(Duration(days: date.weekday - 1));
+    final utcPlus7 = tz.getLocation('Asia/Singapore');
+    final nowUtcPlus7 = tz.TZDateTime.from(date, utcPlus7);
+    final startOfWeekUtcPlus7 =
+        nowUtcPlus7.subtract(Duration(days: nowUtcPlus7.weekday - 1));
+    return tz.TZDateTime(utcPlus7, startOfWeekUtcPlus7.year,
+        startOfWeekUtcPlus7.month, startOfWeekUtcPlus7.day, 0, 0, 0);
   }
 
-  // Function to get the end date of the current week (Sunday)
+// Get end of week in UTC+7
   DateTime _getEndOfWeek(DateTime date) {
-    return date.add(Duration(days: DateTime.daysPerWeek - date.weekday));
+    final utcPlus7 = tz.getLocation('Asia/Singapore');
+    final nowUtcPlus7 = tz.TZDateTime.from(date, utcPlus7);
+    final endOfWeekUtcPlus7 = nowUtcPlus7
+        .add(Duration(days: DateTime.daysPerWeek - nowUtcPlus7.weekday));
+    return tz.TZDateTime(utcPlus7, endOfWeekUtcPlus7.year,
+        endOfWeekUtcPlus7.month, endOfWeekUtcPlus7.day, 23, 59, 59);
   }
 
-  // Function to find the day with the highest sleep hours
   Future<MapEntry<DateTime, double>> _findDayWithHighestSleep() async {
+    final sleepData = await _fetchSleepDataForCurrentWeek();
+
     final today = DateTime.now();
     final startOfWeek = _getStartOfWeek(today);
-    final endOfWeek = _getEndOfWeek(today);
-    final sleepData = await _fetchSleepDataForWeek(startOfWeek, endOfWeek);
-
-    DateTime highestSleepDate = startOfWeek; // Initialize with start of week
+    DateTime highestSleepDate = startOfWeek;
     double highestSleepHours = 0.0;
 
     for (int i = 0; i < sleepData.length; i++) {
@@ -215,13 +258,7 @@ class _SleepingStatsState extends State<SleepingStats> {
                 AspectRatio(
                   aspectRatio: 1.8,
                   child: FutureBuilder<List<double>>(
-                    future: (() async {
-                      final today = DateTime.now();
-                      final startOfWeek = _getStartOfWeek(today);
-                      final endOfWeek = _getEndOfWeek(today);
-                      return await _fetchSleepDataForWeek(
-                          startOfWeek, endOfWeek);
-                    })(),
+                    future: _fetchSleepDataForCurrentWeek(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Center(child: CircularProgressIndicator());

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sleepful/view/Pages/Calendar/calendar.dart';
 
-import '../../services/notification_service.dart';
 import '../../services/alarm_service.dart';
+import '../../services/notification_service.dart';
 import '../../view/Navbar/bottom_navbar.dart';
 
 void alarmCallback() {
@@ -43,7 +43,7 @@ class TimePickerrController {
     required this.endTime, // Required end time
     List<bool>? selectedDays, // Optional selected days
   })  : selectedDays = selectedDays ??
-      List.generate(7, (index) => false), // Initialize selectedDays
+            List.generate(7, (index) => false), // Initialize selectedDays
         selectedHour = int.parse(
             startTime.split(':')[0]), // Initialize selectedHour from startTime
         selectedMinute = int.parse(startTime
@@ -75,7 +75,7 @@ class TimePickerrController {
   void switchToStart() {
     if (!isStartSelected) {
       endTime =
-      '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
+          '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
       resetTime(true);
     } else {
       resetTime(true);
@@ -86,7 +86,7 @@ class TimePickerrController {
   void switchToEnd() {
     if (isStartSelected) {
       startTime =
-      '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
+          '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
       resetTime(false);
     } else {
       resetTime(false);
@@ -95,8 +95,14 @@ class TimePickerrController {
   }
 
   // Future<String> _addPlanOrUpdateToCalendar(String title, String startTime, String endTime, List<String> selectedDays) async {
-  Future<void> _addPlanOrUpdateToCalendar(String planId, String title, String startTime, String endTime, DateTime selectedDate, bool isCalendar) async {
-    User? user = FirebaseAuth.instance.currentUser ;
+  Future<void> _addPlanOrUpdateToCalendar(
+      String planId,
+      String title,
+      String startTime,
+      String endTime,
+      DateTime selectedDate,
+      bool isCalendar) async {
+    User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
       if (isCalendar) {
@@ -168,7 +174,7 @@ class TimePickerrController {
       QuerySnapshot querySnapshot = await plansCollection
           .where('title', isEqualTo: title)
           .where(FieldPath.documentId,
-          isNotEqualTo: planId) // Exclude the current planId
+              isNotEqualTo: planId) // Exclude the current planId
           .get();
 
       // Check if any plans with the same title exist
@@ -178,7 +184,8 @@ class TimePickerrController {
     return false;
   }
 
-  Future<bool> _checkForDuplicateTitleCalendar(String title, String planId) async {
+  Future<bool> _checkForDuplicateTitleCalendar(
+      String title, String planId) async {
     // Get the current user
     User? user = FirebaseAuth.instance.currentUser;
 
@@ -193,7 +200,7 @@ class TimePickerrController {
       QuerySnapshot querySnapshot = await plansCollection
           .where('title', isEqualTo: title)
           .where(FieldPath.documentId,
-          isNotEqualTo: planId) // Exclude the current planId
+              isNotEqualTo: planId) // Exclude the current planId
           .get();
 
       // Check if any plans with the same title exist
@@ -214,9 +221,9 @@ class TimePickerrController {
     );
   }
 
-  Future<void> validateTimes(
-      BuildContext context, String title, String planId, DateTime selectedDate, bool isCalendar) async {
-    User? user = FirebaseAuth.instance.currentUser ;
+  Future<void> validateTimes(BuildContext context, String title, String planId,
+      DateTime selectedDate, bool isCalendar) async {
+    User? user = FirebaseAuth.instance.currentUser;
 
     if (user == null) {
       showToast("User  not authenticated.");
@@ -234,7 +241,8 @@ class TimePickerrController {
       return;
     }
 
-    bool isDuplicateCalendar = await _checkForDuplicateTitleCalendar(title, planId);
+    bool isDuplicateCalendar =
+        await _checkForDuplicateTitleCalendar(title, planId);
     if (isDuplicateCalendar) {
       showToast("Plan title already exists. Please choose a different title.");
       return;
@@ -242,10 +250,10 @@ class TimePickerrController {
 
     if (isStartSelected) {
       startTime =
-      '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
+          '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
     } else {
       endTime =
-      '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
+          '${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')} $selectedPeriod';
     }
 
     DateTime startDateTime = _parseTime(startTime);
@@ -262,8 +270,8 @@ class TimePickerrController {
       return;
     }
 
-    if (duration.inMinutes < 30) {
-      showToast("Minimum duration of sleep is 30 minutes.");
+    if (duration.inMinutes < 2) {
+      showToast("Minimum duration of sleep is 2 minutes.");
       return;
     }
 
@@ -274,7 +282,8 @@ class TimePickerrController {
     }
 
     // Get today's day of the week
-    DateTime startNotificationTime = startDateTime.subtract(Duration(minutes: 5)); // 5 minutes before start time
+    DateTime startNotificationTime = startDateTime
+        .subtract(Duration(minutes: 2)); // 5 minutes before start time
     DateTime currentDate = DateTime.now();
 
     // Schedule the notification
@@ -301,14 +310,14 @@ class TimePickerrController {
 
     showToast('Success! "$title", Your sleep duration is valid.');
 
-    await _addPlanOrUpdateToCalendar(planId, title, startTime, endTime, selectedDate, isCalendar);
+    await _addPlanOrUpdateToCalendar(
+        planId, title, startTime, endTime, selectedDate, isCalendar);
 
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => Calendar(userId: userId ?? '')),
     );
   }
-
 
   void resetTime(bool isStart) {
     if (isStart) {
