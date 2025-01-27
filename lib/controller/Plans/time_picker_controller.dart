@@ -187,7 +187,7 @@ class TimePickerController {
       return;
     }
 
-    if (duration.inMinutes < 2) {
+    if (duration.inMinutes < 5) {
       showToast("Minimum duration of sleep is 30 minutes.");
       return;
     }
@@ -219,7 +219,7 @@ class TimePickerController {
           today.day,
           startDateTime.hour,
           startDateTime.minute,
-        ).subtract(Duration(minutes: 2)); // 5 minutes before start time
+        ).subtract(Duration(minutes: 5)); // 5 minutes before start time
 
         print('Start Notification Time: $startNotificationTime');
         print('Current Time: $today');

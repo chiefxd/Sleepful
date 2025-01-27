@@ -201,7 +201,7 @@ class TimePickerrController {
       return;
     }
 
-    if (duration.inMinutes < 2) {
+    if (duration.inMinutes < 30) {
       showToast("Minimum duration of sleep is 30 minutes.");
       return;
     }
@@ -212,7 +212,7 @@ class TimePickerrController {
       return;
     }
 
-    DateTime startNotificationTime = startDateTime.subtract(Duration(minutes: 2)); // 2 minutes before start time
+    DateTime startNotificationTime = startDateTime.subtract(Duration(minutes: 5)); // 5 minutes before start time
     DateTime currentDate = DateTime.now();
 
     // Schedule the notification
