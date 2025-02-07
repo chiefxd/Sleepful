@@ -40,7 +40,7 @@ class UpdateCalendarState extends State<UpdateCalendar> {
 
     // Initialize the controller with the values passed from UpdatePlans
     controller = TimePickerrController(
-      startTime: widget.startTime, 
+      startTime: widget.startTime,
       endTime: widget.endTime,
       selectedDays: List.generate(7, (index) => false),
     );
@@ -66,8 +66,10 @@ class UpdateCalendarState extends State<UpdateCalendar> {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => Calendar(userId: userId ?? '')));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Calendar(userId: userId ?? '')));
           },
           child: Padding(
             padding: const EdgeInsets.all(10.0),
@@ -120,7 +122,7 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                           childDelegate: ListWheelChildBuilderDelegate(
                             builder: (context, index) {
                               bool isSelected = (controller
-                                  .hours[index % controller.hours.length] ==
+                                      .hours[index % controller.hours.length] ==
                                   controller.selectedHour);
                               return Container(
                                 decoration: BoxDecoration(
@@ -145,9 +147,8 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                                       color: isSelected
                                           ? Colors.white
                                           : Theme.of(context)
-                                          .colorScheme
-                                          .onErrorContainer
-                                  ),
+                                              .colorScheme
+                                              .onErrorContainer),
                                 ),
                               );
                             },
@@ -162,13 +163,10 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                         child: Container(
                           decoration: BoxDecoration(
                             color: (controller.selectedHour != -1 ||
-                                controller.selectedMinute != -1)
-                                ? Theme.of(context)
-                                .colorScheme
-                                .onErrord
+                                    controller.selectedMinute != -1)
+                                ? Theme.of(context).colorScheme.onError
                                 : Colors.transparent,
-                            borderRadius:
-                            BorderRadius.circular(0),
+                            borderRadius: BorderRadius.circular(0),
                           ),
                           alignment: Alignment.center,
                           child: Stack(
@@ -179,8 +177,7 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                                 '1',
                                 style: TextStyle(
                                   fontSize: 32,
-                                  color: Colors
-                                      .transparent,
+                                  color: Colors.transparent,
                                 ),
                               ),
                               // Visible colon
@@ -197,8 +194,7 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                                 '1',
                                 style: TextStyle(
                                   fontSize: 32,
-                                  color: Colors
-                                      .transparent,
+                                  color: Colors.transparent,
                                 ),
                               ),
                             ],
@@ -222,20 +218,19 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                           childDelegate: ListWheelChildBuilderDelegate(
                             builder: (context, index) {
                               bool isSelected = (controller.minutes[
-                              index % controller.minutes.length] ==
+                                      index % controller.minutes.length] ==
                                   controller.selectedMinute);
                               return Container(
                                 decoration: BoxDecoration(
                                   color: isSelected
                                       ? Theme.of(context).colorScheme.onError
                                       : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(
-                                      0),
+                                  borderRadius: BorderRadius.circular(0),
                                 ),
                                 alignment: Alignment.center,
                                 child: Text(
                                   controller.minutes[
-                                  index % controller.minutes.length]
+                                          index % controller.minutes.length]
                                       .toString()
                                       .padLeft(2, '0'),
                                   style: TextStyle(
@@ -245,9 +240,8 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                                       color: isSelected
                                           ? Colors.white
                                           : Theme.of(context)
-                                          .colorScheme
-                                          .onErrorContainer
-                                  ),
+                                              .colorScheme
+                                              .onErrorContainer),
                                 ),
                               );
                             },
@@ -266,7 +260,7 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                           onSelectedItemChanged: (index) {
                             setState(() {
                               controller.selectedPeriod =
-                              controller.periods[index];
+                                  controller.periods[index];
                             });
                           },
                           childDelegate: ListWheelChildBuilderDelegate(
@@ -281,7 +275,7 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                                   borderRadius: BorderRadius.only(
                                     topRight: Radius.circular(10),
                                     bottomRight: Radius.circular(10),
-                                  ), 
+                                  ),
                                 ),
                                 alignment: Alignment.center,
                                 child: Text(
@@ -293,9 +287,8 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                                       color: isSelected
                                           ? Colors.white
                                           : Theme.of(context)
-                                          .colorScheme
-                                          .onErrorContainer
-                                  ),
+                                              .colorScheme
+                                              .onErrorContainer),
                                 ),
                               );
                             },
@@ -334,8 +327,7 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                                     : Colors.white,
                                 side: BorderSide(
                                   color: controller.isStartSelected
-                                      ? Color(
-                                      0xFFB4A9D6)
+                                      ? Color(0xFFB4A9D6)
                                       : Colors.white,
                                 ),
                                 padding: const EdgeInsets.symmetric(
@@ -392,7 +384,7 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: List.generate(7, (index) {
                             String dayLetter =
-                            ['S', 'M', 'T', 'W', 'T', 'F', 'S'][index];
+                                ['S', 'M', 'T', 'W', 'T', 'F', 'S'][index];
                             return DayCircle(
                               letter: dayLetter,
                               isSelected: false,
@@ -430,27 +422,19 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Theme.of(context).colorScheme.primary,
-                            width:
-                            2.0),
+                            width: 2.0),
                       ),
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Theme.of(context).colorScheme.primary,
-                            width:
-                            2.0),
+                            width: 2.0),
                       ),
                       errorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Colors.red,
-                            width:
-                            2.0),
+                        borderSide: BorderSide(color: Colors.red, width: 2.0),
                       ),
                       hintText: 'Enter calendar plan name',
                       hintStyle: TextStyle(
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodySmall
-                              ?.color),
+                          color: Theme.of(context).textTheme.bodySmall?.color),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -460,15 +444,18 @@ class UpdateCalendarState extends State<UpdateCalendar> {
                     onPressed: () {
                       setState(() {
                         controller.validateTimes(
-                            context, titleController.text, widget.planId, widget.selectedDate, widget.isCalendar);
+                            context,
+                            titleController.text,
+                            widget.planId,
+                            widget.selectedDate,
+                            widget.isCalendar);
                       });
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.error,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 35.0,
-                          vertical: 4.0),
+                          horizontal: 35.0, vertical: 4.0),
                     ),
                     child: const Text(
                       'Update',
@@ -493,7 +480,9 @@ class UpdateCalendarState extends State<UpdateCalendar> {
             Positioned(
               bottom: 56,
               left: MediaQuery.of(context).size.width / 2 - 27,
-              child: PlusButton(targetPage: AddCalendar(selectedDate: widget.selectedDate),),
+              child: PlusButton(
+                targetPage: AddCalendar(selectedDate: widget.selectedDate),
+              ),
             ),
           ],
         ],
