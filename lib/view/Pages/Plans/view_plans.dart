@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sleepful/services/notification_service.dart';
 import 'package:sleepful/view/Pages/Plans/add_plans.dart';
 import 'package:sleepful/view/Pages/Plans/update_plans.dart';
@@ -71,10 +70,9 @@ class ViewPlans extends StatelessWidget {
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Montserrat',
-                        // Ensure the same font family is used
                         color: Theme.of(context)
                             .colorScheme
-                            .primary, // Use the same color as in profile.dart
+                            .primary,
                       ),
                     ),
                   ),
@@ -128,12 +126,6 @@ class ViewPlans extends StatelessWidget {
                             parsedStartTime.subtract(Duration(minutes: 5));
 
                         final todayName = daysOfWeek[DateTime.now().weekday - 1];
-
-                        // print('Parsed Start Time: $parsedStartTime');
-                        // print(
-                        //     'Notification Time (5 minutes before): $notificationTime');
-                        // print('Current Day: $todayName');
-                        // print('Current Time: ${DateTime.now()}');
 
                         if (notificationTime.isAfter(DateTime.now()) &&
                             !scheduledNotifications.contains(i) &&
@@ -194,7 +186,6 @@ class ViewPlans extends StatelessWidget {
       if (time is Timestamp) {
         return time.toDate().toLocal(); // Handle Firestore Timestamp
       } else if (time is String) {
-        // final trimmedTime = time.trim();
         final DateFormat format = DateFormat.jm(); // Example: "08:42 PM"
         DateTime parsedTime = format.parse(time);
         DateTime now = DateTime.now();
@@ -205,7 +196,7 @@ class ViewPlans extends StatelessWidget {
       }
     } catch (e) {
       print('Error parsing time: $time. Error: $e');
-      return DateTime.now(); // Default to current time on failure
+      return DateTime.now();
     }
   }
 
@@ -249,40 +240,11 @@ class ViewPlans extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //     children: const ['S', 'M', 'T', 'W', 'T', 'F', 'S']
-            //         .asMap()
-            //         .entries
-            //         .map((entry) {
-            //       final dayIndex = entry.key;
-            //       final letter = entry.value;
-            //
-            //       // Map dayIndex to the corresponding day
-            //       final daysOfWeek = [
-            //         'Sunday',
-            //         'Monday',
-            //         'Tuesday',
-            //         'Wednesday',
-            //         'Thursday',
-            //         'Friday',
-            //         'Saturday'
-            //       ];
-            //       final correspondingDay = daysOfWeek[dayIndex];
-            //
-            //       // Check if the corresponding day is selected
-            //       bool isSelected = selectedDays.contains(correspondingDay);
-            //
-            //       return _DayCircle(
-            //         letter: letter,
-            //         isSelected: isSelected,
-            //       );
-            //     }).toList(),
-            //   ),
-            // ),
                 children: daysOfWeek.map((day) {
                   // Check if the day is selected
                   bool isSelected = selectedDays.contains(day);
                   return _DayCircle(
-                    letter: dayMapping[day]!, // Get the corresponding letter
+                    letter: dayMapping[day]!, // Get the letter
                     isSelected: isSelected,
                   );
                 }).toList(),
@@ -291,7 +253,7 @@ class ViewPlans extends StatelessWidget {
             const SizedBox(height: 8.0),
             Row(
               mainAxisAlignment:
-                  MainAxisAlignment.center, // Centers the entire row
+                  MainAxisAlignment.center,
               children: [
                 InkWell(
                   onTap: () {
@@ -309,7 +271,7 @@ class ViewPlans extends StatelessWidget {
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0), // Equal padding
+                        horizontal: 8.0),
                     child: const Text(
                       'Update Plan',
                       style: TextStyle(
@@ -322,11 +284,11 @@ class ViewPlans extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 24, // Set height equal to the text
+                  height: 24,
                   child: const VerticalDivider(
                     color: Colors.white,
-                    thickness: 2, // Set the thickness of the divider
-                    width: 20, // Space between the texts
+                    thickness: 2,
+                    width: 20,
                   ),
                 ),
                 InkWell(
@@ -335,7 +297,7 @@ class ViewPlans extends StatelessWidget {
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0), // Equal padding
+                        horizontal: 8.0),
                     child: const Text(
                       'Delete Plan',
                       style: TextStyle(
@@ -439,8 +401,8 @@ class ViewPlans extends StatelessWidget {
                             .doc(user?.uid)
                             .collection('Plans')
                             .doc(planId)
-                            .delete(); // Perform the delete operation
-                        Navigator.of(context).pop(); // Close the dialog
+                            .delete();
+                        Navigator.of(context).pop();
                       },
                       style: TextButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 12.0),

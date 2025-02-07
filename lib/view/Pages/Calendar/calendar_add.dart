@@ -10,7 +10,7 @@ class AddCalendar extends StatefulWidget {
   const AddCalendar({super.key, required this.selectedDate});
 
   @override
-  AddCalendarState createState() => AddCalendarState(); // Change to public
+  AddCalendarState createState() => AddCalendarState();
 }
 
 class AddCalendarState extends State<AddCalendar> {
@@ -78,7 +78,6 @@ class AddCalendarState extends State<AddCalendar> {
                         width: 100,
                         height: 200,
                         child: ListWheelScrollView.useDelegate(
-                          // controller: hourController,
                           controller: controller.hourController,
                           itemExtent: 80,
                           physics: FixedExtentScrollPhysics(),
@@ -98,11 +97,10 @@ class AddCalendarState extends State<AddCalendar> {
                                   color: isSelected
                                       ? Theme.of(context).colorScheme.onError
                                       : Colors.transparent,
-                                  // Change color if selected
                                   borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(10),
                                     bottomLeft: Radius.circular(10),
-                                  ), // Optional: Add some rounding
+                                  ),
                                 ),
                                 alignment: Alignment.center,
                                 child: Text(
@@ -118,30 +116,29 @@ class AddCalendarState extends State<AddCalendar> {
                                         ? Colors.white
                                         : Theme.of(context)
                                         .colorScheme
-                                        .onErrorContainer, // Change text color if selected
+                                        .onErrorContainer,
                                   ),
                                 ),
                               );
                             },
-                            // childCount: hours.length * 1000,
                             childCount: controller.hours.length * 1000,
                           ),
                         ),
                       ),
                       // Colon
                       SizedBox(
-                        width: 20, // Set a width for the colon
-                        height: 80, // Set a height for the colon
+                        width: 20,
+                        height: 80,
                         child: Container(
                           decoration: BoxDecoration(
                             color: (controller.selectedHour != -1 ||
                                 controller.selectedMinute != -1)
                                 ? Theme.of(context)
                                 .colorScheme
-                                .onError // Change color if hour or minute is selected
-                                : Colors.transparent, // Default color
+                                .onError
+                                : Colors.transparent,
                             borderRadius:
-                            BorderRadius.circular(0), // No rounding
+                            BorderRadius.circular(0),
                           ),
                           alignment: Alignment.center,
                           child: Stack(
@@ -153,7 +150,7 @@ class AddCalendarState extends State<AddCalendar> {
                                 style: TextStyle(
                                   fontSize: 32,
                                   color: Colors
-                                      .transparent, // Make the number invisible
+                                      .transparent,
                                 ),
                               ),
                               // Visible colon
@@ -171,7 +168,7 @@ class AddCalendarState extends State<AddCalendar> {
                                 style: TextStyle(
                                   fontSize: 32,
                                   color: Colors
-                                      .transparent, // Make the number invisible
+                                      .transparent,
                                 ),
                               ),
                             ],
@@ -202,9 +199,8 @@ class AddCalendarState extends State<AddCalendar> {
                                   color: isSelected
                                       ? Theme.of(context).colorScheme.onError
                                       : Colors.transparent,
-                                  // Change color if selected
                                   borderRadius: BorderRadius.circular(
-                                      0), // Optional: Add some rounding
+                                      0),
                                 ),
                                 alignment: Alignment.center,
                                 child: Text(
@@ -220,7 +216,7 @@ class AddCalendarState extends State<AddCalendar> {
                                         ? Colors.white
                                         : Theme.of(context)
                                         .colorScheme
-                                        .onErrorContainer, // Change text color if selected
+                                        .onErrorContainer,
                                   ),
                                 ),
                               );
@@ -255,7 +251,7 @@ class AddCalendarState extends State<AddCalendar> {
                                   borderRadius: BorderRadius.only(
                                     topRight: Radius.circular(10),
                                     bottomRight: Radius.circular(10),
-                                  ), // Optional: Add some rounding
+                                  ),
                                 ),
                                 alignment: Alignment.center,
                                 child: Text(
@@ -268,7 +264,7 @@ class AddCalendarState extends State<AddCalendar> {
                                         ? Colors.white
                                         : Theme.of(context)
                                         .colorScheme
-                                        .onErrorContainer, // Change text color if selected
+                                        .onErrorContainer,
                                   ),
                                 ),
                               );
@@ -299,8 +295,6 @@ class AddCalendarState extends State<AddCalendar> {
                                   controller.switchToStart();
                                 });
                               },
-                              // onPressed: () => _toggleButton(true),
-                              // onPressed: resetTime,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: controller.isStartSelected
                                     ? Color(0xFFB4A9D6)
@@ -311,7 +305,7 @@ class AddCalendarState extends State<AddCalendar> {
                                 side: BorderSide(
                                   color: controller.isStartSelected
                                       ? Color(
-                                      0xFFB4A9D6) // Change border color to B4A9D6 when selected
+                                      0xFFB4A9D6)
                                       : Colors.white,
                                 ),
                                 padding: const EdgeInsets.symmetric(
@@ -388,7 +382,7 @@ class AddCalendarState extends State<AddCalendar> {
 
                   // Name Your Calendar Section
                   Align(
-                    alignment: Alignment.centerLeft, // Align to the left
+                    alignment: Alignment.centerLeft,
                     child: Text(
                       'Name Your Calendar Plan',
                       style: TextStyle(
@@ -408,24 +402,23 @@ class AddCalendarState extends State<AddCalendar> {
                       fontFamily: 'Montserrat',
                     ),
                     decoration: InputDecoration(
-                      // Set the bottom border to be visible
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Theme.of(context).colorScheme.primary,
                             width:
-                            2.0), // Set the bottom border color and width
+                            2.0),
                       ),
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Theme.of(context).colorScheme.primary,
                             width:
-                            2.0), // Set the focused bottom border color and width
+                            2.0),
                       ),
                       errorBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.red,
                             width:
-                            2.0), // Set the error bottom border color and width
+                            2.0),
                       ),
                       hintText: 'Enter calendar plan name',
                       hintStyle: TextStyle(
@@ -433,7 +426,7 @@ class AddCalendarState extends State<AddCalendar> {
                           color: Theme.of(context)
                               .textTheme
                               .bodySmall
-                              ?.color), // Optional: Change hint text color
+                              ?.color),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -448,10 +441,9 @@ class AddCalendarState extends State<AddCalendar> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.error,
                       foregroundColor: Colors.white,
-                      // Same foreground color as Start button
                       padding: const EdgeInsets.symmetric(
                           horizontal: 35.0,
-                          vertical: 4.0), // Same padding as Start button
+                          vertical: 4.0),
                     ),
                     child: const Text(
                       'Add',

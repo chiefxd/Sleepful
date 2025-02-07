@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sleepful/controller/Calendar/today_plan_controller.dart'; // Import the SleepPlanController
+import 'package:sleepful/controller/Calendar/today_plan_controller.dart';
 import 'package:sleepful/view/Pages/Calendar/calendar_add.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -24,10 +24,10 @@ class Calendar extends StatefulWidget {
 
 class _CalendarState extends State<Calendar> {
   DateTime focusedDay = DateTime.now();
-  DateTime? selectedDay; // State variable to keep track of the selected day
+  DateTime? selectedDay;
   final SleepPlanController sleepPlanController =
-      SleepPlanController(); // Instantiate the controller
-  String? sleepPlan; // Variable to hold the sleep plan for the selected day
+      SleepPlanController();
+  String? sleepPlan;
   Map<DateTime, List<Map<String, dynamic>>>? sleepPlanList;
 
   Future<Map<String, dynamic>?> fetchPlanData(String planId) async {
@@ -125,7 +125,7 @@ class _CalendarState extends State<Calendar> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.of(context).pop(); // Close the dialog
+                        Navigator.of(context).pop();
                       },
                       style: TextButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 12.0),
@@ -168,7 +168,7 @@ class _CalendarState extends State<Calendar> {
                           });
                         });
 
-                        Navigator.of(context).pop(); // Close the dialog
+                        Navigator.of(context).pop();
                       },
                       style: TextButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 12.0),
@@ -198,10 +198,9 @@ class _CalendarState extends State<Calendar> {
   @override
   void initState() {
     super.initState();
-    selectedDay = focusedDay; // Initialize selectedDay to today
+    selectedDay = focusedDay;
     sleepPlanController.fetchSleepPlans(widget.userId).listen((sleepPlans) {
       setState(() {
-        // sleepPlan = sleepPlanController.getSleepPlans(selectedDay!).join('\n');
         sleepPlanList = sleepPlans;
       });
     });
@@ -250,7 +249,6 @@ class _CalendarState extends State<Calendar> {
             children: [
               Expanded(
                 child: SingleChildScrollView(
-                  // Wrap the body in a SingleChildScrollView
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
@@ -290,7 +288,7 @@ class _CalendarState extends State<Calendar> {
                             onDaySelected: (selectedDay, focusedDay) {
                               setState(() {
                                 this.selectedDay =
-                                    selectedDay; // Update the selected day
+                                    selectedDay;
                                 this.focusedDay = selectedDay;
                               });
                               print("Selected Day: $selectedDay");
@@ -357,10 +355,7 @@ class _CalendarState extends State<Calendar> {
                                       .getSleepPlans(selectedDay!)
                                       .first ==
                                   "No sleep plan for this date"
-                              // children: sleepPlanController.getSleepPlans(selectedDay!).isEmpty
                               ? [
-                                  // children: sleepPlanController.getSleepPlans(selectedDay!).isEmpty
-                                  //     ? [
                                   Container(
                                     margin:
                                         const EdgeInsets.symmetric(vertical: 5),
@@ -393,13 +388,13 @@ class _CalendarState extends State<Calendar> {
                                   // print("Plan: $plan");
                                   final parts = plan.split(': ');
                                   if (parts.length < 2) {
-                                    return SizedBox(); // Return empty widget for invalid plan format
+                                    return SizedBox();
                                   }
 
                                   final title = parts[0];
                                   final timeDetails = parts[1].split(' to ');
                                   if (timeDetails.length < 2) {
-                                    return SizedBox(); // Return empty widget for invalid time details
+                                    return SizedBox();
                                   }
 
                                   final startTimeString = timeDetails[0]
@@ -420,21 +415,7 @@ class _CalendarState extends State<Calendar> {
                                       DateFormat.jm('en_US')
                                           .format(endTime); // e.g., 5:00 AM
 
-                                  // final title = plan['title'];
-                                  // final startTime = plan['startTime'];
-                                  // final endTime = plan['endTime'];
-                                  // final planId = plan['planId']; // Now this is correctly extracted
-                                  // final selectedDays = plan['selectedDays']; // Now this is correctly extracted
-                                  // final planDetails = sleepPlanController
-                                  //     .sleepPlans[selectedDay!]
-                                  //     ?.firstWhere(
-                                  //         (plan) => plan['title'] == title);
-                                  // final planId = planDetails?['planId'] ??
-                                  //     "Unknown Plan ID"; // Use actual planId
-                                  // final selectedDays = (planDetails?[
-                                  //             'selectedDays'] as List<String>?)
-                                  //         ?.join(', ') ??
-                                  //     "No selected days"; // Use actual selectedDays
+                                
                                   DateTime normalizedDate = DateTime(
                                       selectedDay!.year,
                                       selectedDay!.month,
@@ -454,8 +435,7 @@ class _CalendarState extends State<Calendar> {
                                           "No selected days";
 
                                   final planId = planDetails?[
-                                      'planId']; // Now this will never be null
-                                  // final selectedDays = (planDetails?['selectedDays'] as List<String>?)?.join(', ') ?? "No selected days"; // Use actual selectedDays
+                                      'planId'];
                                   String formattedDate =
                                       DateFormat('d MMMM yyyy')
                                           .format(selectedDay!);
@@ -474,7 +454,7 @@ class _CalendarState extends State<Calendar> {
                                             selectedDay!.year,
                                             selectedDay!.month,
                                             selectedDay!.day)) {
-                                      return SizedBox(); // Skip this plan if the selectedDate does not match
+                                      return SizedBox();
                                     }
                                   }
 
@@ -483,7 +463,6 @@ class _CalendarState extends State<Calendar> {
                                         const EdgeInsets.symmetric(vertical: 5),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-                                      // color: Theme.of(context).colorScheme.surface,
                                       color: Color(0xFF26184A),
                                     ),
                                     child: Column(
@@ -529,46 +508,6 @@ class _CalendarState extends State<Calendar> {
                                                   fontFamily: 'Montserrat',
                                                 ),
                                               ),
-                                              // Text(
-                                              //   'Plan ID: $planId',
-                                              //   style: TextStyle(
-                                              //     color: Theme.of(context)
-                                              //         .colorScheme
-                                              //         .primary,
-                                              //     fontSize: subtitleFontSize,
-                                              //     fontFamily: 'Montserrat',
-                                              //   ),
-                                              // ),
-                                              // Text(
-                                              //   'Selected Days: $selectedDays',
-                                              //   style: TextStyle(
-                                              //     color: Theme.of(context)
-                                              //         .colorScheme
-                                              //         .primary,
-                                              //     fontSize: subtitleFontSize,
-                                              //     fontFamily: 'Montserrat',
-                                              //   ),
-                                              // ),
-                                              // Text(
-                                              //   'Start Time: $startTime',
-                                              //   style: TextStyle(
-                                              //     color: Theme.of(context)
-                                              //         .colorScheme
-                                              //         .primary,
-                                              //     fontSize: subtitleFontSize,
-                                              //     fontFamily: 'Montserrat',
-                                              //   ),
-                                              // ),
-                                              // Text(
-                                              //   'End Time: $endTime',
-                                              //   style: TextStyle(
-                                              //     color: Theme.of(context)
-                                              //         .colorScheme
-                                              //         .primary,
-                                              //     fontSize: subtitleFontSize,
-                                              //     fontFamily: 'Montserrat',
-                                              //   ),
-                                              // ),
                                             ],
                                           ),
                                         ),
@@ -605,7 +544,7 @@ class _CalendarState extends State<Calendar> {
                                               final endTime =
                                                   planData['endTime'];
                                               final isCalendar = planData[
-                                                  'isCalendar']; // Check the isCalendar field
+                                                  'isCalendar'];
                                               print(
                                                   "Navigating to update page. isCalendar: $isCalendar"); // Debugging line
 
@@ -701,7 +640,7 @@ class _CalendarState extends State<Calendar> {
                                                       _deletePlan(
                                                           context,
                                                           planId,
-                                                          title); // Call the delete function
+                                                          title);
                                                     },
                                                     child: Container(
                                                       alignment:

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:sleepful/services/auth_check.dart'; // Import the AuthCheck page
+import 'package:sleepful/services/auth_check.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,10 +14,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Wait for 3 seconds and navigate to AuthCheck (not SignIn directly)
+    // Navigate to AuthCheck (not SignIn directly)
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
-        // Check if the widget is still in the widget tree
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(

@@ -23,7 +23,6 @@ class SignupController {
 
   // Sign up with Firebase
   Future<void> signUpWithEmailAndPassword() async {
-    // Function to show toast
     void showToast(String message) {
       Fluttertoast.showToast(
         msg: message,
@@ -64,7 +63,7 @@ class SignupController {
       // Sign out the user immediately after account creation
       await FirebaseAuth.instance.signOut();
 
-      // Navigate to the SignIn page, clearing the stack
+      // Navigate to the SignIn page
       if (context.mounted) {
         Navigator.pushAndRemoveUntil(
           context,
@@ -79,7 +78,6 @@ class SignupController {
 
   // Validate inputs and call the sign-up function
   void validateAndSignUp() {
-    // Function to show toast
     void showToast(String message) {
       Fluttertoast.showToast(
         msg: message,
@@ -115,8 +113,6 @@ class SignupController {
       showToast('Please confirm your password');
       return;
     }
-
-    // Additional password validations:
     if (!passwordController.text.trim().contains(RegExp(r'[A-Z]'))) {
       showToast('Password must contain at least one uppercase letter');
       return;
@@ -140,7 +136,6 @@ class SignupController {
       return;
     }
 
-    // If validation passes, proceed to sign up
     signUpWithEmailAndPassword();
   }
 

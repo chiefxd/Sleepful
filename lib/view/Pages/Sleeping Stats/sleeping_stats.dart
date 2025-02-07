@@ -12,7 +12,7 @@ import '../../Navbar/bottom_navbar.dart';
 import '../home_page.dart';
 
 class SleepingStats extends StatefulWidget {
-  final int selectedIndex; // Add selectedIndex parameter
+  final int selectedIndex;
 
   const SleepingStats({super.key, this.selectedIndex = 3});
 
@@ -36,8 +36,6 @@ class _SleepingStatsState extends State<SleepingStats> {
     final today = DateTime.now();
     final startOfWeek = _getStartOfWeek(today);
     final endOfWeek = _getEndOfWeek(today);
-
-    // No need to convert to UTC here
 
     print("Start of Week (UTC+7): $startOfWeek");
     print("End of Week (UTC+7): $endOfWeek");
@@ -163,7 +161,6 @@ class _SleepingStatsState extends State<SleepingStats> {
     final systemPadding = MediaQuery.of(context).padding;
     final parentPadding = const EdgeInsets.symmetric(horizontal: 20.0);
 
-// Calculate available width
     final availableWidth = screenWidth -
         (systemPadding.left +
             systemPadding.right +
@@ -192,7 +189,7 @@ class _SleepingStatsState extends State<SleepingStats> {
           title: Padding(
             padding: const EdgeInsets.only(left: 0),
             child: Text(
-              'Your Sleeping Stats', // Updated title for this page
+              'Your Sleeping Stats',
               style: TextStyle(
                 fontSize: titleFontSize,
                 fontWeight: FontWeight.bold,
@@ -285,12 +282,12 @@ class _SleepingStatsState extends State<SleepingStats> {
                           borderData: FlBorderData(show: false),
                           gridData: FlGridData(
                             drawHorizontalLine:
-                                true, // Add horizontal grid lines
+                                true,
                             drawVerticalLine:
-                                false, // Disable vertical grid lines
+                                false,
                             getDrawingHorizontalLine: (value) {
                               return FlLine(
-                                color: Colors.white12, // Light grid line color
+                                color: Colors.white12,
                                 strokeWidth: 1,
                               );
                             },
@@ -299,7 +296,7 @@ class _SleepingStatsState extends State<SleepingStats> {
                             leftTitles: AxisTitles(
                               sideTitles: SideTitles(
                                 showTitles: true,
-                                interval: 1, // Show titles at every interval
+                                interval: 1,
                                 getTitlesWidget: (value, meta) {
                                   return Padding(
                                     padding: const EdgeInsets.only(right: 8.0),
@@ -374,10 +371,10 @@ class _SleepingStatsState extends State<SleepingStats> {
                             ),
                             topTitles: AxisTitles(
                                 sideTitles: SideTitles(
-                                    showTitles: false)), // Hide top titles
+                                    showTitles: false)),
                             rightTitles: AxisTitles(
                                 sideTitles: SideTitles(
-                                    showTitles: false)), // Hide right titles
+                                    showTitles: false)),
                           ),
                           barTouchData: BarTouchData(enabled: false),
                         ),
@@ -392,7 +389,7 @@ class _SleepingStatsState extends State<SleepingStats> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF26184A), // Purple card background
+                    color: const Color(0xFF26184A),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Column(
@@ -402,7 +399,7 @@ class _SleepingStatsState extends State<SleepingStats> {
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return CircularProgressIndicator(); // Or a placeholder text
+                            return CircularProgressIndicator();
                           }
 
                           if (snapshot.hasError) {
@@ -426,14 +423,13 @@ class _SleepingStatsState extends State<SleepingStats> {
 
                       // Icons and Text
                       SizedBox(
-                        // Added SizedBox for width
                         width: availableWidth,
                         child: IntrinsicHeight(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment
-                                .center, // Center content horizontally
+                                .center,
                             mainAxisSize:
-                                MainAxisSize.min, // Row takes minimum space
+                                MainAxisSize.min,
                             children: [
                               Row(
                                 children: [
@@ -445,7 +441,7 @@ class _SleepingStatsState extends State<SleepingStats> {
                                     builder: (context, snapshot) {
                                       if (snapshot.connectionState ==
                                           ConnectionState.waiting) {
-                                        return CircularProgressIndicator(); // Or a placeholder text
+                                        return CircularProgressIndicator();
                                       }
 
                                       if (snapshot.hasError) {
@@ -490,7 +486,7 @@ class _SleepingStatsState extends State<SleepingStats> {
                                         isSleepSufficient
                                             ? Icons.thumb_up
                                             : Icons
-                                                .sentiment_neutral, // Use flat face emoji icon
+                                                .sentiment_neutral,
                                         color: Colors.white,
                                         size: 24,
                                       ),

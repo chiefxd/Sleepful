@@ -48,10 +48,9 @@ class InfoSquares extends StatelessWidget {
       itemBuilder: (context, index) {
         final item = infoAvailable[index];
         return Column(
-          // Wrap with Column to use AspectRatio
           children: [
             AspectRatio(
-              aspectRatio: 2.274 / 1, // Set desired aspect ratio
+              aspectRatio: 2.274 / 1,
               child: _buildCardItem(context, index, item),
             ),
             if (index < infoAvailable.length - 1) const SizedBox(height: 15.0),
@@ -68,7 +67,6 @@ class InfoSquares extends StatelessWidget {
 
     return GestureDetector(
         onTap: () {
-          // Navigation logic based on index
           if (index == 0) {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => InformationOne()));
@@ -83,7 +81,7 @@ class InfoSquares extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        InformationFour())); // Add more conditions for other items as needed
+                        InformationFour()));
           } else if (index == 4) {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => InformationFive()));
@@ -95,23 +93,23 @@ class InfoSquares extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Theme.of(context)
                     .colorScheme
-                    .onSecondary, // Background color
-                borderRadius: BorderRadius.circular(10), // Rounded corners
+                    .onSecondary,
+                borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                  color: Theme.of(context).colorScheme.primary, // Border color
-                  width: 0.01, // Border thickness
+                  color: Theme.of(context).colorScheme.primary,
+                  width: 0.01,
                 ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black
-                        .withOpacity(0.1), // Shadow color with opacity
-                    blurRadius: 5, // Amount of blur
-                    offset: Offset(0, 0), // X and Y offset of the shadow
+                        .withOpacity(0.1),
+                    blurRadius: 5,
+                    offset: Offset(0, 0),
                   ),
                 ],
               ),
               padding:
-                  const EdgeInsets.all(16.0), // Padding inside the container
+                  const EdgeInsets.all(16.0),
               child: Row(
                 children: [
                   ClipRRect(
@@ -127,7 +125,7 @@ class InfoSquares extends StatelessWidget {
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment
-                          .center, // Center align text vertically
+                          .center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(

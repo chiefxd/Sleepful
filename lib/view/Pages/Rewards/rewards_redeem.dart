@@ -6,7 +6,7 @@ import 'package:sleepful/providers/user_data_provider.dart';
 import 'package:sleepful/view/Pages/Rewards/rewards_page.dart';
 
 class RewardsRedeem extends StatelessWidget {
-  final String imagePath; // Add imagePath parameter
+  final String imagePath;
   final String title;
   final String minutes;
   final int points;
@@ -20,15 +20,15 @@ class RewardsRedeem extends StatelessWidget {
       required this.minutes,
       required this.points,
       required this.soundId,
-      this.selectedIndex = 2}); // Initialize imagePath
+      this.selectedIndex = 2});
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     double subtitleFontSize =
-        screenWidth * 0.04; // 4% of screen width for subtitles
-    double largeTextFontSize = screenWidth * 0.06; // Adjusted for title
+        screenWidth * 0.04;
+    double largeTextFontSize = screenWidth * 0.06;
     double smallTextFontSize = screenWidth * 0.035;
     double bottomText = screenWidth * 0.05;
 
@@ -37,7 +37,6 @@ class RewardsRedeem extends StatelessWidget {
     // Check if user has enough points
     bool hasEnoughPoints = userData.points >= points;
 
-    // Show Toast
     void showToast(String message) {
       Fluttertoast.showToast(
         msg: message,
@@ -52,17 +51,15 @@ class RewardsRedeem extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // Use SafeArea to avoid overlapping with the status bar
           SafeArea(
             child: Column(
               children: [
-                // Display the image at the top
                 Container(
-                  height: screenHeight * 0.4, // Set height for the image
+                  height: screenHeight * 0.4,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage(imagePath), // Use the passed imagePath
-                      fit: BoxFit.cover, // Cover the entire area
+                      image: AssetImage(imagePath),
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
@@ -86,7 +83,7 @@ class RewardsRedeem extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            minutes, // New string on the right
+                            minutes,
                             style: TextStyle(
                               fontSize: smallTextFontSize,
                               fontFamily: 'Montserrat',
@@ -97,7 +94,6 @@ class RewardsRedeem extends StatelessWidget {
                       ),
 
                       SizedBox(height: 8.0),
-                      // Space between title and subtitle
                       Text(
                         'Your Subtitle Here',
                         style: TextStyle(
@@ -107,7 +103,6 @@ class RewardsRedeem extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 16.0),
-                      // Space between subtitle and paragraph
                       Text(
                         'This is a paragraph text that provides more information about the reward that has been redeemed. You can add more details here to inform the user about the next steps or any other relevant information.',
                         style: TextStyle(
@@ -119,9 +114,7 @@ class RewardsRedeem extends StatelessWidget {
                     ],
                   ),
                 ),
-                // Spacer to push the rectangle to the bottom
                 Spacer(),
-                // Rectangle at the bottom
                 Container(
                   padding: EdgeInsets.all(16.0),
                   margin: EdgeInsets.all(0.0),
@@ -141,7 +134,7 @@ class RewardsRedeem extends StatelessWidget {
                           fontFamily: 'Montserrat',
                         ),
                       ),
-                      SizedBox(width: 24.0), // Space between text and button
+                      SizedBox(width: 24.0),
                       Expanded(
                         child: ElevatedButton(
                           onPressed: hasEnoughPoints
@@ -150,7 +143,7 @@ class RewardsRedeem extends StatelessWidget {
                                       Provider.of<RewardsProvider>(context,
                                           listen: false);
                                   rewardsProvider.unlockSound(
-                                      soundId); // Assuming 'title' is used as soundId
+                                      soundId);
 
                                   // Deduct points and navigate back
                                   userData.deductPoints(points);
@@ -168,9 +161,9 @@ class RewardsRedeem extends StatelessWidget {
                             backgroundColor: hasEnoughPoints
                                 ? Theme.of(context).colorScheme.primary
                                 : Color(
-                                    0xFF5A5A5A), // Use a gray color for disabled state
+                                    0xFF5A5A5A),
                             disabledBackgroundColor: const Color(
-                                0xFFAB9FD1), // Background color for disabled state
+                                0xFFAB9FD1),
                             disabledForegroundColor: Colors.black,
                             shape: RoundedRectangleBorder(
                               borderRadius: hasEnoughPoints
@@ -197,7 +190,6 @@ class RewardsRedeem extends StatelessWidget {
               ],
             ),
           ),
-          // Back button on top of the image
           Positioned(
             top: 27,
             left: 4,
@@ -209,7 +201,7 @@ class RewardsRedeem extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              const RewardsPage())); // Go back to the previous screen
+                              const RewardsPage()));
                 },
                 child: Image.asset(
                   'assets/images/buttonBack.png',

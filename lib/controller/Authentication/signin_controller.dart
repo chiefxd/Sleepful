@@ -55,7 +55,6 @@ class SignInController {
 
   // Validate inputs and call the sign-in function
   void validateAndSignIn(BuildContext context) {
-    // Function to show toast
     void showToast(String message) {
       Fluttertoast.showToast(
         msg: message,
@@ -84,7 +83,6 @@ class SignInController {
       return;
     }
 
-    // Additional password validations:
     if (!passwordController.text.trim().contains(RegExp(r'[A-Z]'))) {
       showToast('Password must contain at least one uppercase letter');
       return;

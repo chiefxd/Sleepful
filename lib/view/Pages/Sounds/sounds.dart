@@ -8,7 +8,6 @@ class SoundPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        // Use Stack to position the PlusButton
         child: NestedScrollView(
           headerSliverBuilder: (context, innerIsScrolled) {
             return [
@@ -18,12 +17,12 @@ class SoundPage extends StatelessWidget {
                 leading: GestureDetector(
                   onTap: () {
                     Navigator.of(context)
-                        .pop(); // Go back to the previous screen
+                        .pop();
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Image.asset(
-                      'assets/images/buttonBack.png', // Use the same back button image
+                      'assets/images/buttonBack.png',
                       width: 48,
                       height: 48,
                     ),
@@ -37,10 +36,10 @@ class SoundPage extends StatelessWidget {
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       fontFamily:
-                          'Montserrat', // Ensure the same font family is used
+                          'Montserrat',
                       color: Theme.of(context)
                           .colorScheme
-                          .primary, // Use the same color as in profile.dart
+                          .primary,
                     ),
                   ),
                 ),
@@ -59,7 +58,6 @@ class SoundPage extends StatelessWidget {
                 Expanded(
                   child: SoundSquares(),
                 ),
-                // BottomNavbar(selectedIndex: -1),
               ],
             ),
           ),

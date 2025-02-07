@@ -171,8 +171,8 @@ class _AboutUsState extends State<AboutUs> {
 
           // App Version
           Positioned(
-            bottom: 10, // Adjust as needed
-            left: 20, // Aligned with headphone icon
+            bottom: 10,
+            left: 20,
             child: Text(
               'App Version: $appVersion',
               style: TextStyle(

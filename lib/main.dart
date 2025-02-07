@@ -44,10 +44,9 @@ void main() async {
         ChangeNotifierProvider(
           create: (context) => RewardsProvider()..fetchUnlockedSounds(),
         ),
-        // We'll provide ThemeProvider later when the user is authenticated.
         ChangeNotifierProvider<ThemeProvider>(
           create: (_) => ThemeProvider('default')
-            ..initializeTheme(), // Initialize with default if no user
+            ..initializeTheme(),
         ),
       ],
       child: const MyApp(),
@@ -66,7 +65,7 @@ class MyApp extends StatefulWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Alarm App',
-      navigatorKey: navigatorKey, // Global key for navigation
+      navigatorKey: navigatorKey,
       initialRoute: '/',
       routes: {
         '/': (context) => HomePage(),
@@ -77,21 +76,21 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool _isInitializing = true; // Variable to control the splash screen display
+  bool _isInitializing = true;
 
   @override
   void initState() {
     super.initState();
     _initializeApp();
-    _listenForAuthChanges(); // Listen for auth changes
+    _listenForAuthChanges();
   }
 
   // Simulate a delay for the splash screen to show
   Future<void> _initializeApp() async {
     await Future.delayed(
-        const Duration(seconds: 2)); // Show splash for 2 seconds
+        const Duration(seconds: 2));
     setState(() {
-      _isInitializing = false; // After the delay, stop showing the splash
+      _isInitializing = false;
     });
   }
 
@@ -102,7 +101,7 @@ class _MyAppState extends State<MyApp> {
         secondary: Color(0xFF1F1249),
         tertiary: Color(0xFF37256C),
         surface: Color(0xFFE4DDFA),
-        error: Color(0xFF37256C), //button
+        error: Color(0xFF37256C),
         onError: Color(0xFF37256C),
         onSurface: Color(0xFF37256C),
         onSecondary: Color(0xFFE8E2FB),
@@ -146,7 +145,7 @@ class _MyAppState extends State<MyApp> {
       if (user != null) {
         await context.read<UserDataProvider>().fetchAndSetUserData(user.uid);
       }
-      setState(() {}); // Rebuild the UI to reflect the auth change
+      setState(() {}); // Rebuild the UI
     });
   }
 

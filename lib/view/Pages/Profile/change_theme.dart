@@ -19,7 +19,6 @@ class _ChangeThemeState extends State<ChangeTheme> {
   @override
   void initState() {
     super.initState();
-    // Initialization moved to didChangeDependencies
   }
 
   @override
@@ -106,7 +105,7 @@ class _ChangeThemeState extends State<ChangeTheme> {
                           description,
                           style: TextStyle(
                             fontSize:
-                                screenWidth * 0.03, // Responsive font size
+                                screenWidth * 0.03,
                             fontFamily: 'Montserrat',
                             color: Theme.of(context).colorScheme.primary,
                           ),
@@ -209,8 +208,8 @@ class _ChangeThemeState extends State<ChangeTheme> {
                               break;
                             case 2:
                               newTheme = ThemeMode
-                                  .dark; // Default to dark, overridden by auto logic
-                              isAuto = true; // Set auto mode
+                                  .dark; // Default to dark
+                              isAuto = true;
                               break;
                             default:
                               newTheme = ThemeMode.dark;
@@ -223,7 +222,6 @@ class _ChangeThemeState extends State<ChangeTheme> {
 
                           showToast('Theme updated successfully!');
 
-                          // Redirect to splash screen
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(

@@ -11,23 +11,6 @@ class InformationTwo extends StatelessWidget {
     double refFontSize = screenWidth * 0.028;
     double textFontSize = screenWidth * 0.03;
 
-    // return Scaffold(
-    //   body: CustomScrollView(
-    //     slivers: [
-    //       SliverPadding(
-    //         padding: const EdgeInsets.all(20.0),
-    //         sliver: SliverToBoxAdapter( // Wrap the Column with SliverToBoxAdapter
-    //           child: Column(
-    //             children:
-    //               // ... your existing content ...
-    //             ],
-    //           ),
-    //         ),
-    //       )
-    //     ],
-    //   ),
-    //
-    // )
 
     return Scaffold(
       body: SafeArea(
@@ -43,12 +26,12 @@ class InformationTwo extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                const Information())); // Go back to the previous screen
+                                const Information()));
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Image.asset(
-                      'assets/images/buttonBack.png', // Use the same back button image
+                      'assets/images/buttonBack.png',
                       width: 48,
                       height: 48,
                     ),
@@ -62,10 +45,10 @@ class InformationTwo extends StatelessWidget {
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       fontFamily:
-                          'Montserrat', // Ensure the same font family is used
+                          'Montserrat',
                       color: Theme.of(context)
                           .colorScheme
-                          .primary, // Use the same color as in profile.dart
+                          .primary,
                     ),
                   ),
                 ),

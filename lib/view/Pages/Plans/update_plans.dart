@@ -23,7 +23,7 @@ class UpdatePlans extends StatefulWidget {
   });
 
   @override
-  UpdatePlansState createState() => UpdatePlansState(); // Change to public
+  UpdatePlansState createState() => UpdatePlansState();
 }
 
 class UpdatePlansState extends State<UpdatePlans> {
@@ -36,12 +36,12 @@ class UpdatePlansState extends State<UpdatePlans> {
 
     // Initialize the controller with the values passed from UpdatePlans
     controller = TimePickerController(
-      startTime: widget.startTime, // Pass startTime
-      endTime: widget.endTime, // Pass endTime
-      selectedDays: _getSelectedDays(widget.selectedDays), // Pass selected days
+      startTime: widget.startTime,
+      endTime: widget.endTime,
+      selectedDays: _getSelectedDays(widget.selectedDays),
     );
 
-    titleController.text = widget.title; // Set the title in the TextField
+    titleController.text = widget.title;
   }
 
   List<bool> _getSelectedDays(List<String> days) {
@@ -77,12 +77,6 @@ class UpdatePlansState extends State<UpdatePlans> {
   @override
   Widget build(BuildContext context) {
     final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
-    // print('Update Plans Page');
-    // print('Title: ${widget.title}');
-    // print('Plan ID: ${widget.planId}');
-    // print('Start Time: ${widget.startTime}');
-    // print('End Time: ${widget.endTime}');
-    // print('Selected Days: ${widget.selectedDays}');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -131,7 +125,6 @@ class UpdatePlansState extends State<UpdatePlans> {
                         width: 100,
                         height: 200,
                         child: ListWheelScrollView.useDelegate(
-                          // controller: hourController,
                           controller: controller.hourController,
                           itemExtent: 80,
                           physics: FixedExtentScrollPhysics(),
@@ -151,11 +144,10 @@ class UpdatePlansState extends State<UpdatePlans> {
                                   color: isSelected
                                       ? Theme.of(context).colorScheme.onError
                                       : Colors.transparent,
-                                  // Change color if selected
                                   borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(10),
                                     bottomLeft: Radius.circular(10),
-                                  ), // Optional: Add some rounding
+                                  ),
                                 ),
                                 alignment: Alignment.center,
                                 child: Text(
@@ -171,7 +163,7 @@ class UpdatePlansState extends State<UpdatePlans> {
                                           ? Colors.white
                                           : Theme.of(context)
                                               .colorScheme
-                                              .onErrorContainer // Change text color if selected
+                                              .onErrorContainer
                                       ),
                                 ),
                               );
@@ -182,18 +174,18 @@ class UpdatePlansState extends State<UpdatePlans> {
                       ),
                       // Colon
                       SizedBox(
-                        width: 20, // Set a width for the colon
-                        height: 80, // Set a height for the colon
+                        width: 20,
+                        height: 80,
                         child: Container(
                           decoration: BoxDecoration(
                             color: (controller.selectedHour != -1 ||
                                     controller.selectedMinute != -1)
                                 ? Theme.of(context)
                                     .colorScheme
-                                    .onError // Change color if hour or minute is selected
-                                : Colors.transparent, // Default color
+                                    .onError
+                                : Colors.transparent,
                             borderRadius:
-                                BorderRadius.circular(0), // No rounding
+                                BorderRadius.circular(0),
                           ),
                           alignment: Alignment.center,
                           child: Stack(
@@ -205,7 +197,7 @@ class UpdatePlansState extends State<UpdatePlans> {
                                 style: TextStyle(
                                   fontSize: 32,
                                   color: Colors
-                                      .transparent, // Make the number invisible
+                                      .transparent,
                                 ),
                               ),
                               // Visible colon
@@ -223,7 +215,7 @@ class UpdatePlansState extends State<UpdatePlans> {
                                 style: TextStyle(
                                   fontSize: 32,
                                   color: Colors
-                                      .transparent, // Make the number invisible
+                                      .transparent,
                                 ),
                               ),
                             ],
@@ -255,9 +247,8 @@ class UpdatePlansState extends State<UpdatePlans> {
                                   color: isSelected
                                       ? Theme.of(context).colorScheme.onError
                                       : Colors.transparent,
-                                  // Change color if selected
                                   borderRadius: BorderRadius.circular(
-                                      0), // Optional: Add some rounding
+                                      0),
                                 ),
                                 alignment: Alignment.center,
                                 child: Text(
@@ -273,7 +264,7 @@ class UpdatePlansState extends State<UpdatePlans> {
                                           ? Colors.white
                                           : Theme.of(context)
                                               .colorScheme
-                                              .onErrorContainer // Change text color if selected
+                                              .onErrorContainer 
                                       ),
                                 ),
                               );
@@ -305,11 +296,10 @@ class UpdatePlansState extends State<UpdatePlans> {
                                   color: isSelected
                                       ? Theme.of(context).colorScheme.onError
                                       : Colors.transparent,
-                                  // Change color if selected
                                   borderRadius: BorderRadius.only(
                                     topRight: Radius.circular(10),
                                     bottomRight: Radius.circular(10),
-                                  ), // Optional: Add some rounding
+                                  ),
                                 ),
                                 alignment: Alignment.center,
                                 child: Text(
@@ -322,7 +312,7 @@ class UpdatePlansState extends State<UpdatePlans> {
                                           ? Colors.white
                                           : Theme.of(context)
                                               .colorScheme
-                                              .onErrorContainer // Change text color if selected
+                                              .onErrorContainer
                                       ),
                                 ),
                               );
@@ -363,7 +353,7 @@ class UpdatePlansState extends State<UpdatePlans> {
                                 side: BorderSide(
                                   color: controller.isStartSelected
                                       ? Color(
-                                          0xFFB4A9D6) // Change border color to B4A9D6 when selected
+                                          0xFFB4A9D6)
                                       : Colors.white,
                                 ),
                                 padding: const EdgeInsets.symmetric(
@@ -385,8 +375,7 @@ class UpdatePlansState extends State<UpdatePlans> {
                                   controller.switchToEnd();
                                 });
                               },
-                              // onPressed: () => _toggleButton(false),
-                              // onPressed: resetTime,
+                              
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: !controller.isStartSelected
                                     ? Color(0xFFB4A9D6)
@@ -429,7 +418,7 @@ class UpdatePlansState extends State<UpdatePlans> {
                               onSelected: (isSelected) {
                                 setState(() {
                                   controller.selectedDays[index] =
-                                      isSelected; // Update the selected day
+                                      isSelected;
                                 });
                               },
                             );
@@ -442,7 +431,7 @@ class UpdatePlansState extends State<UpdatePlans> {
 
                   // Name Your Plan Section
                   Align(
-                    alignment: Alignment.centerLeft, // Align to the left
+                    alignment: Alignment.centerLeft,
                     child: Text(
                       'Name Your Plan',
                       style: TextStyle(
@@ -462,31 +451,30 @@ class UpdatePlansState extends State<UpdatePlans> {
                       fontFamily: 'Montserrat',
                     ),
                     decoration: InputDecoration(
-                      // Set the bottom border to be visible
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Theme.of(context).colorScheme.primary,
                             width:
-                                2.0), // Set the bottom border color and width
+                                2.0),
                       ),
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Theme.of(context).colorScheme.primary,
                             width:
-                                2.0), // Set the focused bottom border color and width
+                                2.0),
                       ),
                       errorBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.red,
                             width:
-                                2.0), // Set the error bottom border color and width
+                                2.0),
                       ),
                       hintText: 'Enter plan name',
                       hintStyle: TextStyle(
                           color: Theme.of(context)
                               .textTheme
                               .bodySmall
-                              ?.color), // Optional: Change hint text color
+                              ?.color),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -502,10 +490,9 @@ class UpdatePlansState extends State<UpdatePlans> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.error,
                       foregroundColor: Colors.white,
-                      // Same foreground color as Start button
                       padding: const EdgeInsets.symmetric(
                           horizontal: 35.0,
-                          vertical: 4.0), // Same padding as Start button
+                          vertical: 4.0),
                     ),
                     child: const Text(
                       'Update',

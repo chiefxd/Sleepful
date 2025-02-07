@@ -54,7 +54,7 @@ class _EditProfileState extends State<EditProfile> {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         name = await _userDataProvider.getFullName(user.uid);
-        email = user.email ?? ''; // Directly use FirebaseAuth for email
+        email = user.email ?? '';
         setState(() {
           _controller.nameController.text = name;
         });
@@ -150,7 +150,6 @@ class _EditProfileState extends State<EditProfile> {
             SizedBox(height: 25),
             // Profile Picture and Text Section
             GestureDetector(
-              // Wrap both the CircleAvatar and Text in GestureDetector
               onTap: () async {
                 final ImagePicker picker = ImagePicker();
                 final XFile? image =
@@ -192,7 +191,6 @@ class _EditProfileState extends State<EditProfile> {
                 }
               },
               child: Column(
-                // Use a Column to arrange the CircleAvatar and Text
                 children: [
                   CircleAvatar(
                     radius: 75,
@@ -232,13 +230,11 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                   ),
                   SizedBox(width: 10),
-                  // Editable name field
                   Expanded(
                     child: isEditingName
                         ? TextField(
                             controller: _controller.nameController,
                             style: TextStyle(
-                              // Style applied to the TextField's text
                               fontSize: screenWidth * 0.04,
                               fontFamily: 'Montserrat',
                               color: Theme.of(context).colorScheme.primary,
@@ -263,7 +259,7 @@ class _EditProfileState extends State<EditProfile> {
                             ),
                           ),
                   ),
-                  // Edit button (removed check icon)
+                  // Edit button 
                   if (!isEditingName) // Show only when not editing
                     IconButton(
                       icon: Icon(Icons.edit,
@@ -295,7 +291,7 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                   SizedBox(width: 10),
                   Text(
-                    email, // Display the fetched email
+                    email,
                     style: TextStyle(
                       fontSize: screenWidth * 0.04,
                       fontFamily: 'Montserrat',

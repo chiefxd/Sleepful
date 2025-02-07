@@ -12,7 +12,6 @@ class RewardsCard extends StatelessWidget {
   final String imagePath;
   final String soundId;
 
-  // final VoidCallback unlockPoints;
   final int points;
 
   const RewardsCard({
@@ -21,7 +20,6 @@ class RewardsCard extends StatelessWidget {
     required this.minutes,
     required this.imagePath,
     required this.soundId,
-    // required this.unlockPoints,
     required this.points,
   });
 
@@ -29,7 +27,7 @@ class RewardsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final rewardsProvider = Provider.of<RewardsProvider>(context);
     final isUnlocked =
-        rewardsProvider.isRewardUnlocked(soundId); // Check if unlocked
+        rewardsProvider.isRewardUnlocked(soundId);
 
     return Card(
       shape: RoundedRectangleBorder(
@@ -45,11 +43,10 @@ class RewardsCard extends StatelessWidget {
                   top: Radius.circular(10), bottom: Radius.circular(10)),
               image: DecorationImage(
                 image: AssetImage(imagePath),
-                // Image path passed from RewardsPage
-                fit: BoxFit.cover, // Cover the entire area
+                fit: BoxFit.cover,
               ),
             ),
-            height: 140, // Set a fixed height for the image
+            height: 140,
           ),
           const SizedBox(height: 10),
           Text(
@@ -72,12 +69,11 @@ class RewardsCard extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           SizedBox(
-            height: 24, // Set your desired height for the button
+            height: 24,
             child: ElevatedButton(
               onPressed: isUnlocked
                   ? null
                   : () {
-                      // Navigate to RewardsRedeem and pass the imagePath
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -93,20 +89,17 @@ class RewardsCard extends StatelessWidget {
                     },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.primary,
-                // Button color
-                // Button color (for enabled state)
                 disabledBackgroundColor: Theme.of(context)
                     .colorScheme
-                    .primary, // Background color for disabled state
+                    .primary,
                 disabledForegroundColor:
-                    Colors.black, // Foreground color for disabled state
+                    Colors.black,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                // Adjust horizontal padding
                 textStyle: TextStyle(
-                  fontSize: 14, // Smaller font size
+                  fontSize: 14,
                 ),
               ),
               child: Text(

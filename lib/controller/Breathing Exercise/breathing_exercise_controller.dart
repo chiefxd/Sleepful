@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 class BreathingExerciseController extends ChangeNotifier {
   int _breathDuration = 3;
-  bool _isBreathing = false; // Flag to track breathing state
-  Timer? _timer; // Timer for breathing exercise
-  Timer? _timeRemainingTimer; // Timer for updating time
-  int _secondsRemaining = 0; // Add variable to track remaining seconds
-  String _buttonText = 'START'; // Text displayed on the circle
+  bool _isBreathing = false;
+  Timer? _timer;
+  Timer? _timeRemainingTimer;
+  int _secondsRemaining = 0;
+  String _buttonText = 'START';
 
   int get breathDuration => _breathDuration;
   bool get isBreathing => _isBreathing;
@@ -24,7 +24,7 @@ class BreathingExerciseController extends ChangeNotifier {
       if (_secondsRemaining > 0) {
         _buttonText =
             _buttonText == 'BREATHE IN' ? 'BREATHE OUT' : 'BREATHE IN';
-        notifyListeners(); // Add notifyListeners here to update the button text
+        notifyListeners();
       } else {
         stopBreathing();
       }
@@ -34,7 +34,7 @@ class BreathingExerciseController extends ChangeNotifier {
     _timeRemainingTimer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (_secondsRemaining > 0) {
         _secondsRemaining--;
-        notifyListeners(); // Add notifyListeners here to update the timer
+        notifyListeners();
       } else {
         _timeRemainingTimer?.cancel();
       }
@@ -53,7 +53,7 @@ class BreathingExerciseController extends ChangeNotifier {
     _isBreathing = false;
     _buttonText = 'START';
     _timer?.cancel();
-    _timeRemainingTimer?.cancel(); // Cancel time remaining timer
+    _timeRemainingTimer?.cancel(); 
 
     notifyListeners();
   }

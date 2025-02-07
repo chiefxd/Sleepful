@@ -46,20 +46,19 @@ class Information extends StatelessWidget {
                   floating: false,
                   snap: false,
                   pinned:
-                      false, // This will keep the SliverAppBar visible and avoid space
+                      false,
                   forceElevated: innerIsScrolled,
                 ),
               ];
             },
             body: Padding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: 20.0), // Remove top padding
+                  horizontal: 20.0),
               child: Column(
                 children: [
                   Expanded(
                     child: InfoSquares(),
                   ),
-                  // BottomNavbar(selectedIndex: -1),
                 ],
               ),
             ),

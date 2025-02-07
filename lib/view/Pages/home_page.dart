@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
   String userName = '';
   final UserDataProvider _userDataProvider = UserDataProvider();
 
-  // Function to fetch yesterday's sleep data
+  // Fetch yesterday's sleep data
   Future<double> _fetchYesterdaySleepData() async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId == null) {
@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
     return totalSleepTime;
   }
 
-  // Helper function to parse time
+  // Parse time
   DateTime _parseTime(DateTime date, String time) {
     int hour = int.parse(time.split(':')[0]);
     int minute = int.parse(time.split(':')[1].split(' ')[0]);
@@ -85,7 +85,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    // Listen for authentication state changes
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user != null) {
         _fetchUserData();
@@ -102,7 +101,7 @@ class _HomePageState extends State<HomePage> {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         userName = await _userDataProvider.getUserName(user.uid);
-        setState(() {}); // Update the UI with the new name
+        setState(() {}); // Update new name
       }
     } catch (e) {
       if (kDebugMode) {
@@ -113,27 +112,25 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // Get the screen width
     double screenWidth = MediaQuery.of(context).size.width;
 
-    // Define button size as a percentage of the screen width
-    double buttonSize = screenWidth * 0.25; // Adjust this value as needed
+    double buttonSize = screenWidth * 0.25;
 
-    double titleFontSize = screenWidth * 0.06; // 6% of screen width for title
+    double titleFontSize = screenWidth * 0.06;
     double subtitleFontSize =
-        screenWidth * 0.04; // 4% of screen width for subtitles
+        screenWidth * 0.04;
     double largeTextFontSize =
-        screenWidth * 0.16; // 10% of screen width for large text
+        screenWidth * 0.16;
     double smallTextFontSize =
-        screenWidth * 0.035; // 4% of screen width for small text
+        screenWidth * 0.035;
     double titleFontCardSize =
-        screenWidth * 0.035; // Responsive font size for card title
+        screenWidth * 0.035;
     double readMoreFontSize = screenWidth * 0.030;
 
     return WillPopScope(
       onWillPop: () async {
         SystemNavigator.pop();
-        return false; // Prevent the default back action
+        return false;
       },
       child: Scaffold(
         // Section 1: Hello You and Profile Icon
@@ -446,7 +443,7 @@ class _HomePageState extends State<HomePage> {
                                             imagePath:
                                                 'assets/images/info 1.jpg',
                                             onReadMore:
-                                                () {}, // Remove this callback
+                                                () {},
                                             cardColor: Theme.of(context)
                                                 .colorScheme
                                                 .surface,
@@ -473,7 +470,7 @@ class _HomePageState extends State<HomePage> {
                                             imagePath:
                                                 'assets/images/info 2.jpg',
                                             onReadMore:
-                                                () {}, // Remove this callback
+                                                () {},
                                             cardColor: Theme.of(context)
                                                 .colorScheme
                                                 .surface,
@@ -500,7 +497,7 @@ class _HomePageState extends State<HomePage> {
                                             imagePath:
                                                 'assets/images/info 3.jpg',
                                             onReadMore:
-                                                () {}, // Remove this callback
+                                                () {},
                                             cardColor: Theme.of(context)
                                                 .colorScheme
                                                 .surface,
@@ -527,7 +524,7 @@ class _HomePageState extends State<HomePage> {
                                             imagePath:
                                                 'assets/images/info 4.jpg',
                                             onReadMore:
-                                                () {}, // Remove this callback
+                                                () {},
                                             cardColor: Theme.of(context)
                                                 .colorScheme
                                                 .surface,
@@ -554,7 +551,7 @@ class _HomePageState extends State<HomePage> {
                                             imagePath:
                                                 'assets/images/info 5.jpg',
                                             onReadMore:
-                                                () {}, // Remove this callback
+                                                () {},
                                             cardColor: Theme.of(context)
                                                 .colorScheme
                                                 .surface,

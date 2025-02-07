@@ -25,7 +25,6 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
-    // Listen for authentication state changes
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user != null) {
         _fetchUserData();
@@ -43,7 +42,7 @@ class _ProfileState extends State<Profile> {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         fullName = await _userDataProvider.getFullName(user.uid);
-        setState(() {}); // Update the UI with the new name
+        setState(() {}); // Update new name
       }
     } catch (e) {
       if (kDebugMode) {
@@ -63,7 +62,7 @@ class _ProfileState extends State<Profile> {
         });
       } else {
         setState(() {
-          _profilePicturePath = null; // Default to placeholder
+          _profilePicturePath = null;
         });
       }
     } catch (e) {
@@ -103,7 +102,7 @@ class _ProfileState extends State<Profile> {
     return totalSleepTime;
   }
 
-  // Helper function to parse time (you can use the one from your HomePage)
+  // Function to parse time
   DateTime _parseTime(DateTime date, String time) {
     int hour = int.parse(time.split(':')[0]);
     int minute = int.parse(time.split(':')[1].split(' ')[0]);
@@ -156,7 +155,7 @@ class _ProfileState extends State<Profile> {
                             onPressed: () {
                               Navigator.pop(
                                 context,
-                              ); // Close the dialog
+                              );
                             },
                             style: TextButton.styleFrom(
                               padding:
@@ -218,7 +217,7 @@ class _ProfileState extends State<Profile> {
                 },
                 onNameUpdated: (updatedName) {
                   setState(() {
-                    fullName = updatedName; // Update the name directly
+                    fullName = updatedName; // Update the name
                   });
                 },
               ),

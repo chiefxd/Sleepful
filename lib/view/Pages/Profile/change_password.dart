@@ -129,21 +129,21 @@ class _EditPasswordState extends State<ChangePassword> {
                       'Old Password',
                       subtitleFontSize,
                       _controller
-                          .oldPassController, // Use the controller from the separate class
+                          .oldPassController,
                     ),
                     _buildEditableIconRow(
                       Icons.password_rounded,
                       'New Password',
                       subtitleFontSize,
                       _controller
-                          .newPassController, // Use the controller from the separate class
+                          .newPassController,
                     ),
                     _buildEditableIconRow(
                       Icons.password_rounded,
                       'Confirm New Password',
                       subtitleFontSize,
                       _controller
-                          .confirmNewPassController, // Use the controller from the separate class
+                          .confirmNewPassController,
                     ),
                   ],
                 ),
@@ -225,9 +225,9 @@ class _EditPasswordState extends State<ChangePassword> {
                               await user.updatePassword(
                                   _controller.newPassController.text);
 
-                              // 3. Show success message and navigate back using Fluttertoast
+                              // 3. Show success message and navigate back
                               showToast(
-                                  'Password changed successfully!'); // Call your showToast function
+                                  'Password changed successfully!');
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -242,7 +242,7 @@ class _EditPasswordState extends State<ChangePassword> {
                               errorMessage = 'New password is too weak';
                             }
                             showToast(
-                                errorMessage); // Call your showToast function
+                                errorMessage);
                           }
                         },
                         style: ElevatedButton.styleFrom(

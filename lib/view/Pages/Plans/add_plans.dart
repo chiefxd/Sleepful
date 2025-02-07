@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../controller/Plans/time_picker_controller.dart';
 import '../../Components/plus_button.dart';
-// import 'package:sleepful/view/Pages/Plans/time_picker_page.dart';
 import '../../Navbar/bottom_navbar.dart';
 import '../home_page.dart';
 
@@ -10,7 +9,7 @@ class AddPlans extends StatefulWidget {
   const AddPlans({super.key});
 
   @override
-  AddPlansState createState() => AddPlansState(); // Change to public
+  AddPlansState createState() => AddPlansState(); 
 }
 
 class AddPlansState extends State<AddPlans> {
@@ -77,7 +76,6 @@ class AddPlansState extends State<AddPlans> {
                         width: 100,
                         height: 200,
                         child: ListWheelScrollView.useDelegate(
-                          // controller: hourController,
                           controller: controller.hourController,
                           itemExtent: 80,
                           physics: FixedExtentScrollPhysics(),
@@ -97,11 +95,10 @@ class AddPlansState extends State<AddPlans> {
                                   color: isSelected
                                       ? Theme.of(context).colorScheme.onError
                                       : Colors.transparent,
-                                  // Change color if selected
                                   borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(10),
                                     bottomLeft: Radius.circular(10),
-                                  ), // Optional: Add some rounding
+                                  ),
                                 ),
                                 alignment: Alignment.center,
                                 child: Text(
@@ -117,30 +114,29 @@ class AddPlansState extends State<AddPlans> {
                                         ? Colors.white
                                         : Theme.of(context)
                                             .colorScheme
-                                            .onErrorContainer, // Change text color if selected
+                                            .onErrorContainer,
                                   ),
                                 ),
                               );
                             },
-                            // childCount: hours.length * 1000,
                             childCount: controller.hours.length * 1000,
                           ),
                         ),
                       ),
                       // Colon
                       SizedBox(
-                        width: 20, // Set a width for the colon
-                        height: 80, // Set a height for the colon
+                        width: 20,
+                        height: 80,
                         child: Container(
                           decoration: BoxDecoration(
                             color: (controller.selectedHour != -1 ||
                                     controller.selectedMinute != -1)
                                 ? Theme.of(context)
                                     .colorScheme
-                                    .onError // Change color if hour or minute is selected
-                                : Colors.transparent, // Default color
+                                    .onError
+                                : Colors.transparent,
                             borderRadius:
-                                BorderRadius.circular(0), // No rounding
+                                BorderRadius.circular(0),
                           ),
                           alignment: Alignment.center,
                           child: Stack(
@@ -152,7 +148,7 @@ class AddPlansState extends State<AddPlans> {
                                 style: TextStyle(
                                   fontSize: 32,
                                   color: Colors
-                                      .transparent, // Make the number invisible
+                                      .transparent,
                                 ),
                               ),
                               // Visible colon
@@ -170,7 +166,7 @@ class AddPlansState extends State<AddPlans> {
                                 style: TextStyle(
                                   fontSize: 32,
                                   color: Colors
-                                      .transparent, // Make the number invisible
+                                      .transparent,
                                 ),
                               ),
                             ],
@@ -201,9 +197,8 @@ class AddPlansState extends State<AddPlans> {
                                   color: isSelected
                                       ? Theme.of(context).colorScheme.onError
                                       : Colors.transparent,
-                                  // Change color if selected
                                   borderRadius: BorderRadius.circular(
-                                      0), // Optional: Add some rounding
+                                      0),
                                 ),
                                 alignment: Alignment.center,
                                 child: Text(
@@ -219,7 +214,7 @@ class AddPlansState extends State<AddPlans> {
                                         ? Colors.white
                                         : Theme.of(context)
                                             .colorScheme
-                                            .onErrorContainer, // Change text color if selected
+                                            .onErrorContainer,
                                   ),
                                 ),
                               );
@@ -254,7 +249,7 @@ class AddPlansState extends State<AddPlans> {
                                   borderRadius: BorderRadius.only(
                                     topRight: Radius.circular(10),
                                     bottomRight: Radius.circular(10),
-                                  ), // Optional: Add some rounding
+                                  ),
                                 ),
                                 alignment: Alignment.center,
                                 child: Text(
@@ -267,7 +262,7 @@ class AddPlansState extends State<AddPlans> {
                                         ? Colors.white
                                         : Theme.of(context)
                                             .colorScheme
-                                            .onErrorContainer, // Change text color if selected
+                                            .onErrorContainer,
                                   ),
                                 ),
                               );
@@ -298,8 +293,6 @@ class AddPlansState extends State<AddPlans> {
                                   controller.switchToStart();
                                 });
                               },
-                              // onPressed: () => _toggleButton(true),
-                              // onPressed: resetTime,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: controller.isStartSelected
                                     ? Color(0xFFB4A9D6)
@@ -310,7 +303,7 @@ class AddPlansState extends State<AddPlans> {
                                 side: BorderSide(
                                   color: controller.isStartSelected
                                       ? Color(
-                                          0xFFB4A9D6) // Change border color to B4A9D6 when selected
+                                          0xFFB4A9D6)
                                       : Colors.white,
                                 ),
                                 padding: const EdgeInsets.symmetric(
@@ -387,7 +380,7 @@ class AddPlansState extends State<AddPlans> {
 
                   // Name Your Plan Section
                   Align(
-                    alignment: Alignment.centerLeft, // Align to the left
+                    alignment: Alignment.centerLeft,
                     child: Text(
                       'Name Your Plan',
                       style: TextStyle(
@@ -407,24 +400,23 @@ class AddPlansState extends State<AddPlans> {
                       fontFamily: 'Montserrat',
                     ),
                     decoration: InputDecoration(
-                      // Set the bottom border to be visible
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Theme.of(context).colorScheme.primary,
                             width:
-                                2.0), // Set the bottom border color and width
+                                2.0),
                       ),
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Theme.of(context).colorScheme.primary,
                             width:
-                                2.0), // Set the focused bottom border color and width
+                                2.0),
                       ),
                       errorBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.red,
                             width:
-                                2.0), // Set the error bottom border color and width
+                                2.0),
                       ),
                       hintText: 'Enter plan name',
                       hintStyle: TextStyle(
@@ -432,7 +424,7 @@ class AddPlansState extends State<AddPlans> {
                           color: Theme.of(context)
                               .textTheme
                               .bodySmall
-                              ?.color), // Optional: Change hint text color
+                              ?.color),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -447,10 +439,9 @@ class AddPlansState extends State<AddPlans> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.error,
                       foregroundColor: Colors.white,
-                      // Same foreground color as Start button
                       padding: const EdgeInsets.symmetric(
                           horizontal: 35.0,
-                          vertical: 4.0), // Same padding as Start button
+                          vertical: 4.0),
                     ),
                     child: const Text(
                       'Add',

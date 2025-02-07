@@ -18,9 +18,9 @@ class RewardsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double subtitleFontSize =
-        screenWidth * 0.04; // 4% of screen width for subtitles
+        screenWidth * 0.04;
     double largeTextFontSize =
-        screenWidth * 0.16; // 16% of screen width for large text
+        screenWidth * 0.16;
     double smallTextFontSize = screenWidth * 0.04;
 
     final userData = Provider.of<UserDataProvider>(context);
@@ -92,7 +92,7 @@ class RewardsPage extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  HomePage())); // Go back to the previous screen
+                                  HomePage()));
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
@@ -211,26 +211,25 @@ class RewardsPage extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              // Add some space before the next text
                               Padding(
                                 padding: const EdgeInsets.only(
                                     left: 20,
                                     right: 20,
-                                    top: 20), // Add padding of 20 pixels
+                                    top: 20),
                                 child: Align(
                                   alignment:
-                                      Alignment.centerLeft, // Align to the left
+                                      Alignment.centerLeft,
                                   child: Text(
                                     'Sounds',
                                     style: TextStyle(
                                       fontSize: screenWidth *
-                                          0.07, // Set the font size to 28
+                                          0.07,
                                       fontWeight: FontWeight
-                                          .bold, // Set the font weight to bold
+                                          .bold,
                                       fontFamily: 'Montserrat',
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .primary, // Set the text color to 0xFFA594F9
+                                          .primary,
                                     ),
                                   ),
                                 ),
@@ -252,18 +251,18 @@ class RewardsPage extends StatelessWidget {
                                     padding: EdgeInsets.only(
                                       left: index % 2 == 0
                                           ? 20.0
-                                          : 0.0, // Add left padding for left column cards
+                                          : 0.0,
                                       right: index % 2 == 1
                                           ? 20.0
-                                          : 0.0, // Add right padding for right column cards
+                                          : 0.0,
                                     ),
                                     child: RewardsCard(
-                                      title: titles[index], // Dynamic title
+                                      title: titles[index],
                                       minutes:
-                                          minutes[index], // Dynamic minutes
+                                          minutes[index],
                                       imagePath: imagePaths[index],
                                       soundId: soundId[
-                                          index], // Replace with your image path
+                                          index],
                                       points: points[index],
                                     ),
                                   );

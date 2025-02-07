@@ -48,7 +48,7 @@ class ForgotPassword extends StatelessWidget {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Navigator.pop(context); // Just pop the ForgotPassword page
+            Navigator.pop(context);
           },
           child: Padding(
             padding: const EdgeInsets.all(10.0),

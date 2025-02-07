@@ -16,9 +16,9 @@ class _SoundPlayerState extends State<SoundPlayer> {
   double _currentSliderValue = 0.0;
   double _sliderMaxValue = 900.0;
   bool audioPlay = false;
-  late String audioPath; // To store audio path
-  late String imagePath; // To store image path
-  late String genre; // To store genre
+  late String audioPath;
+  late String imagePath;
+  late String genre;
 
   @override
   void initState() {
@@ -163,8 +163,8 @@ class _SoundPlayerState extends State<SoundPlayer> {
       genre = soundData['genre'];
     } else {
       // Handle the case when the sound is not found
-      audioPath = 'assets/sounds/default.mp3'; // Default sound if not found
-      imagePath = 'assets/images/default.jpg'; // Default image if not found
+      audioPath = 'assets/sounds/default.mp3';
+      imagePath = 'assets/images/default.jpg';
       genre = 'Relaxing';
     }
   }
