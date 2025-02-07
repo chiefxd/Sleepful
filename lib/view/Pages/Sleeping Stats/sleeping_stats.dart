@@ -70,24 +70,32 @@ class _SleepingStatsState extends State<SleepingStats> {
       final endDateTimeLocal =
           _parseTime(successfulDateLocal, data['endTime'] as String);
 
-      print("Start Time (Local): $startDateTimeLocal");
-      print("End Time (Local): $endDateTimeLocal");
-
       final startDateTimeUtcPlus7 =
           tz.TZDateTime.from(startDateTimeLocal, utcPlus7);
       final endDateTimeUtcPlus7 =
           tz.TZDateTime.from(endDateTimeLocal, utcPlus7);
 
-      final duration =
-          endDateTimeUtcPlus7.difference(startDateTimeUtcPlus7).inMinutes /
-              60.0;
+      Duration duration;
 
-      print("Duration (Hours): $duration");
+      if (endDateTimeUtcPlus7.isBefore(startDateTimeUtcPlus7)) {
+        // Sleep period crosses midnight
+        final nextDay = DateTime(endDateTimeUtcPlus7.year,
+            endDateTimeUtcPlus7.month, endDateTimeUtcPlus7.day + 1);
+        final endDateTimeNextDay = tz.TZDateTime.from(nextDay, utcPlus7).add(
+            Duration(
+                hours: endDateTimeUtcPlus7.hour,
+                minutes: endDateTimeUtcPlus7.minute));
 
-      sleepData[dayIndex] += duration;
+        duration = endDateTimeNextDay.difference(startDateTimeUtcPlus7);
+      } else {
+        // Sleep period within the same day
+        duration = endDateTimeUtcPlus7.difference(startDateTimeUtcPlus7);
+      }
+
+      final durationInHours = duration.inMinutes / 60.0;
+
+      sleepData[dayIndex] += durationInHours;
     }
-
-    print("Sleep Data: $sleepData");
 
     return sleepData;
   }
@@ -281,10 +289,8 @@ class _SleepingStatsState extends State<SleepingStats> {
                           barGroups: _generateBarGroups(sleepData),
                           borderData: FlBorderData(show: false),
                           gridData: FlGridData(
-                            drawHorizontalLine:
-                                true,
-                            drawVerticalLine:
-                                false,
+                            drawHorizontalLine: true,
+                            drawVerticalLine: false,
                             getDrawingHorizontalLine: (value) {
                               return FlLine(
                                 color: Colors.white12,
@@ -370,11 +376,9 @@ class _SleepingStatsState extends State<SleepingStats> {
                               ),
                             ),
                             topTitles: AxisTitles(
-                                sideTitles: SideTitles(
-                                    showTitles: false)),
+                                sideTitles: SideTitles(showTitles: false)),
                             rightTitles: AxisTitles(
-                                sideTitles: SideTitles(
-                                    showTitles: false)),
+                                sideTitles: SideTitles(showTitles: false)),
                           ),
                           barTouchData: BarTouchData(enabled: false),
                         ),
@@ -426,10 +430,8 @@ class _SleepingStatsState extends State<SleepingStats> {
                         width: availableWidth,
                         child: IntrinsicHeight(
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment
-                                .center,
-                            mainAxisSize:
-                                MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Row(
                                 children: [
@@ -485,8 +487,7 @@ class _SleepingStatsState extends State<SleepingStats> {
                                       Icon(
                                         isSleepSufficient
                                             ? Icons.thumb_up
-                                            : Icons
-                                                .sentiment_neutral,
+                                            : Icons.sentiment_neutral,
                                         color: Colors.white,
                                         size: 24,
                                       ),
