@@ -7,27 +7,26 @@ import '../../services/alarm_service.dart';
 import '../../services/notification_service.dart';
 import '../../view/Navbar/bottom_navbar.dart';
 import '../../view/Pages/Calendar/calendar.dart';
-// import '../../view/Pages/Plans/view_plans.dart';
 
 void alarmCallback() {
   print("🚨 Alarm Triggered: End Time Reached! 🚨");
   NotificationService().playCustomAlarm(
     "End Time Alert",
     "Your specified end time has been reached.",
-    "custom_alarm", // Name of the MP3 file in the `android/app/src/main/res/raw` directory
+    "custom_alarm",
   );
 }
 
 class TimePickerrController {
-  int selectedHour = 12; // Default hour
-  int selectedMinute = 0; // Default minute
+  int selectedHour = 12;
+  int selectedMinute = 0;
   String selectedPeriod = 'AM';
 
   // Store selected times for start and end
   String startTime = '12:00 AM';
   String endTime = '12:00 AM';
 
-  bool isStartSelected = true; // Track which button is selected
+  bool isStartSelected = true;
   String successMessage = '';
 
   final List<int> hours = List.generate(12, (index) => index + 1);
@@ -203,8 +202,8 @@ class TimePickerrController {
       return;
     }
 
-    if (duration.inMinutes < 2) {
-      showToast("Minimum duration of sleep is 2 minutes.");
+    if (duration.inMinutes < 30) {
+      showToast("Minimum duration of sleep is 30 minutes.");
       return;
     }
 
@@ -215,7 +214,7 @@ class TimePickerrController {
     }
 
     DateTime startNotificationTime = startDateTime
-        .subtract(Duration(minutes: 2)); // 5 minutes before start time
+        .subtract(Duration(minutes: 5)); // 5 minutes before start time
     DateTime currentDate = DateTime.now();
 
     // Schedule the notification

@@ -12,7 +12,7 @@ void alarmCallback() {
   NotificationService().playCustomAlarm(
     "End Time Alert",
     "Your specified end time has been reached.",
-    "custom_alarm", // Name of the MP3 file in the `android/app/src/main/res/raw` directory
+    "custom_alarm",
   );
 }
 
@@ -26,27 +26,21 @@ class TimePickerController {
   String startTime;
   String endTime;
 
-  bool isStartSelected = true; // Track which button is selected
+  bool isStartSelected = true;
   String successMessage = '';
 
   final List<int> hours = List.generate(12, (index) => index + 1);
   final List<int> minutes = List.generate(60, (index) => index);
   final List<String> periods = ['AM', 'PM'];
 
-  // final FixedExtentScrollController hourController =
-  // FixedExtentScrollController(initialItem: 12 + 5999);
-  // final FixedExtentScrollController minuteController =
-  // FixedExtentScrollController(initialItem: 0 + 6000);
-  // final FixedExtentScrollController periodController =
-  // FixedExtentScrollController(initialItem: 0);
   final FixedExtentScrollController hourController;
   final FixedExtentScrollController minuteController;
   final FixedExtentScrollController periodController;
 
   TimePickerController({
-    required this.startTime, // Required start time
-    required this.endTime, // Required end time
-    List<bool>? selectedDays, // Optional selected days
+    required this.startTime,
+    required this.endTime,
+    List<bool>? selectedDays,
   })  : selectedDays = selectedDays ??
             List.generate(7, (index) => false), // Initialize selectedDays
         selectedHour = int.parse(
@@ -65,7 +59,7 @@ class TimePickerController {
   // Helper methods to get the initial index for hour, minute, and period
   static int _getHourIndex(String time) {
     int hour = int.parse(time.split(':')[0]);
-    return hour == 12 ? 0 : hour - 1; // Adjust for 12-hour format
+    return hour == 12 ? 0 : hour - 1;
   }
 
   static int _getMinuteIndex(String time) {
@@ -121,7 +115,7 @@ class TimePickerController {
         'isCalendar': false,
         'notVisibleCalendar': null,
         'updatedAt': FieldValue
-            .serverTimestamp(), // Optional: Add a timestamp for the update
+            .serverTimestamp(),
       });
     }
   }
@@ -141,7 +135,7 @@ class TimePickerController {
       QuerySnapshot querySnapshot = await plansCollection
           .where('title', isEqualTo: title)
           .where(FieldPath.documentId,
-              isNotEqualTo: planId) // Exclude the current planId
+              isNotEqualTo: planId)
           .get();
 
       // Check if any plans with the same title exist
@@ -208,8 +202,8 @@ class TimePickerController {
       return;
     }
 
-    if (duration.inMinutes < 2) {
-      showToast("Minimum duration of sleep is 2 minutes.");
+    if (duration.inMinutes < 30) {
+      showToast("Minimum duration of sleep is 30 minutes.");
       return;
     }
 
@@ -242,7 +236,7 @@ class TimePickerController {
           today.day,
           startDateTime.hour,
           startDateTime.minute,
-        ).subtract(Duration(minutes: 2)); // 5 minutes before start time
+        ).subtract(Duration(minutes: 5));
 
         print('Start Notification Time: $startNotificationTime');
         print('Current Time: $today');
@@ -267,7 +261,6 @@ class TimePickerController {
               endDateTime.hour,
               endDateTime.minute,
             );
-            // if (today.isAtSameMomentAs(endDateTime) || today.isAfter(endAlarmTime)) {
             if (alarmTime.isAfter(currentDate)) {
               print('Triggering alarm callback for end time at $alarmTime');
               await alarmService.scheduleAlarm(
@@ -348,20 +341,6 @@ class TimePickerController {
     }
   }
 
-  // DateTime _parseTime(String time) {
-  //   List<String> parts = time.split(':');
-  //   int hour = int.parse(parts[0]);
-  //   int minute = int.parse(parts[1].split(' ')[0]);
-  //   String period = parts[1].split(' ')[1];
-  //
-  //   if (period == 'PM' && hour != 12) {
-  //     hour += 12;
-  //   } else if (period == 'AM' && hour == 12) {
-  //     hour = 0;
-  //   }
-  //
-  //   return DateTime(0, 1, 1, hour, minute);
-  // }
   DateTime _parseTime(String time, {DateTime? date}) {
     List<String> parts = time.split(':');
     int hour = int.parse(parts[0]);
@@ -375,7 +354,6 @@ class TimePickerController {
     }
 
     date ??= DateTime.now(); // Use current date if no date is provided
-    // return DateTime(0, 1, 1, hour, minute);
     return DateTime(date.year, date.month, date.day, hour, minute);
   }
 }

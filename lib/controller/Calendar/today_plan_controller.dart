@@ -27,7 +27,6 @@ class SleepPlanController {
       // Clear previous plans
       sleepPlans.clear();
       DateTime today = DateTime.now();
-      // print('Fetching plans for today: $today');
 
       // Fetch plans from the "Plans" collection
       await _fetchPlansFromCollection(snapshot.docs, today, userId, 'Plans');
@@ -41,7 +40,6 @@ class SleepPlanController {
 
       await _fetchCalendarPlans(calendarPlansSnapshot.docs, today, userId);
 
-      // print("All Sleep Plans: $sleepPlans"); // Debugging: Print all sleep plans
       return sleepPlans; // Return the updated sleepPlans map
     });
   }
@@ -100,15 +98,14 @@ class SleepPlanController {
               'startTime': startDateTimeRill,
               'endTime': endDateTimeRill,
               'planData': plan,
-              'planId': planId, // Include the planId
-              'selectedDays': selectedDays, // Include selectedDays
+              'planId': planId,
+              'selectedDays': selectedDays,
               'userId': userId,
               'collection':
-              collectionName, // Indicate which collection the plan came from
+              collectionName,
               'isCalendar': isCalendar,
               'notVisibleCalendar': notVisibleCalendar,
             });
-            // print("Added Plan: $title from $startDateTimeRill to $endTime on $date and createdAt: $createdAt");
           } else {
             // If createdAt is after startTime, add the plan for the next occurrence of the selected day
             DateTime nextOccurrence =
@@ -121,14 +118,13 @@ class SleepPlanController {
               'startTime': startDateTimeRill,
               'endTime': endDateTimeRill,
               'planData': plan,
-              'planId': planId, // Include the planId
-              'selectedDays': selectedDays, // Include selectedDays
+              'planId': planId,
+              'selectedDays': selectedDays, 
               'userId': userId,
               'collection': collectionName,
               'isCalendar': isCalendar,
               'notVisibleCalendar': notVisibleCalendar,
             });
-            // print("Added Plan: $title for next occurrence on $nextOccurrence and createdAt: $createdAt");
           }
         }
       }
@@ -138,24 +134,19 @@ class SleepPlanController {
   Future<void> _fetchCalendarPlans(List<QueryDocumentSnapshot> docs, DateTime today, String userId) async {
     for (var doc in docs) {
       final plan = doc.data() as Map<String, dynamic>;
-      final planId = doc.id; // Get the planId
-      final selectedDate = (plan['selectedDate'] as Timestamp).toDate(); // Get the selectedDate
+      final planId = doc.id;
+      final selectedDate = (plan['selectedDate'] as Timestamp).toDate();
       final startTime = plan['startTime'];
       final endTime = plan['endTime'];
       final title = plan['title'];
       final isCalendar = plan['isCalendar'];
-      // final createdAt = (plan['createdAt'] as Timestamp).toDate();
-      final notVisibleCalendar = plan['notVisibleCalendar']; // Get the notVisibleCalendar field
+      final notVisibleCalendar = plan['notVisibleCalendar'];
 
       DateTime startDateTime = _parseTime(selectedDate, startTime);
       DateTime endDateTime = _parseTime(selectedDate, endTime);
 
       DateTime normalizedDate = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
 
-      // Only add the plan if the selectedDate matches today
-      // if (selectedDate.year == today.year &&
-      //     selectedDate.month == today.month &&
-      //     selectedDate.day == today.day) {
       // Check if the date is in notVisibleCalendar
       if (notVisibleCalendar != null && normalizedDate.isAtSameMomentAs(notVisibleCalendar)) {
         continue; // Skip this date
@@ -170,12 +161,12 @@ class SleepPlanController {
         'startTime': startDateTime,
         'endTime': endDateTime,
         'planData': plan,
-        'planId': planId, // Include the planId
-        'selectedDate': selectedDate, // Include selectedDate
+        'planId': planId,
+        'selectedDate': selectedDate,
         'userId': userId,
-        'collection': 'Calendar Plans', // Indicate this is from Calendar Plans
+        'collection': 'Calendar Plans',
         'isCalendar': isCalendar,
-        'notVisibleCalendar': notVisibleCalendar, // Include notVisibleCalendar
+        'notVisibleCalendar': notVisibleCalendar,
       });
       print('Added Calendar Plan to sleepPlans:');
       print('Title: $title');
@@ -194,7 +185,6 @@ class SleepPlanController {
     print('Current Time: $now');
     DateTime startTime = DateTime.now();
 
-    // for (var date in sleepPlans.keys) {
     if (sleepPlans.containsKey(today)) {
       for (var plan in sleepPlans[today] ?? []) {
         DateTime endDateTime = plan['endTime'];
@@ -252,15 +242,15 @@ class SleepPlanController {
           'title': plan['title'],
           'updatedAt': plan.containsKey('updatedAt')
               ? plan['updatedAt']
-              : plan['createdAt'], // Add updatedAt field
-          'successfulDate': endDateTime, // Use current date
+              : plan['createdAt'],
+          'successfulDate': endDateTime,
         });
 
         print('Successfully moved plan to Successful Plans: ${plan['title']}');
 
         // Award points for completing the plan
         final userDataProvider = UserDataProvider();
-        await userDataProvider.fetchAndSetUserData(userId); // Load user data
+        await userDataProvider.fetchAndSetUserData(userId);
         userDataProvider.showToast("Congratulations on completing a plan!");
         await userDataProvider
             .awardPointsForPlanCompletion(userId); // Award points

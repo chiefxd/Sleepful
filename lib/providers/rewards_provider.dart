@@ -7,76 +7,72 @@ import 'package:sleepful/view/Pages/Sounds/sound_part.dart';
 class RewardSound extends SoundPart {
   final String id;
   bool isUnlocked;
-  final int points; // Add points property
+  final int points;
 
   RewardSound({
     required this.id,
-    required String imagePaths, // Renamed to match rewards_page.dart
-    required String titles, // Renamed to match rewards_page.dart
-    required String minutes, // Renamed to match rewards_page.dart
-    required this.points, // Points required to unlock
+    required String imagePaths,
+    required String titles,
+    required String minutes,
+    required this.points,
     this.isUnlocked = false,
   }) : super(
           key: UniqueKey(),
-          soundPictures: imagePaths, // Use imagePaths for soundPictures
-          soundTitle: titles, // Use titles for soundTitle
-          soundGenre: 'Reward Genre', // You might want to adjust this
-          soundDuration: minutes, // Use minutes for soundDuration
+          soundPictures: imagePaths,
+          soundTitle: titles,
+          soundGenre: 'Reward Genre',
+          soundDuration: minutes,
         );
 }
 
 class RewardsProvider extends ChangeNotifier {
   final List<RewardSound> _rewardSounds = [
-    // Add your reward sounds here (as RewardSound objects)
-    // Example:
     RewardSound(
       id: 'reward_sound_1',
       imagePaths:
-          'assets/images/Contoh 1.png', // Assuming this is your image path
-      titles: 'Title A', // Assuming this is your title
-      minutes: '2m', // Assuming this is your duration
-      points: 5, // Assuming this is the points required
+          'assets/images/Contoh 1.png',
+      titles: 'Title A',
+      minutes: '2m',
+      points: 5,
     ),
     RewardSound(
       id: 'reward_sound_2',
       imagePaths:
-          'assets/images/Contoh 2.png', // Assuming this is your image path
-      titles: 'Title B', // Assuming this is your title
-      minutes: '6m', // Assuming this is your duration
-      points: 10, // Assuming this is the points required
+          'assets/images/Contoh 2.png',
+      titles: 'Title B',
+      minutes: '6m',
+      points: 10,
     ),
     RewardSound(
       id: 'reward_sound_3',
-      imagePaths: 'assets/images/rain.jpg', // Assuming this is your image path
-      titles: 'Title C', // Assuming this is your title
-      minutes: '4m', // Assuming this is your duration
-      points: 15, // Assuming this is the points required
+      imagePaths: 'assets/images/rain.jpg',
+      titles: 'Title C',
+      minutes: '4m',
+      points: 15,
     ),
     RewardSound(
       id: 'reward_sound_4',
       imagePaths:
-          'assets/images/winter.jpg', // Assuming this is your image path
-      titles: 'Title D', // Assuming this is your title
-      minutes: '8m', // Assuming this is your duration
-      points: 20, // Assuming this is the points required
+          'assets/images/winter.jpg',
+      titles: 'Title D',
+      minutes: '8m',
+      points: 20,
     ),
     RewardSound(
       id: 'reward_sound_5',
       imagePaths:
-          'assets/images/Contoh 3.png', // Assuming this is your image path
-      titles: 'Title E', // Assuming this is your title
-      minutes: '10m', // Assuming this is your duration
-      points: 25, // Assuming this is the points required
+          'assets/images/Contoh 3.png',
+      titles: 'Title E',
+      minutes: '10m',
+      points: 25,
     ),
-    // ... more reward sounds
   ];
 
-  final Set<String> _unlockedRewardIds = {}; // Store unlocked reward IDs
+  final Set<String> _unlockedRewardIds = {};
 
-  // Getter to access unlocked reward IDs
   Set<String> get unlockedRewardIds => _unlockedRewardIds;
 
-  // Add the following method to check if a reward is unlocked
+  // check if a reward is unlocked
   bool isRewardUnlocked(String soundId) {
     return _unlockedRewardIds.contains(soundId);
   }
@@ -84,18 +80,17 @@ class RewardsProvider extends ChangeNotifier {
   List<RewardSound> get unlockedSounds =>
       _rewardSounds.where((sound) => sound.isUnlocked).toList();
 
-  // Function to unlock a reward by its ID
+  // unlock a reward by its ID
   void unlockSound(String soundId) async {
     final soundIndex = _rewardSounds.indexWhere((sound) => sound.id == soundId);
     if (soundIndex != -1) {
       _rewardSounds[soundIndex].isUnlocked = true;
 
-      // Add the soundId to the set of unlocked reward IDs
       _unlockedRewardIds.add(soundId);
 
       notifyListeners();
 
-      // Create a new document in 'redeemedSounds' subcollection
+      // Create a new document in 'redeemedSounds' collection
       final userDoc = FirebaseFirestore.instance
           .collection('Users')
           .doc(FirebaseAuth.instance.currentUser!.uid);
@@ -114,7 +109,7 @@ class RewardsProvider extends ChangeNotifier {
 
     for (final doc in querySnapshot.docs) {
       final soundId = doc.data()['soundId'] as String;
-      unlockSound(soundId); // Unlock sounds based on data from Firestore
+      unlockSound(soundId);
     }
   }
 }

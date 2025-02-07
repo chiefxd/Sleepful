@@ -39,7 +39,6 @@ class NotificationService {
       android: initializationSettingsAndroid,
     );
 
-    // await flutterLocalNotificationsPlugin.initialize(initializationSettings);
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) {
@@ -95,8 +94,6 @@ class NotificationService {
             print("✅ Battery optimizations ignored.");
           } else {
             print("⚠️ Battery optimizations NOT ignored.");
-            // Optionally, guide the user to settings
-            // await openAppSettings();
           }
         } else {
           print("✅ Battery optimizations already ignored.");
@@ -120,9 +117,9 @@ class NotificationService {
     const notificationDetails = NotificationDetails(android: androidDetails);
 
     await flutterLocalNotificationsPlugin.show(
-      1, // Notification ID (0 for a generic notification)
-      title, // Notification title
-      body, // Notification body
+      1, // id
+      title,
+      body,
       notificationDetails,
       payload: jsonEncode({'action': 'view_plans'}),
     );
@@ -138,25 +135,23 @@ class NotificationService {
       'Your Channel Name',
       importance: Importance.max,
       priority: Priority.high,
-      playSound: true, // Ensure the sound is set for the notification
-      enableVibration: true, // Enable vibration if needed
+      playSound: true,
+      enableVibration: true,
       ongoing: true,
       timeoutAfter: null,
-      // Use setExactAndAllowWhileIdle for more precise scheduling (if needed)
-      // This requires the USE_FULL_SCREEN_INTENT permission
       styleInformation: BigTextStyleInformation(''),
     );
 
     final notificationDetails = NotificationDetails(android: androidDetails);
 
-    print('Scheduling notification at: $scheduleTime'); // Debugging line
+    print('Scheduling notification at: $scheduleTime');
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
       id,
       title,
       'Your scheduled plan is about to start!',
       tz.TZDateTime.from(
-          scheduleTime, tz.local), // Ensuring time is converted to TZDateTime
+          scheduleTime, tz.local),
       notificationDetails,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
@@ -168,22 +163,22 @@ class NotificationService {
     _startForegroundTask();
   }
 
-  // Method to play an endTime alarm with a custom sound
+  // Play an endTime alarm with a custom sound
   Future<void> playCustomAlarm(
       String title, String body, String soundFile) async {
     final androidDetails = AndroidNotificationDetails(
-      'end_time_alarm_channel', // Unique channel ID for end time alarm
+      'end_time_alarm_channel',
       'End Time Alarm',
       channelDescription: 'Alarm for end time with custom sound.',
       importance: Importance.max,
       priority: Priority.high,
       playSound: true,
       sound: RawResourceAndroidNotificationSound(soundFile),
-      enableVibration: false, // Disable vibration
+      enableVibration: false,
       actions: <AndroidNotificationAction>[
         AndroidNotificationAction(
-          'navigate_to_view_plans', // Action ID
-          'View Plans', // Action button text
+          'navigate_to_view_plans',
+          'View Plans',
         ),
       ],
     );
@@ -191,11 +186,11 @@ class NotificationService {
     final notificationDetails = NotificationDetails(android: androidDetails);
 
     await flutterLocalNotificationsPlugin.show(
-      1, // Notification ID (unique for end time alarm)
-      title, // Notification title
-      body, // Notification body
+      1, // id
+      title,
+      body,
       notificationDetails,
-      payload: jsonEncode({'action': 'view_plans'}), // Add payload
+      payload: jsonEncode({'action': 'view_plans'}),
     );
 
     print('🔔 Custom alarm notification shown with button: $title');
@@ -223,7 +218,7 @@ class NotificationService {
         iconData: const NotificationIconData(
           resType: ResourceType.mipmap,
           resPrefix: ResourcePrefix.ic,
-          name: 'launcher', // Make sure this icon exists in your project
+          name: 'launcher',
         ),
       ),
       iosNotificationOptions: const IOSNotificationOptions(
@@ -231,7 +226,7 @@ class NotificationService {
         playSound: false,
       ),
       foregroundTaskOptions: const ForegroundTaskOptions(
-        interval: 5000, // 5 seconds (adjust as needed)
+        interval: 5000,
         autoRunOnBoot: true,
         allowWifiLock: true,
       ),

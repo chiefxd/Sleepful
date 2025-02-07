@@ -2,37 +2,34 @@
 import 'package:flutter/material.dart';
 
 class ButtonWithText extends StatelessWidget {
-  final IconData? icon; // Make this nullable
-  final Widget? customIcon; // New parameter for custom icons
+  final IconData? icon;
+  final Widget? customIcon;
   final String text;
   final Widget nextPage;
   final Color? textColor;
   final Color? buttonColor;
-  final Color? borderColor; // New parameter for border color
+  final Color? borderColor;
 
   const ButtonWithText({
     super.key,
-    this.icon, // Keep this for standard icons
-    this.customIcon, // New parameter for custom icons
+    this.icon,
+    this.customIcon,
     required this.text,
     required this.nextPage,
     this.textColor,
     this.buttonColor,
-    this.borderColor, // Accept border color
+    this.borderColor,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Get the screen width
     double screenWidth = MediaQuery.of(context).size.width;
 
-    // Define button size as a percentage of the screen width
-    double buttonSize = screenWidth * 0.20; // Adjust this value as needed
+    double buttonSize = screenWidth * 0.20;
 
-    double iconSize = buttonSize * 0.6; // Make the icon size a percentage of the button size
+    double iconSize = buttonSize * 0.6;
     double buttonTextSize = screenWidth * 0.04;
 
-    // Define the gradient
     final Gradient gradient = LinearGradient(
       colors: [
         const Color(0xFF493190),
@@ -61,7 +58,6 @@ class ButtonWithText extends StatelessWidget {
                 minimumSize: Size(buttonSize, buttonSize),
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.transparent,
-                // Make the button background transparent
                 padding: EdgeInsets.all(0),
               ),
               child: customIcon ?? Icon(
@@ -111,7 +107,7 @@ class GradientBorderPainter extends CustomPainter {
     final paint = Paint()
       ..shader = gradient.createShader(Rect.fromLTWH(0, 0, size.width, size.height))
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 4; // Adjust the border width as needed
+      ..strokeWidth = 4;
 
     canvas.drawRRect(
       RRect.fromRectAndRadius(Rect.fromLTWH(0, 0, size.width, size.height), Radius.circular(20)),

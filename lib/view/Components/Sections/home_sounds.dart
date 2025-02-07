@@ -12,7 +12,7 @@ class SoundsSection extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.only(
-          left: 20, right: 20), // Add padding of 20 pixels
+          left: 20, right: 20),
       child: Column(
         children: [
           Row(
@@ -21,13 +21,13 @@ class SoundsSection extends StatelessWidget {
               Text(
                 'Sounds',
                 style: TextStyle(
-                  fontSize: screenWidth * 0.07, // Set the font size to 28
-                  fontWeight: FontWeight.bold, // Set the font weight to bold
+                  fontSize: screenWidth * 0.07,
+                  fontWeight: FontWeight.bold,
                   fontFamily: 'Montserrat',
                   color: Theme.of(context)
                       .textTheme
                       .bodyMedium
-                      ?.color, // Set the text color to 0xFFA594F9
+                      ?.color,
                 ),
               ),
               GestureDetector(
@@ -46,14 +46,14 @@ class SoundsSection extends StatelessWidget {
                     color: Theme.of(context)
                         .textTheme
                         .bodyMedium
-                        ?.color, // Set the text color to 0xFFCDC1FF
+                        ?.color,
                   ),
                 ),
               ),
             ],
           ),
           const SizedBox(
-              height: 20), // Add some space between the title and images
+              height: 20),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -118,19 +118,19 @@ class SoundsSection extends StatelessWidget {
         );
       },
       child: Padding(
-        padding: const EdgeInsets.only(right: 25), // Space between images
+        padding: const EdgeInsets.only(right: 25),
         child: Column(
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.asset(
-                imagePath, // Replace with your image path
+                imagePath,
                 width: 100,
                 height: 100,
                 fit: BoxFit.cover,
               ),
             ),
-            const SizedBox(height: 5), // Space between image and text
+            const SizedBox(height: 5),
             Text(
               label,
               style: TextStyle(
@@ -138,7 +138,7 @@ class SoundsSection extends StatelessWidget {
                 color: Theme.of(context).textTheme.bodyMedium?.color,
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Montserrat',
-              ), // Adjust text style as needed
+              ),
             ),
           ],
         ),

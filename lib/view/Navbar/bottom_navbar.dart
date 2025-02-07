@@ -11,7 +11,7 @@ final user = FirebaseAuth.instance.currentUser ;
 final userId = user?.uid;
 
 class BottomNavbar extends StatefulWidget {
-  final int selectedIndex; // Add selectedIndex parameter
+  final int selectedIndex;
 
   const BottomNavbar({super.key, required this.selectedIndex});
 
@@ -25,11 +25,10 @@ class BottomNavbarState extends State<BottomNavbar> {
     Color iconText = Theme.of(context).colorScheme.tertiary;
     Color navbarColor = Theme.of(context).colorScheme.onPrimary;
 
-    // Determine if the current page is one of the specified pages
     bool isOnMainPage = widget.selectedIndex >= 0 && widget.selectedIndex <= 3;
 
     return Container(
-      height: 80, // adjust the height as needed
+      height: 80,
       decoration: BoxDecoration(
         border: Border(top: BorderSide(color: navbarColor, width: 0.5)),
         color: navbarColor,
@@ -66,8 +65,7 @@ class BottomNavbarState extends State<BottomNavbar> {
                     ? iconText
                     : const Color(0xFF7F779A),
               ),
-              // Placeholder for "My Stats" to maintain layout
-              SizedBox(width: 60), // Adjust width as needed
+              SizedBox(width: 60),
               IconWithText(
                 icon: Icons.star,
                 text: 'Rewards',
@@ -82,14 +80,13 @@ class BottomNavbarState extends State<BottomNavbar> {
                 color: isOnMainPage && widget.selectedIndex == 2
                     ? iconText
                     : const Color(
-                        0xFF7F779A), // Set color based on selected index
+                        0xFF7F779A),
               ),
             ],
           ),
-          // Positioned for "My Stats"
           Positioned(
             left: MediaQuery.of(context).size.width / 1.6 -
-                20, // Adjust as needed
+                20,
             top: 0,
             bottom: 0,
             child: Center(

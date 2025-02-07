@@ -7,36 +7,25 @@ import '../../services/alarm_service.dart';
 import '../../services/notification_service.dart';
 import '../../view/Pages/Plans/view_plans.dart';
 
-// void alarmCallback(String userId, Map<String, dynamic> planData) async {
-//   print("🚨 Alarm Triggered: End Time Reached! 🚨");
-//   NotificationService().playCustomAlarm(
-//     "End Time Alert",
-//     "Your specified end time has been reached.",
-//     "custom_alarm",
-//   );
-//
-//   // Move the plan to Successful Plans
-//   await SleepPlanController().handleAlarmCallback(userId, planData);
-// }
 void alarmCallback() {
   print("🚨 Alarm Triggered: End Time Reached! 🚨");
   NotificationService().playCustomAlarm(
     "End Time Alert",
     "Your specified end time has been reached.",
-    "custom_alarm", // Name of the MP3 file in the `android/app/src/main/res/raw` directory
+    "custom_alarm",
   );
 }
 
 class TimePickerController {
-  int selectedHour = 12; // Default hour
-  int selectedMinute = 0; // Default minute
+  int selectedHour = 12;
+  int selectedMinute = 0;
   String selectedPeriod = 'AM';
 
   // Store selected times for start and end
   String startTime = '12:00 AM';
   String endTime = '12:00 AM';
 
-  bool isStartSelected = true; // Track which button is selected
+  bool isStartSelected = true;
   String successMessage = '';
 
   final List<int> hours = List.generate(12, (index) => index + 1);
@@ -187,8 +176,8 @@ class TimePickerController {
       return;
     }
 
-    if (duration.inMinutes < 2) {
-      showToast("Minimum duration of sleep is 2 minutes.");
+    if (duration.inMinutes < 30) {
+      showToast("Minimum duration of sleep is 30 minutes.");
       return;
     }
 
@@ -219,7 +208,7 @@ class TimePickerController {
           today.day,
           startDateTime.hour,
           startDateTime.minute,
-        ).subtract(Duration(minutes: 2)); // 5 minutes before start time
+        ).subtract(Duration(minutes: 5)); // 5 minutes before start time
 
         print('Start Notification Time: $startNotificationTime');
         print('Current Time: $today');
@@ -252,20 +241,6 @@ class TimePickerController {
                 callback: alarmCallback,
               );
             }
-            // if (alarmTime.isAfter(currentDate)) {
-            //   print('Triggering alarm callback for end time at $alarmTime');
-            //   await alarmService.scheduleAlarm(
-            //     id: i + 1000, // Unique ID for alarm
-            //     triggerTime: alarmTime,
-            //     callback: () => alarmCallback(user.uid, {
-            //       'title': title,
-            //       'startTime': startTime,
-            //       'endTime': endTime,
-            //       'selectedDays': selectedDayLetters,
-            //       'createdAt': createdAt,
-            //     }),
-            //   );
-            // }
           }
         }
       }

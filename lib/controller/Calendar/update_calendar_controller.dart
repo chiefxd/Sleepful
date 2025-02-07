@@ -13,7 +13,7 @@ void alarmCallback() {
   NotificationService().playCustomAlarm(
     "End Time Alert",
     "Your specified end time has been reached.",
-    "custom_alarm", // Name of the MP3 file in the `android/app/src/main/res/raw` directory
+    "custom_alarm",
   );
 }
 
@@ -27,7 +27,7 @@ class TimePickerrController {
   String startTime;
   String endTime;
 
-  bool isStartSelected = true; // Track which button is selected
+  bool isStartSelected = true;
   String successMessage = '';
 
   final List<int> hours = List.generate(12, (index) => index + 1);
@@ -39,9 +39,9 @@ class TimePickerrController {
   final FixedExtentScrollController periodController;
 
   TimePickerrController({
-    required this.startTime, // Required start time
-    required this.endTime, // Required end time
-    List<bool>? selectedDays, // Optional selected days
+    required this.startTime,
+    required this.endTime,
+    List<bool>? selectedDays,
   })  : selectedDays = selectedDays ??
             List.generate(7, (index) => false), // Initialize selectedDays
         selectedHour = int.parse(
@@ -94,7 +94,6 @@ class TimePickerrController {
     isStartSelected = false;
   }
 
-  // Future<String> _addPlanOrUpdateToCalendar(String title, String startTime, String endTime, List<String> selectedDays) async {
   Future<void> _addPlanOrUpdateToCalendar(
       String planId,
       String title,
@@ -119,12 +118,11 @@ class TimePickerrController {
           'selectedDays': null,
           'isCalendar': true,
           'updatedAt': FieldValue
-              .serverTimestamp(), // Optional: Add a timestamp for the update
+              .serverTimestamp(),
           'selectedDate': selectedDate,
           'notVisibleCalendar': null,
         });
       }
-      // throw Exception("User  not authenticated.");
       else {
         // Move plan from Plans to Calendar Plans
         DocumentReference planDocument = FirebaseFirestore.instance
@@ -270,8 +268,8 @@ class TimePickerrController {
       return;
     }
 
-    if (duration.inMinutes < 2) {
-      showToast("Minimum duration of sleep is 2 minutes.");
+    if (duration.inMinutes < 30) {
+      showToast("Minimum duration of sleep is 30 minutes.");
       return;
     }
 
@@ -283,7 +281,7 @@ class TimePickerrController {
 
     // Get today's day of the week
     DateTime startNotificationTime = startDateTime
-        .subtract(Duration(minutes: 2)); // 5 minutes before start time
+        .subtract(Duration(minutes: 5)); // 5 minutes before start time
     DateTime currentDate = DateTime.now();
 
     // Schedule the notification

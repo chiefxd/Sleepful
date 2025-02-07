@@ -11,9 +11,9 @@ class AlarmService {
 
     await AndroidAlarmManager.oneShotAt(
       triggerTime,
-      id, // Unique ID for the alarm
-      callback, // Function to execute when alarm triggers
-      exact: true, // Ensures precise timing
+      id,
+      callback,
+      exact: true, // For precise timing
       wakeup: true, // Wakes up the device if asleep
     );
   }

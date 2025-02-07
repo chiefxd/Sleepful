@@ -34,7 +34,7 @@ class UserDataProvider extends ChangeNotifier {
     );
   }
 
-  // Helper function to get user name from Firestore
+  // Get user name from Firestore
   Future<String> getUserName(String uid) async {
     try {
       final userDoc = FirebaseFirestore.instance.collection('Users').doc(uid);
@@ -114,7 +114,7 @@ class UserDataProvider extends ChangeNotifier {
     }
   }
 
-  // Method to fetch and set initial user data
+  // Fetch and set initial user data
   Future<void> fetchAndSetUserData(String uid) async {
     try {
       final userDoc = FirebaseFirestore.instance.collection('Users').doc(uid);
@@ -138,7 +138,7 @@ class UserDataProvider extends ChangeNotifier {
         _checkAndAwardDailyPoints(uid);
       } else {
         // New user - Create 'points' field with 0 value
-        await _createPointsField(uid); // Call the function to create the field
+        await _createPointsField(uid);
         _points = 0;
       }
       notifyListeners();
@@ -147,12 +147,12 @@ class UserDataProvider extends ChangeNotifier {
     }
   }
 
-  // Function to create the 'points' field
+  // Create the 'points' field
   Future<void> _createPointsField(String uid) async {
     try {
       final userDoc = FirebaseFirestore.instance.collection('Users').doc(uid);
       await userDoc
-          .set({'points': 0}, SetOptions(merge: true)); // Use merge: true
+          .set({'points': 0}, SetOptions(merge: true));
     } catch (e) {
       print("Error creating points field: $e");
     }
@@ -173,7 +173,6 @@ class UserDataProvider extends ChangeNotifier {
           .doc(FirebaseAuth.instance.currentUser!.uid);
       await userDoc.update({'points': _points});
     } on FirebaseException catch (error) {
-      // Handle specific FirebaseException types
       print('Error deducting points: ${error.code}');
       // Revert points deduction if update fails
       _points += pointsToDeduct;
@@ -181,8 +180,7 @@ class UserDataProvider extends ChangeNotifier {
     }
   }
 
-  // Function to check and award daily points
-// Function to check and award daily points
+  // Check and award daily points
   Future<void> _checkAndAwardDailyPoints(String uid) async {
     try {
       final userDoc = FirebaseFirestore.instance.collection('Users').doc(uid);
@@ -191,20 +189,17 @@ class UserDataProvider extends ChangeNotifier {
         // First time user opens the app, give reward
         _points += 1;
         _lastRewardTime = DateTime.now();
-        // Update Firestore
         await userDoc
             .update({'lastRewardTime': _lastRewardTime, 'points': _points});
         notifyListeners();
-        // Show toast notification
         showToast("You have been awarded 1 daily points!");
-        return; // Exit to avoid further checks
+        return;
       }
 
       final now = DateTime.now();
       final timeSinceLastReward = now.difference(_lastRewardTime!);
 
       if (timeSinceLastReward >= const Duration(hours: 24)) {
-        // More than 24 hours have passed
         _points += 1; // Always award points if 24 hours have passed
         _lastRewardTime = DateTime.now();
 
@@ -212,7 +207,6 @@ class UserDataProvider extends ChangeNotifier {
         await userDoc
             .update({'lastRewardTime': _lastRewardTime, 'points': _points});
         notifyListeners();
-        // Show toast notification
         showToast("You have been awarded 1 daily points!");
       }
     } catch (e) {
@@ -223,14 +217,12 @@ class UserDataProvider extends ChangeNotifier {
   Future<void> awardPointsForPlanCompletion(String uid) async {
     try {
       // Add points for completing the plan
-      _points += 2; // Award 2 points, adjust this as necessary
+      _points += 2;
       notifyListeners();
 
-      // Update Firestore
       final userDoc = FirebaseFirestore.instance.collection('Users').doc(uid);
       await userDoc.update({'points': _points});
 
-      // Show notification
       showToast("You've earned 2 points for completing your sleep plan!");
     } catch (e) {
       print("Error awarding points: $e");
